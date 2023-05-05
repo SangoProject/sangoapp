@@ -32,7 +32,7 @@ dependencies:
     sdk: flutter
 
   firebase_core: "^2.10.0" # firebase 사용을 위해 pub dev에서 버전 검색하여 추가함
-  firebase_auth: "^4.4.2" # firebase auth - 로그인 기능
+  firebase_auth: ^4.5.0 # firebase auth - 로그인 기능
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

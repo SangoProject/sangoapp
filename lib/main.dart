@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart'; //기본 패키지
-import 'package:firebase_auth/firebase_core.dart';
-import 'package:get/get.dart';
-import 'package:logintest/my_home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_core.dart';
+// import 'package:get/get.dart';
+// import 'package:logintest/my_home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,9 +26,9 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.lime,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: '산책하자Go'),
     );
   }
 }
