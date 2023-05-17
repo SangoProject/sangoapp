@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SanGo app', // 산책하자고로 이름을 바꿈
       theme: ThemeData(
+        fontFamily: 'Pretendard',
         primarySwatch: Colors.lime,
       ),
       home: const LoginSignupScreen(), // title: '로그인 / 회원가입' 어떻게 넣지

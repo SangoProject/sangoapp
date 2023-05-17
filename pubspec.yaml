@@ -96,6 +96,11 @@ flutter:
 #      - family: SocialIcons
 #        fonts:
 #          - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
+fonts:
+  - family: Pretendard
+    fonts:
+      - asset: assets/font/Pretendard-Regular.otf
+        weight: 400
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

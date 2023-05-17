@@ -21,12 +21,21 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               right: 0,
               left: 0,
               child: Container(
-                height: 300,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('images/background.jpg'),
-                      fit: BoxFit.fill
-                  )
+                height: 800,
+                decoration: BoxDecoration(
+                  color: Colors.lime.withOpacity(0.1)
+                  // gradient: LinearGradient(
+                  //     colors: const [
+                  //       Colors.green,
+                  //       Colors.white
+                  //     ],
+                  //     begin: Alignment.topCenter,
+                  //     end: Alignment.bottomCenter
+                  // )
+                  // image: DecorationImage(
+                  //     image: AssetImage('images/background.jpg'),
+                  //     fit: BoxFit.fill
+                  // )
                 ),
                 child: Container(
                   padding: const EdgeInsets.only(top: 80, left: 20),
@@ -35,19 +44,20 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     children: [
                       RichText(
                           text: TextSpan(
-                            text: 'Welcome',
-                            style: TextStyle(
-                              letterSpacing: 1.0,
-                              fontSize: 25,
-                              color: Colors.lightGreen
-                            ),
+                            // text: '산책하자Go',
+                            // style: TextStyle(
+                            //   letterSpacing: 1.0,
+                            //   fontSize: 24,
+                            //   color: Colors.black54,
+                            //   fontWeight: FontWeight.bold,
+                            // ),
                             children: [
                               TextSpan(
-                                text: isSignupScreen ? ' to Sango App' : ' back',
+                                text: isSignupScreen ? ' 회원가입하기' : ' 로그인하기',
                                 style: TextStyle(
                                     letterSpacing: 1.0,
-                                    fontSize  : 25,
-                                    color: Colors.lightGreen,
+                                    fontSize  : 24,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                 ),
                               )
@@ -57,12 +67,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       const SizedBox(
                         height: 5.0,
                       ),
-                      Text(
-                        isSignupScreen ? 'Signup to continue' : 'Signin to continue',
-                        style: TextStyle(
-                        letterSpacing: 1.0,
-                        color: Palette.textColor1,
-                      ))
+                      // Text(
+                      //   isSignupScreen ? 'Signup to continue' : 'Signin to continue',
+                      //   style: TextStyle(
+                      //   letterSpacing: 1.0,
+                      //   color: Palette.textColor1,
+                      // ))
                     ],
                   )
                 ),
@@ -105,11 +115,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           child: Column(
                             children: [
                               Text(
-                                'LOGIN',
+                                '로그인',
                                 style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: !isSignupScreen ? Palette.activeColor
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: !isSignupScreen ? Palette.activeColor
                                     : Palette.textColor1 // 선택시 색상 변경
                                 ),
                               ),
@@ -132,7 +142,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           child: Column(
                             children: [
                               Text(
-                                'SIGNUP',
+                                '회원가입',
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -181,7 +191,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                     Radius.circular(35.0),
                                   ),
                                 ),
-                                hintText: 'User name',
+                                hintText: '아이디',
                                 hintStyle: TextStyle(
                                   fontSize: 14,
                                   color: Palette.textColor1
@@ -215,7 +225,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                       Radius.circular(35.0),
                                     ),
                                   ),
-                                  hintText: 'email',
+                                  hintText: '이메일',
                                   hintStyle: TextStyle(
                                       fontSize: 14,
                                       color: Palette.textColor1
@@ -249,7 +259,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                       Radius.circular(35.0),
                                     ),
                                   ),
-                                  hintText: 'password',
+                                  hintText: '비밀번호',
                                   hintStyle: TextStyle(
                                       fontSize: 14,
                                       color: Palette.textColor1
@@ -290,7 +300,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                       Radius.circular(35.0),
                                     ),
                                   ),
-                                  hintText: 'email',
+                                  hintText: '이메일',
                                   hintStyle: TextStyle(
                                       fontSize: 14,
                                       color: Palette.textColor1
@@ -324,7 +334,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                       Radius.circular(35.0),
                                     ),
                                   ),
-                                  hintText: 'password',
+                                  hintText: '비밀번호',
                                   hintStyle: TextStyle(
                                       fontSize: 14,
                                       color: Palette.textColor1
@@ -393,14 +403,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             left: 0,
             child: Column(
               children: [
-                Text(isSignupScreen ? 'or Signup with' : 'or Signin with'),
-                SizedBox(
-                  height: 10,
-                ),
+                // Text(isSignupScreen ? 'or Signup with' : 'or Signin with'),
+                // SizedBox(
+                //   height: 10,
+                // ),
                 TextButton.icon(
                     onPressed: (){},
                     style: TextButton.styleFrom(
-                      primary: Colors.white,
+                      foregroundColor: Colors.white,
                       minimumSize: Size(155, 40),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)
