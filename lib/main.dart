@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'SanGo app', // 산책하자고로 이름을 바꿈
       theme: ThemeData(
         primarySwatch: Colors.lime,
