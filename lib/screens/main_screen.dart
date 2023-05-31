@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sangoproject/config/palette.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -9,6 +10,7 @@ class LoginSignupScreen extends StatefulWidget {
 }
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
+  final _authentication = FirebaseAuth.instance;
   bool isSignupScreen = true;
   final _formKey = GlobalKey<FormState>();
   String userName = '';
@@ -16,7 +18,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   String userPassword = '';
 
   void _tryValidation(){
-    final isValid = _formKey.currentState!.validate(); // !는 not null(null test)
+    final isValid = _formKey.currentState!.validate();
+    // !는 not null(null test)
     // validate가 적용된 textformfield 모두 적용
     if(isValid){
       _formKey.currentState!.save();
@@ -299,7 +302,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                   onChanged: (value){
                                     userPassword = value;
                                   },
-                                  obscureText: true,
+                                  obscureText: true, // 비밀번호 숨기기
                                   decoration: const InputDecoration(
                                       prefixIcon: Icon(
                                         Icons.lock,
@@ -461,11 +464,33 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     borderRadius: BorderRadius.circular(50)
                   ),
                   child: GestureDetector(
-                    onTap: (){
-                      _tryValidation();
-                      debugPrint(userName);
-                      debugPrint(userEmail);
-                      debugPrint(userPassword);
+                    onTap: () async{
+                      if(isSignupScreen){
+                        _tryValidation();
+                        try {
+                          final newUser = await _authentication
+                              .createUserWithEmailAndPassword(
+                            email: userEmail,
+                            password: userPassword,
+                          );
+
+                          if(newUser.user != null){
+
+                          }
+                        }catch(e){
+                          print(e);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                Text('이메일과 비밀번호를 확인해주세요'),
+                                backgroundColor: Colors.blue,
+                              ),
+                          );
+                        }
+                      }
+                      // debugPrint(userName);
+                      // debugPrint(userEmail);
+                      // debugPrint(userPassword);
                     },
                     child: Container(
                       decoration: BoxDecoration(
