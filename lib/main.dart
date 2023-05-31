@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart'; //기본 패키지
-import 'package:sangoproject/screens/main_screen.dart'; // 메인(로그인, 회원가입) 화면 패키지
+import 'package:sangoproject/screens/loginsignupPage.dart'; // 메인(로그인, 회원가입) 화면 패키지
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'dart:async';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // flutter 비동기 method 사용위해 초기화 -> flutter에서 firebase 사용을 위해
-  Firebase.initializeApp(); // firebase 이용 필수 속성
+  await Firebase.initializeApp(); // firebase 이용 초기화 method
   runApp(MyApp());
 }
 
@@ -26,8 +27,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const LoginSignupScreen(),
+      // StreamBuilder<User>(
+      //   stream: FirebaseAuth.instance.authStateChanges(),
+      // )
       // title: '로그인 / 회원가입' 어떻게 넣지
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

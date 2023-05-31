@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sangoproject/config/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'mainPage.dart'; // 로그인, 회원가입 완료시 mainPage로 이동
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -138,7 +139,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               child: Column(
                                 children: [
                                   Text(
-                                    'Login',
+                                    '로그인',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -337,7 +338,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             )
                           ),
                         ),
-                        if(!isSignupScreen)
+                        if(!isSignupScreen) // 로그인 screen일 때
                         Container(
                           margin: EdgeInsets.only(top: 20),
                           child: Form(
@@ -446,7 +447,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   ),
                 )
             ),
-            // 텍스트 폼 필드 -> code refactoring 필요.
+            // 텍스트 폼 필드
             AnimatedPositioned(
               duration: Duration(milliseconds: 500),
               curve: Curves.easeIn,
@@ -473,19 +474,45 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             email: userEmail,
                             password: userPassword,
                           );
-
                           if(newUser.user != null){
-
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context){
+                                  return MainPage();
+                                }
+                              ),
+                            );
                           }
-                        }catch(e){
+                        }catch(e){ // 에러 문구 출력
                           print(e);
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content:
-                                Text('이메일과 비밀번호를 확인해주세요'),
+                                Text('입력하신 내용을 다시 확인해주세요.'),
                                 backgroundColor: Colors.blue,
                               ),
                           );
+                        }
+                      }
+                      if(!isSignupScreen) {
+                        _tryValidation();
+                        try {
+                          final newUser = await _authentication
+                              .signInWithEmailAndPassword(
+                              email: userEmail,
+                              password: userPassword
+                          );
+                          if (newUser.user != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return MainPage();
+                              }
+                              ),
+                            );
+                          }
+                        }catch(e){
+                          print(e);
                         }
                       }
                       // debugPrint(userName);
