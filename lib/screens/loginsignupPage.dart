@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sangoproject/config/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'homePage.dart'; // 로그인, 회원가입 완료시 HomePage로 이동
+import 'package:sangoproject/mainPage.dart'; // 로그인, 회원가입 완료시 MainPage로 이동
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -478,7 +478,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context){
-                                  return HomePage();
+                                  return MainPage();
                                 }
                               ),
                             );
@@ -506,7 +506,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) {
-                                return HomePage();
+                                return MainPage();
                               }
                               ),
                             );

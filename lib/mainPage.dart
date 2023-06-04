@@ -28,7 +28,7 @@ class _MainPage extends State<MainPage> with SingleTickerProviderStateMixin{
   Widget build(BuildContext context){
     return Scaffold(
         body: TabBarView(
-          children: <Widget>[HomePage(), RecordPage(), CalendarPage(), MyPage()],
+          children: <Widget>[HomePage(), RecordPage(), CalendarPage(), SettingPage()],
           controller: controller,
         ),
         bottomNavigationBar: TabBar(tabs: <Tab>[

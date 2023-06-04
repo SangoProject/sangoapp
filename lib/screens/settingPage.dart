@@ -1,15 +1,18 @@
-// 아직 기능을 하지 않지만 그냥 샘플로 남겨둠
-
 import 'package:flutter/material.dart';
 
-class SettingPage extends StatelessWidget{
+class SettingPage extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState(){
+    return _SettingPage();
+  }
+}
+
+class _SettingPage extends State<SettingPage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: Container(
-        child: Center(
-          child: Text('settingPage'),
-        ),
+      appBar: AppBar(
+        title: Text('setting page'),
       ),
     );
   }
