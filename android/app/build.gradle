@@ -66,7 +66,7 @@ android {
         applicationId "com.sango.sangoproject"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 19    // minSdkVersion 설정해줌 꺅됏당ㅋㅋ
+        minSdkVersion 20    // minSdkVersion 19->20 Google Maps sdk의 최소 버전
 //        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
