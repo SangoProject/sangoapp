@@ -11,7 +11,7 @@ class RecordPage extends StatefulWidget{
 class _RecordPageState extends State<RecordPage>{
   late GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(37.541, 126.986);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -22,10 +22,10 @@ class _RecordPageState extends State<RecordPage>{
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('record page'),
-          backgroundColor: Colors.lime,
-        ),
+        // appBar: AppBar(
+        //   title: const Text('record page'),
+        //   backgroundColor: Colors.lime,
+        // ),
         body: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(

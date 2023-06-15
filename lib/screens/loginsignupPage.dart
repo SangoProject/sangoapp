@@ -46,18 +46,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   height: 800,
                   decoration: BoxDecoration(
                     color: Colors.lime.withOpacity(0.1)
-                    // gradient: LinearGradient(
-                    //     colors: const [
-                    //       Colors.green,
-                    //       Colors.white
-                    //     ],
-                    //     begin: Alignment.topCenter,
-                    //     end: Alignment.bottomCenter
-                    // )
-                    // image: DecorationImage(
-                    //     image: AssetImage('images/background.jpg'),
-                    //     fit: BoxFit.fill
-                    // )
                   ),
                   child: Container(
                     padding: const EdgeInsets.only(top: 80, left: 20),
@@ -66,13 +54,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       children: [
                         RichText(
                             text: TextSpan(
-                              // text: '산책하자Go',
-                              // style: TextStyle(
-                              //   letterSpacing: 1.0,
-                              //   fontSize: 24,
-                              //   color: Colors.black54,
-                              //   fontWeight: FontWeight.bold,
-                              // ),
                               children: [
                                 TextSpan(
                                   text: isSignupScreen ? ' 회원가입하기' : ' 로그인하기',
@@ -89,12 +70,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         const SizedBox(
                           height: 5.0,
                         ),
-                        // Text(
-                        //   isSignupScreen ? 'Signup to continue' : 'Signin to continue',
-                        //   style: TextStyle(
-                        //   letterSpacing: 1.0,
-                        //   color: Palette.textColor1,
-                        // ))
                       ],
                     )
                   ),
@@ -160,7 +135,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             GestureDetector(
                               onTap: (){
                                 setState(() {
-                                  isSignupScreen = true; // 사용자가 signup 선택함
+                                  isSignupScreen = true; // 사용자가 회원가입 선택함
                                 });
                               },
                               child: Column(
@@ -355,10 +330,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                     return null;
                                   },
                                   onSaved: (value){
-                                    userName = value!;
+                                    userEmail = value!;
                                   },
                                   onChanged: (value){
-                                    userName = value;
+                                    userEmail = value;
                                   },
                                   decoration: const InputDecoration(
                                       prefixIcon: Icon(
@@ -475,6 +450,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             password: userPassword,
                           );
                           if(newUser.user != null){
+                            if(!mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context){
@@ -503,6 +479,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               password: userPassword
                           );
                           if (newUser.user != null) {
+                            if(!mounted) return;
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) {
