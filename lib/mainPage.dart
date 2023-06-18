@@ -35,7 +35,7 @@ class _MainPage extends State<MainPage> with SingleTickerProviderStateMixin{
           Tab(icon: Icon(Icons.home),),
           Tab(icon: Icon(Icons.location_on),),
           Tab(icon: Icon(Icons.calendar_month),),
-          Tab(icon: Icon(Icons.account_circle),)
+          Tab(icon: Icon(Icons.settings),)
         ],
           labelColor: Color(0xFFB7B8AD),
           indicatorColor: Color(0xFFB7B8AD),

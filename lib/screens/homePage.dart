@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'searchPage.dart';
 import 'goalPage.dart';
+import 'package:sangoproject/screens/components/goalGraph.dart';
 import 'libraryPage.dart';
+import 'package:sangoproject/screens/components/libraryList.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({Key? key}) : super(key: key);
@@ -57,22 +59,31 @@ class _HomePage extends State<HomePage> {
               Padding(
                 padding: EdgeInsets.all(15),
                 child: ElevatedButton(
-                  child: Text('오늘의 목표'),
+                  child: Text(
+                    '오늘의 목표',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                   onPressed: (){
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => GoalPage()));
                   },
                 ),
               ),
+              ChartPage(),
+
               // 찜목록
               Padding(
                 padding: EdgeInsets.all(15),
                 child: ElevatedButton(
-                  child: Text('찜목록'),
+                  child: Text(
+                    '찜목록',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                   onPressed: (){
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => LibraryPage()));
                   },
                 ),
               ),
+              LibraryList(),
             ],
           ),
         ),
