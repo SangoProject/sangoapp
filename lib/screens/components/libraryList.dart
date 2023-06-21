@@ -8,7 +8,7 @@ class LibraryList extends StatelessWidget {
   Widget build(BuildContext context) {
     // return Container(
     return Container(
-      height: 200,
+      height: 180,
       child: ListView.separated(
         itemBuilder: (context, index) => Container(
           child: SizedBox(
@@ -20,7 +20,6 @@ class LibraryList extends StatelessWidget {
                     onPressed: () {},
                     child: Text(
                       sample[index],
-                      textAlign: TextAlign.left,
                       style: TextStyle(color: Colors.black, fontSize: 16),
                     )
                 ),

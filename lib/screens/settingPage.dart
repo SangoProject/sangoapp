@@ -12,7 +12,10 @@ class _SettingPage extends State<SettingPage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      // backgroundColor: Colors.lime,
+// <<<<<<< HEAD
+//       // backgroundColor: Colors.lime,
+// =======
+// >>>>>>> c9419eb5e09f7e6b7c0afc3ee2d666e65cb67057
       appBar: AppBar(
         title: Text('설정'),
       ),
