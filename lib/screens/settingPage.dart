@@ -12,9 +12,9 @@ class _SettingPage extends State<SettingPage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      backgroundColor: Colors.lime,
+      // backgroundColor: Colors.lime,
       appBar: AppBar(
-        title: Text('setting page'),
+        title: Text('설정'),
       ),
       body: SettingsList(
         sections: [
@@ -39,6 +39,16 @@ class _SettingPage extends State<SettingPage>{
               //   },
               //   leading: Icon(Icons.vibration),
               // ),
+            ],
+          ),
+          SettingsSection(
+            title: Text('개인정보 수정'),
+            tiles: <SettingsTile>[
+              SettingsTile.navigation(
+                leading: Icon(Icons.account_circle),
+                title: Text('나의 정보'),
+                onPressed: ((context) {}),
+              ),
             ],
           ),
           SettingsSection(
