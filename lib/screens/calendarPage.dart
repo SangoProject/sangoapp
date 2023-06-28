@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:sangoproject/screens/components/apiButton.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'goalPage.dart';
 import '../utils.dart';
@@ -73,9 +74,10 @@ class _CalendarPageState extends State<CalendarPage>{
           ),
           Padding(
             padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
-            child: Text(
-              '기록을 확인할 날짜를 선택해주세요'
-            ),
+            child: MyButtonWidget(),
+            // Text(
+            //   '기록을 확인할 날짜를 선택해주세요'
+            // ),
           )
         ],
       ),
