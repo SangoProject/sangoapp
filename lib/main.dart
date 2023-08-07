@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Pretendard',
         primarySwatch: Colors.lime,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lime),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
       initialRoute: '/',
