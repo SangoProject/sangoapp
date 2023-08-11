@@ -154,7 +154,7 @@ class _SearchPage extends State<SearchPage>{
               ElevatedButton(
                   onPressed: (){
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => SearchResultPage()));
+                        MaterialPageRoute(builder: (context) => SearchResultPage(dropdownValue)));
                   },
                   child: Text('검색하기')
               ),
