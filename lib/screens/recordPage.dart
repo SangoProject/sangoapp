@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sangoproject/config/palette.dart';
 
 class RecordPage extends StatefulWidget{
   const RecordPage({Key? key}) : super(key: key);
@@ -26,12 +27,25 @@ class _RecordPageState extends State<RecordPage>{
         //   title: const Text('record page'),
         //   backgroundColor: Colors.lime,
         // ),
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
-          ),
+        body: Column(
+          children: [
+            SizedBox(
+              height: 500,
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 11.0,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                height: 200,
+                color: Palette.activeColor,
+              ),
+            ),
+          ],
         ),
       ),
     );

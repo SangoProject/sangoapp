@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sangoproject/config/palette.dart';
 import 'package:sangoproject/screens/components/editgoalGraph.dart';
 
@@ -27,9 +28,50 @@ class _GoalPage extends State<GoalPage>{
           // 목표
           Padding(
           padding: EdgeInsets.all(15),
-            child: Text(
-            '오늘의 목표',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                '오늘의 목표',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: 500,
+                          color: Colors.white,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.digitsOnly],
+                                    decoration:
+                                    InputDecoration(
+                                      labelText: '목표 값 변경',
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  child: const Text('Done!'),
+                                  onPressed: () => Navigator.pop(context),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Image.asset('images/pencil.png'))
+              ],
             ),
           ),
           TextButton(
@@ -56,6 +98,7 @@ class _GoalPage extends State<GoalPage>{
           ),
         ],
       ),
+      // bottomNavigationBar: TabBar(),
     );
   }
 }

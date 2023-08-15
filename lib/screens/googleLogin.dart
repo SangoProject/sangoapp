@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sangoproject/mainPage.dart';
 import 'package:sangoproject/screens/homePage.dart';
 
 class GoogleLogin extends StatelessWidget {
@@ -13,6 +14,7 @@ class GoogleLogin extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset('images/logo.png'),
             ElevatedButton(
               onPressed: () async {
                 final _googleSignIn = GoogleSignIn();
@@ -30,8 +32,8 @@ class GoogleLogin extends StatelessWidget {
                         accessToken: googleAuth.accessToken,
                       ));
                       print('success registered');
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => MainPage()),
                       );
                     } on FirebaseAuthException catch (e) {
                       print('an error occured $e');

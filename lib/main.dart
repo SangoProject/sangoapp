@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart'; //기본 패키지
+import 'package:sangoproject/screens/goalPage.dart';
 import 'package:sangoproject/screens/googleLogin.dart';
 import 'package:sangoproject/screens/loginsignupPage.dart'; // 메인(로그인, 회원가입) 화면 패키지
 import 'mainPage.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      initialRoute: '/',
+      initialRoute: '/main',
       routes: {
         // '/': (context) => LoginSignupScreen(),
         '/' : (context) => GoogleLogin(),

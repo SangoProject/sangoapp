@@ -16,13 +16,21 @@ class SettingPage extends StatelessWidget {
     Icons.info,
     Icons.logout,
   ];
+  static const List<String> _function = [
+    '',
+    '',
+    '',
+    'FirebaseAuth.instance.signOut()',
+  ];
 
   Widget _settingListView() {
     return ListView.builder(
       itemCount: _data.length,
       itemBuilder: (BuildContext context, int i) {
         return InkWell(
-          onTap: (){},
+          onTap: (){
+            _function;
+          },
           child: ListTile(
             title: Text(_data[i],
             style: TextStyle(
