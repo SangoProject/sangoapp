@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:sangoproject/screens/components/libraryList.dart';
 
 class SearchResultPage extends StatefulWidget{
+  String input = '';
+  SearchResultPage(this.input);
   @override
   State<StatefulWidget> createState(){
-    return _SearchResultPage();
+    return _SearchResultPage(input);
   }
 }
 
 class _SearchResultPage extends State<SearchResultPage>{
-  String location = '???';
+  String location = '';
   String resultCnt = '5';
+  _SearchResultPage(this.location);
 
   @override
   Widget build(BuildContext context){
@@ -22,6 +26,7 @@ class _SearchResultPage extends State<SearchResultPage>{
         children: <Widget>[
           Text("'${location}' 검색 결과 입니다."),
           Text("${resultCnt}건"),
+          Expanded(child: LibraryList()),
         ],
       ),
     );

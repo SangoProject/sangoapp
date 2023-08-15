@@ -81,7 +81,7 @@ class _HomePage extends State<HomePage> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
-              LibraryList(),
+              Expanded(child: LibraryList()),
               Padding(
                 padding: EdgeInsets.all(15),
                 child: TextButton(
