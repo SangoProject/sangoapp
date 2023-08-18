@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sangoproject/config/palette.dart';
-import 'package:sangoproject/screens/components/editgoalGraph.dart';
 
 import 'components/goalGraph.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:sangoproject/screens/components/barGraph.dart';
 import 'package:sangoproject/screens/goal_data/barGraph_data.dart';
+
+import 'goal_data/pie_edit.dart';
 
 
 class GoalPage extends StatefulWidget{
@@ -37,38 +38,43 @@ class _GoalPage extends State<GoalPage>{
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    showModalBottomSheet<void>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          height: 500,
-                          color: Colors.white,
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Expanded(
-                                  child: TextField(
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly],
-                                    decoration:
-                                    InputDecoration(
-                                      labelText: '목표 값 변경',
-                                    ),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  child: const Text('Done!'),
-                                  onPressed: () => Navigator.pop(context),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PieDataScreen()),
                     );
+
+                    // showModalBottomSheet<void>(
+                    //   context: context,
+                    //   builder: (BuildContext context) {
+                    //     return Container(
+                    //       height: 500,
+                    //       color: Colors.white,
+                    //       child: Center(
+                    //         child: Column(
+                    //           mainAxisAlignment: MainAxisAlignment.center,
+                    //           mainAxisSize: MainAxisSize.min,
+                    //           children: <Widget>[
+                    //             Expanded(
+                    //               child: TextField(
+                    //                 keyboardType: TextInputType.number,
+                    //                 inputFormatters: <TextInputFormatter>[
+                    //                   FilteringTextInputFormatter.digitsOnly],
+                    //                 decoration:
+                    //                 InputDecoration(
+                    //                   labelText: '목표 값 변경',
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             ElevatedButton(
+                    //               child: const Text('Done!'),
+                    //               onPressed: () => Navigator.pop(context),
+                    //             )
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // );
                   },
                   child: Image.asset('images/pencil.png'))
               ],
@@ -76,10 +82,7 @@ class _GoalPage extends State<GoalPage>{
           ),
           TextButton(
             child: ChartPage(),
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => EditGoalGraph()));
-            },
+            onPressed: () {},
           ),
           Padding(
             padding: EdgeInsets.all(15),

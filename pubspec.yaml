@@ -46,8 +46,7 @@ dependencies:
   xml: ^6.2.2
   google_sign_in: ^5.4.4
   fl_chart: ^0.62.0
-  flutter_secure_storage: ^8.0.0
-  dio: ^5.3.2
+  shared_preferences: ^2.2.0
 
 
 dev_dependencies:
