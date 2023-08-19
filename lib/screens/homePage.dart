@@ -75,26 +75,25 @@ class _HomePage extends State<HomePage> {
 
               // 찜목록
               Padding(
-                padding: EdgeInsets.all(15),
-                child: Text(
-                  '찜목록',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        '찜목록',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => LibraryPage()));
+                          },
+                          icon: Icon(Icons.chevron_right)
+                      )
+                    ],
+                  )
               ),
               Expanded(child: LibraryList()),
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: TextButton(
-                  child: Text(
-                    '전체목록',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => LibraryPage()));
-                  },
-                ),
-              ),
             ],
           ),
         ),
