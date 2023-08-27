@@ -20,6 +20,8 @@ class LibraryList extends StatelessWidget {
         String? distance = list[index].DISTANCE;
         String? lead_time = list[index].LEAD_TIME;
         int? course_level = list[index].COURSE_LEVEL;
+        int? course_negative = 3 - list[index].COURSE_LEVEL!;
+
         return TextButton(
             onPressed: (){
               Navigator.of(context).push(
@@ -31,11 +33,23 @@ class LibraryList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Icon(Icons.star),
-                      Icon(Icons.star),
-                      Icon(Icons.star_border)
+                    children: [
+                      Row(
+                        children: List.generate(course_level!, (index) {
+                          return Icon(
+                            Icons.star,
+                            color: Colors.amber, // 노란색 별 아이콘
+                          );
+                        }),
+                      ),
+                      Row(
+                        children: List.generate(course_negative!, (index) {
+                          return Icon(
+                            Icons.star_border,
+                            color: Colors.amber, // 노란색 별 아이콘
+                          );
+                        }),
+                      ),
                     ],
                   ),
                   Row(
