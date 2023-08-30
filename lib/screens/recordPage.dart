@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sangoproject/config/location.dart';
 
 class RecordPage extends StatefulWidget{
   const RecordPage({Key? key}) : super(key: key);
@@ -20,22 +21,31 @@ class RecordPage extends StatefulWidget{
     @override
     void initState() {
       super.initState();
-      _checkLocationPermission();
+      // _checkLocationPermission();
       // _getCurrentLocation();
     }
 
+    // Future<void> _getCurrentLocation() async {
+    //   final position = await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high,
+    //   );
+    //
+    //   setState(() {
+    //     _currentPosition = position;
+    //   });
+    // }
     // void _onMapCreated(GoogleMapController controller) {
     //   _controller = controller;
     // }
 
-    Future<void> _checkLocationPermission() async {
-      final status = await Permission.location.request();
-      if (status.isGranted) {
-        print('Location permission granted');
-      } else {
-        print('Location permission denied');
-      }
-    }
+    // Future<void> _checkLocationPermission() async {
+    //   final status = await Permission.location.request();
+    //   if (status.isGranted) {
+    //     print('Location permission granted');
+    //   } else {
+    //     print('Location permission denied');
+    //   }
+    // }
 
     // 지도 클릭 시 표시할 장소에 대한 마커 목록
     final List<Marker> markers = [];
@@ -91,7 +101,8 @@ class RecordPage extends StatefulWidget{
                             Text('산책 거리 1.0km'),
                             TextButton(
                               onPressed: () {
-                                print('Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}');
+                                getLocation();
+                                // print('Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}');
                                 // 현위치를 반환하는 버튼
                                 // _controller?.animateCamera(
                                 //   CameraUpdate.newLatLng(
