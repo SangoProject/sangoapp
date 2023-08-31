@@ -1,18 +1,39 @@
-import 'package:geolocator/geolocator.dart';
+// import 'package:geolocator/geolocator.dart';
+//
+// Future<void> getLocation() async {
+//   try {
+//     Position position = await Geolocator.getCurrentPosition(
+//       desiredAccuracy: LocationAccuracy.high,
+//     );
+//     print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
+//
+//     setState(() {
+//       _currentPosition = position;
+//     });
+//
+//     if (_controller != null) {
+//       _controller!.animateCamera(CameraUpdate.newLatLngZoom(LatLng(position.latitude, position.longitude), 15.0));
+//     }
+//   } catch (e) {
+//     print('Error: $e');
+//   }
+// }
 
-Future<Position?> getLocation() async {
-  try {
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
-    return position;
-  } catch (e) {
-    print('Error: $e');
-    return null;
-  }
-}
-
+// import 'package:geolocator/geolocator.dart';
+//
+// Future<Position?> getLocation() async {
+//   try {
+//     Position position = await Geolocator.getCurrentPosition(
+//       desiredAccuracy: LocationAccuracy.high,
+//     );
+//     print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
+//     return position;
+//   } catch (e) {
+//     print('Error: $e');
+//     return null;
+//   }
+// }
+//
 
 // import 'package:location/location.dart';
 //
