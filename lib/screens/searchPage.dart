@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sangoproject/screens/course_data/courseInfo.dart';
 import 'package:sangoproject/screens/searchResultPage.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class SearchPage extends StatefulWidget{
   @override
@@ -158,9 +160,17 @@ class _SearchPage extends State<SearchPage>{
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
-                  onPressed: (){
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => SearchResultPage(dropdownValue)));
+                  onPressed: () async {
+                    final tmp = await FirebaseDatabase.instance.ref('DATA').orderByChild('area_gu').equalTo(dropdownValue);
+                    tmp.onValue.listen((DatabaseEvent event){
+                      //관악구
+                      //List<dynamic> _data = event.snapshot.value as List<dynamic>;
+                      Map<dynamic, dynamic> _toMap = event.snapshot.value as Map<dynamic, dynamic>;
+                      List<CourseInfo> _data = _toMap.values.map((e) => CourseInfo.fromJson(e)).toList();
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => SearchResultPage(dropdownValue, _data))
+                      );
+                    });
                   },
                   child: Text('검색하기')
               ),

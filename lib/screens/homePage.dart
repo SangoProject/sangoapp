@@ -93,7 +93,7 @@ class _HomePage extends State<HomePage> {
                     ],
                   )
               ),
-              Expanded(child: LibraryList()),
+              //Expanded(child: LibraryList("중구")),
             ],
           ),
         ),

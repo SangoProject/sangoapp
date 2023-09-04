@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:sangoproject/screens/components/libraryList.dart';
+import 'package:sangoproject/screens/course_data/courseInfo.dart';
 
 class SearchResultPage extends StatefulWidget{
   String input = '';
-  SearchResultPage(this.input);
+  List<CourseInfo> data;
+  SearchResultPage(this.input, this.data);
   @override
   State<StatefulWidget> createState(){
-    return _SearchResultPage(input);
+    return _SearchResultPage(input, data);
   }
 }
 
 class _SearchResultPage extends State<SearchResultPage>{
   String location = '';
-  String resultCnt = '5';
-  _SearchResultPage(this.location);
+  List<CourseInfo> data;
+  _SearchResultPage(this.location, this.data);
+  late int resultCnt = data.length;
 
   @override
   Widget build(BuildContext context){
@@ -26,7 +29,7 @@ class _SearchResultPage extends State<SearchResultPage>{
         children: <Widget>[
           Text("'${location}' 검색 결과 입니다."),
           Text("${resultCnt}건"),
-          Expanded(child: LibraryList()),
+          Expanded(child: LibraryList(data)),
         ],
       ),
     );
