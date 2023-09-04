@@ -27,8 +27,14 @@ class _SearchResultPage extends State<SearchResultPage>{
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("'${location}' 검색 결과 입니다."),
-          Text("${resultCnt}건"),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            child: Text("'$location' 검색 결과 입니다."),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            child: Text("$resultCnt건"),
+          ),
           Expanded(child: LibraryList(data)),
         ],
       ),

@@ -6,6 +6,7 @@ class LibraryList extends StatelessWidget {
   List<CourseInfo> data;
   LibraryList(this.data);
   //임의의 데이터
+
   @override
   Widget build(BuildContext context) {
     // List<CourseInfo> list = [];
@@ -18,11 +19,22 @@ class LibraryList extends StatelessWidget {
 
     return ListView.separated(
       itemBuilder: (context, index){
-        final area_gu = data[index].area_gu;
+        // final area_gu = data[index].area_gu;
         final distance = data[index].distance;
         final lead_time = data[index].lead_time;
         final course_level = int.parse(data[index].course_level);
         final course_negative = 3 - course_level;
+
+        String detailCourse = data[index].detail_course;
+        List<String> courseParts = detailCourse.split("~");
+
+        String firstString = ''; // 가장 앞의 문자열을 저장할 변수
+        String lastString = '';  // 가장 뒤의 문자열을 저장할 변수
+
+        if (courseParts.length >= 2) {
+          firstString = courseParts.first;
+          lastString = courseParts.last;
+        }
 
         return TextButton(
             onPressed: (){
@@ -57,9 +69,9 @@ class LibraryList extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Text(area_gu),
+                      Text(firstString),
                       Icon(Icons.arrow_forward),
-                      Text(area_gu),
+                      Text(lastString),
                     ],
                   ),
                   Text("거리 : " + distance + ", 산책시간 : " + lead_time),
