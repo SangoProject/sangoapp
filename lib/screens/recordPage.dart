@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
 import '../config/timer.dart';
+import 'components/popDialog.dart';
 
 class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);
@@ -14,15 +17,15 @@ class RecordPage extends StatefulWidget {
 class _RecordPageState extends State<RecordPage> {
   GoogleMapController? _controller;
   Position? _currentPosition;
-  bool isPaused = false; // 일시정지 상태 여부
+  // bool isPaused = false; // 일시정지 상태 여부
   bool startRecording = false; // 기록중인 상태 여부
   int _seconds = 0;
-  TimerUtil _timerUtil = TimerUtil();
-  Stream<int> _timerStream = Stream<int>.empty();
+  final TimerUtil _timerUtil = TimerUtil();
 
   @override
   void dispose() {
-    _timerUtil.stopTimer();
+    // _timerUtil.stopTimer();
+    // _timerStreamController.close();
     super.dispose();
   }
 
@@ -81,7 +84,7 @@ class _RecordPageState extends State<RecordPage> {
         body: Column(
           children: [
             SizedBox(
-              height: 500,
+              height: MediaQuery.of(context).size.height * 0.7,
               child: GoogleMap(
                 onMapCreated: (controller) {
                   setState(() {
@@ -106,7 +109,7 @@ class _RecordPageState extends State<RecordPage> {
             ),
             Expanded(
               child: Container(
-                height: 200,
+                height: MediaQuery.of(context).size.height * 0.2,
                 color: Colors.white,
                 child: Column(
                   children: [
@@ -137,59 +140,46 @@ class _RecordPageState extends State<RecordPage> {
                         ],
                       ),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: ElevatedButton(
-                            onPressed: !startRecording
-                                ? null // 버튼을 비활성화 상태로 만듦
-                                : () {
-                              setState(() {
-                                isPaused = !isPaused; // 버튼 상태 변경
-                              });
-                            },
-                            style: ButtonStyle(
-                              minimumSize: MaterialStateProperty.all<Size>(
-                                Size(MediaQuery.of(context).size.width * 0.8, 50), // 가로 폭의 70%로 설정
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  startRecording = !startRecording;
+                                  if (startRecording) {
+                                    _timerUtil.startTimer((seconds) {
+                                      // 여기서 타이머 갱신된 값을 처리할 수 있습니다.
+                                      // 예를 들어, 타이머 갱신된 값을 UI에 표시하거나 다른 작업을 수행할 수 있습니다.
+                                    });
+                                  } else {
+                                    _timerUtil.stopTimer();
+                                    showExitConfirmationDialog(context);
+                                  }
+                                });
+                              },
+                              style: ButtonStyle(
+                                minimumSize: MaterialStateProperty.all<Size>(
+                                  Size(MediaQuery.of(context).size.width * 0.8, 50),
+                                ),
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                                  if (startRecording) {
+                                    // startRecording이 true일 때 버튼의 배경색을 옅은 빨강색으로 설정
+                                    return Colors.red;
+                                  } else {
+                                    return Colors.white; // 그 외에는 흰색으로 설정
+                                  }
+                                }),
                               ),
-                              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                startRecording ? Colors.white : Colors.grey, // 활성화 및 비활성화 상태의 색상 설정
-                              ),
+                              child: Text(startRecording ? '산책종료' : '산책시작'),
                             ),
-                            child: Text(isPaused ? '이어하기' : '일시정지'), // 버튼 텍스트 동적으로 변경
                           ),
-
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                startRecording = !startRecording;
-                                if (startRecording) {
-                                  _timerUtil.startTimer((seconds) {
-                                    // 여기서 타이머 갱신된 값을 처리할 수 있습니다.
-                                    // 예를 들어, 타이머 갱신된 값을 UI에 표시하거나 다른 작업을 수행할 수 있습니다.
-                                  });
-                                } else {
-                                  _timerUtil.stopTimer();
-                                }
-                              });
-                            },
-                            style: ButtonStyle(
-                              minimumSize: MaterialStateProperty.all<Size>(
-                                Size(MediaQuery.of(context).size.width * 0.8, 50), // 가로 폭의 70%로 설정
-                              ),
-                              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                            ),
-                            child: Text(startRecording ? '산책종료' : '산책시작'),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
