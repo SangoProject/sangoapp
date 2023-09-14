@@ -4,7 +4,7 @@ import 'package:sangoproject/screens/course_data/courseInfo.dart';
 
 class SearchResultPage extends StatefulWidget{
   String input = '';
-  List<CourseInfo> data;
+  List<dynamic> data;
   SearchResultPage(this.input, this.data);
   @override
   State<StatefulWidget> createState(){
@@ -14,7 +14,7 @@ class SearchResultPage extends StatefulWidget{
 
 class _SearchResultPage extends State<SearchResultPage>{
   String location = '';
-  List<CourseInfo> data;
+  List<dynamic> data;
   _SearchResultPage(this.location, this.data);
   late int resultCnt = data.length;
 

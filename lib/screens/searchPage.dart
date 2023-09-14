@@ -11,7 +11,7 @@ class SearchPage extends StatefulWidget{
 }
 
 class _SearchPage extends State<SearchPage>{
-  List<String> dropdownList = [
+  List<String> areaGu = [
     '강남구', '강동구', '강북구', '강서구', '관악구',
     '광진구', '구로구', '금천구', '노원구', '도봉구',
     '동대문구', '동작구', '마포구', '서대문구', '서초구',
@@ -19,9 +19,9 @@ class _SearchPage extends State<SearchPage>{
     '용산구', '은평구', '종로구', '중구', '중랑구'
   ];
   String dropdownValue = '강남구';
-  List<bool> _selections1 = List.generate(3, (index) => false);
-  List<bool> _selections2 = List.generate(3, (index) => false);
-  List<bool> _selections3 = List.generate(3, (index) => false);
+  List<bool> _leadTime = List.generate(3, (index) => false);
+  List<bool> _distance = List.generate(3, (index) => false);
+  List<bool> _courseLevel = List.generate(3, (index) => false);
 
   @override
   Widget build(BuildContext context){
@@ -55,7 +55,7 @@ class _SearchPage extends State<SearchPage>{
                     dropdownValue = newValue!;
                   });
                 },
-                items: dropdownList.map<DropdownMenuItem<String>>((String value){
+                items: areaGu.map<DropdownMenuItem<String>>((String value){
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -81,16 +81,16 @@ class _SearchPage extends State<SearchPage>{
             children: <Widget>[
               ToggleButtons(
                 children: <Widget>[
-                  Text("  30분 이하  "),
                   Text("  1시간 이하  "),
+                  Text("  1시간 초과 2시간 이하  "),
                   Text("  2시간 초과  "),
                 ],
                 onPressed: (int index){
                   setState(() {
-                    _selections1[index] = !_selections1[index];
+                    _leadTime[index] = !_leadTime[index];
                   });
                 },
-                isSelected: _selections1,
+                isSelected: _leadTime,
               )
             ],
           ),
@@ -112,15 +112,15 @@ class _SearchPage extends State<SearchPage>{
               ToggleButtons(
                 children: <Widget>[
                   Text("  1km 이하  "),
-                  Text("  5km 이하  "),
-                  Text("  10km 초과  "),
+                  Text("  1km 초과  5km 이하  "),
+                  Text("  5km 초과  "),
                 ],
                 onPressed: (int index){
                   setState(() {
-                    _selections2[index] = !_selections2[index];
+                    _distance[index] = !_distance[index];
                   });
                 },
-                isSelected: _selections2,
+                isSelected: _distance,
               )
             ],
           ),
@@ -147,10 +147,10 @@ class _SearchPage extends State<SearchPage>{
                 ],
                 onPressed: (int index){
                   setState(() {
-                    _selections3[index] = !_selections3[index];
+                    _courseLevel[index] = !_courseLevel[index];
                   });
                 },
-                isSelected: _selections3,
+                isSelected: _courseLevel,
               )
             ],
           ),
@@ -161,12 +161,84 @@ class _SearchPage extends State<SearchPage>{
             children: <Widget>[
               ElevatedButton(
                   onPressed: () async {
-                    final tmp = await FirebaseDatabase.instance.ref('DATA').orderByChild('area_gu').equalTo(dropdownValue);
+                    // 데이터 가져오기
+                    final tmp = await FirebaseDatabase.instance.ref('SEARCH').child(dropdownValue);
                     tmp.onValue.listen((DatabaseEvent event){
-                      //관악구
-                      //List<dynamic> _data = event.snapshot.value as List<dynamic>;
-                      Map<dynamic, dynamic> _toMap = event.snapshot.value as Map<dynamic, dynamic>;
-                      List<CourseInfo> _data = _toMap.values.map((e) => CourseInfo.fromJson(e)).toList();
+                      List<dynamic> _list = event.snapshot.value as List<dynamic>;
+                      List<dynamic> _data = [];
+                      for(int i=0; i<_list.length; i++){
+                        _data.add(_list[i]);
+                      }
+
+                      //필터링
+                      for(dynamic i in _list){
+                        if(_leadTime[0] || _leadTime[1] || _leadTime[2]
+                            || _distance[0] || _distance[1] || _distance[2]
+                            || _courseLevel[0] || _courseLevel[1] || _courseLevel[2])
+                        {
+                          // 산책시간 필터링
+                          if(_leadTime[0]){
+                            if(i["lead_time"] <= 30){
+                              _data.add(i);
+                              continue;
+                            }
+                          }
+                          if(_leadTime[1]){
+                            if(i["lead_time"] > 30 && i["lead_time"] <= 60){
+                              _data.add(i);
+                              continue;
+                            }
+                          }
+                          if(_leadTime[2]){
+                            if(i["lead_time"] > 60){
+                              _data.add(i);
+                              continue;
+                            }
+                          }
+                          // 산책거리 필터링
+                          if(_distance[0]){
+                            if(i["distance"] <= 1.0){
+                              _data.add(i);
+                              continue;
+                            }
+                          }
+                          if(_distance[1]){
+                            if(i["distance"] > 1.0 && i["distance"] <= 5.0){
+                              _data.add(i);
+                              continue;
+                            }
+                          }
+                          if(_distance[2]){
+                            if(i["distance"] > 5.0){
+                              _data.add(i);
+                              continue;
+                            }
+                          }
+                          // 산책난이도 필터링
+                          if(_courseLevel[0]){
+                            if(i["course_level"] == 3){
+                              _data.add(i);
+                              continue;
+                            }
+                          }
+                          if(_courseLevel[1]){
+                            if(i["course_level"] == 2){
+                              _data.add(i);
+                              continue;
+                            }
+                          }
+                          if(_courseLevel[2]){
+                            if(i["course_level"] == 1){
+                              _data.add(i);
+                              continue;
+                            }
+                          }
+                        }
+                      }
+                      if(_data.isEmpty){
+                        _data = _list;
+                      }
+
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => SearchResultPage(dropdownValue, _data))
                       );
