@@ -19,10 +19,9 @@ class LibraryList extends StatelessWidget {
 
     return ListView.separated(
       itemBuilder: (context, index){
-        // final area_gu = data[index].area_gu;
-        final distance = data[index].distance;
-        final lead_time = data[index].lead_time;
-        final course_level = int.parse(data[index].course_level);
+        final distance = data[index].distance;   // 이동 거리
+        final lead_time = data[index].lead_time; // 소요 시간
+        final course_level = int.parse(data[index].course_level); // 난이도
         final course_negative = 3 - course_level;
 
         String detailCourse = data[index].detail_course;

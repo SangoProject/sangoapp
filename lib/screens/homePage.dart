@@ -5,6 +5,7 @@ import 'goalPage.dart';
 import 'package:sangoproject/screens/components/goalGraph.dart';
 import 'libraryPage.dart';
 import 'package:sangoproject/screens/components/libraryList.dart';
+import 'package:sangoproject/screens/course_data/courseInfo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -37,6 +38,13 @@ class _HomePage extends State<HomePage> {
       print(e);
     }
   }
+
+  //삭제해줘야 됨.
+  List<CourseInfo> list = [
+    CourseInfo(course_name: '생태문화길', area_gu: '관악구', distance: '1.3km', lead_time: '30분', course_level: '1', detail_course: '제2광장 자락길(무장애숲길)입구~도토리 쉼터'),
+    CourseInfo(course_name: '한강지천길',area_gu: '종로구', distance: '4km', lead_time: '2시간 30분', course_level: '2', detail_course: '돈의문 터~창의문'),
+    CourseInfo(course_name: '생태문화길',area_gu: '중구', distance: '1.8km', lead_time: '1시간', course_level: '1', detail_course: '백범광장~돈의문터 강북삼성병원')
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +101,7 @@ class _HomePage extends State<HomePage> {
                     ],
                   )
               ),
-              //Expanded(child: LibraryList("중구")),
+              Expanded(child: LibraryList(list)),
             ],
           ),
         ),
