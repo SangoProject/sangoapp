@@ -18,17 +18,6 @@ class LibraryList extends StatelessWidget {
         int course_level = data[index]["course_level"];
         int course_negative = 3 - course_level;
 
-        /*String detailCourse = data[index].detail_course;
-        List<String> courseParts = detailCourse.split("~");
-
-        String firstString = ''; // 가장 앞의 문자열을 저장할 변수
-        String lastString = '';  // 가장 뒤의 문자열을 저장할 변수
-
-        if (courseParts.length >= 2) {
-          firstString = courseParts.first;
-          lastString = courseParts.last;
-        }*/
-
         return TextButton(
             onPressed: () async {
               // 세부정보 가져오기

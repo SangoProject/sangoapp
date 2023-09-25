@@ -165,82 +165,84 @@ class _SearchPage extends State<SearchPage>{
                     final tmp = await FirebaseDatabase.instance.ref('SEARCH').child(dropdownValue);
                     tmp.onValue.listen((DatabaseEvent event){
                       List<dynamic> _list = event.snapshot.value as List<dynamic>;
-                      List<dynamic> _data = [];
-                      for(int i=0; i<_list.length; i++){
-                        _data.add(_list[i]);
-                      }
-
-                      //필터링
-                      for(dynamic i in _list){
-                        if(_leadTime[0] || _leadTime[1] || _leadTime[2]
-                            || _distance[0] || _distance[1] || _distance[2]
-                            || _courseLevel[0] || _courseLevel[1] || _courseLevel[2])
-                        {
-                          // 산책시간 필터링
+                      Set<dynamic> _data = _list.toSet();
+                      //산책 시간 필터링
+                      if(_leadTime[0] || _leadTime[1] || _leadTime[2]){
+                        Set<dynamic> _dataLeadTime = {};
+                        for(dynamic i in _list){
                           if(_leadTime[0]){
                             if(i["lead_time"] <= 30){
-                              _data.add(i);
+                              _dataLeadTime.add(i);
                               continue;
                             }
                           }
                           if(_leadTime[1]){
                             if(i["lead_time"] > 30 && i["lead_time"] <= 60){
-                              _data.add(i);
+                              _dataLeadTime.add(i);
                               continue;
                             }
                           }
                           if(_leadTime[2]){
                             if(i["lead_time"] > 60){
-                              _data.add(i);
+                              _dataLeadTime.add(i);
                               continue;
                             }
                           }
-                          // 산책거리 필터링
+                        }
+                        _data = _data.intersection(_dataLeadTime);
+                      }
+                      //산책 거리 필터링
+                      if(_distance[0] || _distance[1] || _distance[2]){
+                        Set<dynamic> _dataDistance = {};
+                        for(dynamic i in _list){
                           if(_distance[0]){
                             if(i["distance"] <= 1.0){
-                              _data.add(i);
+                              _dataDistance.add(i);
                               continue;
                             }
                           }
                           if(_distance[1]){
                             if(i["distance"] > 1.0 && i["distance"] <= 5.0){
-                              _data.add(i);
+                              _dataDistance.add(i);
                               continue;
                             }
                           }
                           if(_distance[2]){
                             if(i["distance"] > 5.0){
-                              _data.add(i);
+                              _dataDistance.add(i);
                               continue;
                             }
                           }
-                          // 산책난이도 필터링
+                        }
+                        _data = _data.intersection(_dataDistance);
+                      }
+                      //난이도 필터링
+                      if(_courseLevel[0] || _courseLevel[1] || _courseLevel[2]){
+                        Set<dynamic> _dataLevel = {};
+                        for(dynamic i in _list){
                           if(_courseLevel[0]){
                             if(i["course_level"] == 3){
-                              _data.add(i);
+                              _dataLevel.add(i);
                               continue;
                             }
                           }
                           if(_courseLevel[1]){
                             if(i["course_level"] == 2){
-                              _data.add(i);
+                              _dataLevel.add(i);
                               continue;
                             }
                           }
                           if(_courseLevel[2]){
                             if(i["course_level"] == 1){
-                              _data.add(i);
+                              _dataLevel.add(i);
                               continue;
                             }
                           }
                         }
+                        _data = _data.intersection(_dataLevel);
                       }
-                      if(_data.isEmpty){
-                        _data = _list;
-                      }
-
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => SearchResultPage(dropdownValue, _data))
+                          MaterialPageRoute(builder: (context) => SearchResultPage(dropdownValue, _data.toList()))
                       );
                     });
                   },
