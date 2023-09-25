@@ -12,11 +12,18 @@ class LibraryList extends StatelessWidget {
 
     return ListView.separated(
       itemBuilder: (context, index){
+// <<<<<<< HEAD
+//         final distance = data[index].distance;   // 이동 거리
+//         final lead_time = data[index].lead_time; // 소요 시간
+//         final course_level = int.parse(data[index].course_level); // 난이도
+//         final course_negative = 3 - course_level;
+// =======
         String course_name = data[index]["course_name"];
         final distance = data[index]["distance"];
         final lead_time = data[index]["lead_time"];
         int course_level = data[index]["course_level"];
         int course_negative = 3 - course_level;
+// >>>>>>> 8d7508d47e012dfb24d939465f54721d5f5e233a
 
         return TextButton(
             onPressed: () async {

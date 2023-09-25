@@ -17,15 +17,13 @@ class RecordPage extends StatefulWidget {
 class _RecordPageState extends State<RecordPage> {
   GoogleMapController? _controller;
   Position? _currentPosition;
-  // bool isPaused = false; // 일시정지 상태 여부
   bool startRecording = false; // 기록중인 상태 여부
-  int _seconds = 0;
   final TimerUtil _timerUtil = TimerUtil();
+  final StreamController<int> _timerStreamController = StreamController<int>();
 
   @override
   void dispose() {
-    // _timerUtil.stopTimer();
-    // _timerStreamController.close();
+    _timerStreamController.close();
     super.dispose();
   }
 
@@ -44,7 +42,7 @@ class _RecordPageState extends State<RecordPage> {
         _controller!.animateCamera(
           CameraUpdate.newLatLngZoom(
             LatLng(position.latitude, position.longitude),
-            15.0, // Change zoom to 15.0 when getting current location
+            15.0, // 줌 값 변경
           ),
         );
       }
@@ -70,6 +68,7 @@ class _RecordPageState extends State<RecordPage> {
 
   Stream<int> getTimerStream() {
     if (startRecording) {
+      _timerStreamController.sink.add(0); // 0으로 초기화
       return _timerUtil.timerStream; // startRecording이 true일 때 타이머 스트림을 반환
     } else {
       return Stream<int>.empty(); // startRecording이 false일 때 빈 스트림을 반환
@@ -149,8 +148,21 @@ class _RecordPageState extends State<RecordPage> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
+                                  if (!startRecording) {
+                                    _timerUtil.resetTimer(); // 타이머 초기화
+                                  }
                                   startRecording = !startRecording;
                                   if (startRecording) {
+                                    // 위치 가져오고 마커 추가
+                                    getLocation().then((position) {
+                                      if (_currentPosition != null) {
+                                        final LatLng currentLatLng =
+                                        LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
+                                        _controller?.animateCamera(CameraUpdate.newLatLng(currentLatLng));
+                                        _controller?.animateCamera(CameraUpdate.newLatLngZoom(currentLatLng, 15));
+                                        addMarker(currentLatLng);
+                                      }
+                                    });
                                     _timerUtil.startTimer((seconds) {
                                       // 여기서 타이머 갱신된 값을 처리할 수 있습니다.
                                       // 예를 들어, 타이머 갱신된 값을 UI에 표시하거나 다른 작업을 수행할 수 있습니다.
