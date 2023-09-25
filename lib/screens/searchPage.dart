@@ -27,7 +27,13 @@ class _SearchPage extends State<SearchPage>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('검색'),
+        centerTitle: true,
+        title: Text(
+          '검색',
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

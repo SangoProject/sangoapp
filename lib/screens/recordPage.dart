@@ -77,127 +77,132 @@ class _RecordPageState extends State<RecordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: GoogleMap(
-                onMapCreated: (controller) {
-                  setState(() {
-                    _controller = controller;
-                  });
-                },
-                markers: markers.toSet(),
-                onTap: (cordinate) {
-                  _controller?.animateCamera(CameraUpdate.newLatLng(cordinate));
-                  addMarker(cordinate);
-                },
-                initialCameraPosition: _currentPosition != null
-                    ? CameraPosition(
-                  target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-                  zoom: 15.0,
-                )
-                    : CameraPosition(
-                  target: LatLng(37.541, 126.986),
-                  zoom: 11.0,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: GoogleMap(
+                  onMapCreated: (controller) {
+                    setState(() {
+                      _controller = controller;
+                    });
+                  },
+                  markers: markers.toSet(),
+                  onTap: (cordinate) {
+                    _controller?.animateCamera(CameraUpdate.newLatLng(cordinate));
+                    addMarker(cordinate);
+                  },
+                  initialCameraPosition: _currentPosition != null
+                      ? CameraPosition(
+                    target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+                    zoom: 15.0,
+                  )
+                      : CameraPosition(
+                    target: LatLng(37.541, 126.986),
+                    zoom: 11.0,
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.2,
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          StreamBuilder<int>(
-                            stream: getTimerStream(), // 조건에 따라 다른 스트림 반환
-                            builder: (context, snapshot) {
-                              final int seconds = snapshot.data ?? 0;
-                              final String formattedTime = TimerUtil.getFormattedTime(seconds);
-                              return Text(
-                                formattedTime,
-                                style: TextStyle(fontSize: 20),
-                              );
-                            },
-                          ),
-                          Text('0.0km',
-                          style: TextStyle(fontSize: 20),),
-                          TextButton(
-                            onPressed: () {
-                              getLocation();
-                            },
-                            child: Text('현위치'),
-                          )
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (!startRecording) {
-                                    _timerUtil.resetTimer(); // 타이머 초기화
-                                  }
-                                  startRecording = !startRecording;
-                                  if (startRecording) {
-                                    // 위치 가져오고 마커 추가
-                                    getLocation().then((position) {
-                                      if (_currentPosition != null) {
-                                        final LatLng currentLatLng =
-                                        LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
-                                        _controller?.animateCamera(CameraUpdate.newLatLng(currentLatLng));
-                                        _controller?.animateCamera(CameraUpdate.newLatLngZoom(currentLatLng, 15));
-                                        addMarker(currentLatLng);
-                                      }
-                                    });
-                                    _timerUtil.startTimer((seconds) {
-                                      // 여기서 타이머 갱신된 값을 처리할 수 있습니다.
-                                      // 예를 들어, 타이머 갱신된 값을 UI에 표시하거나 다른 작업을 수행할 수 있습니다.
-                                    });
-                                  } else {
-                                    _timerUtil.stopTimer();
-                                    showExitConfirmationDialog(context);
-                                  }
-                                });
+              Expanded(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            StreamBuilder<int>(
+                              stream: getTimerStream(), // 조건에 따라 다른 스트림 반환
+                              builder: (context, snapshot) {
+                                final int seconds = snapshot.data ?? 0;
+                                final String formattedTime = TimerUtil.getFormattedTime(seconds);
+                                return Text(
+                                  formattedTime,
+                                  style: TextStyle(fontSize: 20),
+                                );
                               },
-                              style: ButtonStyle(
-                                minimumSize: MaterialStateProperty.all<Size>(
-                                  Size(MediaQuery.of(context).size.width * 0.8, 50),
-                                ),
-                                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                                  if (startRecording) {
-                                    // startRecording이 true일 때 버튼의 배경색을 옅은 빨강색으로 설정
-                                    return Colors.red;
-                                  } else {
-                                    return Colors.white; // 그 외에는 흰색으로 설정
-                                  }
-                                }),
-                              ),
-                              child: Text(startRecording ? '산책종료' : '산책시작'),
                             ),
-                          ),
-                        ],
+                            Text('0.0km',
+                            style: TextStyle(fontSize: 20),),
+                            TextButton(
+                              onPressed: () {
+                                getLocation();
+                              },
+                              child: Text('현위치'),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    if (!startRecording) {
+                                      _timerUtil.resetTimer(); // 타이머 초기화
+                                    }
+                                    startRecording = !startRecording;
+                                    if (startRecording) {
+                                      // 위치 가져오고 마커 추가
+                                      getLocation().then((position) {
+                                        if (_currentPosition != null) {
+                                          final LatLng currentLatLng =
+                                          LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
+                                          _controller?.animateCamera(CameraUpdate.newLatLng(currentLatLng));
+                                          _controller?.animateCamera(CameraUpdate.newLatLngZoom(currentLatLng, 15));
+                                          addMarker(currentLatLng);
+                                        }
+                                      });
+                                      _timerUtil.startTimer((seconds) {
+                                        // 여기서 타이머 갱신된 값을 처리할 수 있습니다.
+                                        // 예를 들어, 타이머 갱신된 값을 UI에 표시하거나 다른 작업을 수행할 수 있습니다.
+                                      });
+                                    } else {
+                                      _timerUtil.stopTimer();
+                                      showExitConfirmationDialog(context);
+                                    }
+                                  });
+                                },
+                                style: ButtonStyle(
+                                  minimumSize: MaterialStateProperty.all<Size>(
+                                    Size(MediaQuery.of(context).size.width * 0.8, 50),
+                                  ),
+                                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                  backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                                    if (startRecording) {
+                                      // startRecording이 true일 때 버튼의 배경색을 옅은 빨강색으로 설정
+                                      return Colors.red;
+                                    } else {
+                                      return Colors.white; // 그 외에는 흰색으로 설정
+                                    }
+                                  }),
+                                ),
+                                child: Text(startRecording ? '산책종료' : '산책시작'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

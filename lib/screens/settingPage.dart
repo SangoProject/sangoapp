@@ -45,16 +45,21 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(_title),
-          elevation: 0,
-          backgroundColor: Colors.lime,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: MaterialApp(
+        title: _title,
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text(_title),
+            elevation: 0,
+            backgroundColor: Colors.lime,
+          ),
+          body: _settingListView(),
         ),
-        body: _settingListView(),
       ),
     );
   }

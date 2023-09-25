@@ -1,13 +1,7 @@
-// import 'dart:math';
-
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-// import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proj4dart/proj4dart.dart';
-// import 'map_data/mapLatLng.dart';
-// import 'package:sangoproject/screens/course_data/courseInfo.dart';
 
 class SearchDetailPage extends StatefulWidget{
   dynamic data; // 코스명, 시간, 거리, 난이도
@@ -25,51 +19,17 @@ class _SearchDetailPage extends State<SearchDetailPage>{
   dynamic detail;
   _SearchDetailPage(this.data, this.detail);
 
-  // GoogleMapController? _controller;
-  // Position? _currentPosition;
-
   final Completer<GoogleMapController> _controller = Completer();
   final _markers = <Marker>{};
-  // final List<Marker> _markers = [];
   final List<LatLng> _points = [];
-  final Set<Polyline> _polylines = Set<Polyline>();
-
-  // final List<Map<String, dynamic>> _points = [];
-
-  // Future<void> processdetail() async {
-  //   for (int index = 0; index < detail.length; index++) {
-  //     LatLng googlePoint = await utmkToGoogle(detail[index].x, detail[index].y);
-  //     _points.add({
-  //       "name": "${detail[index].cpi_name}",
-  //       "latitude": googlePoint.latitude,
-  //       "longitude": googlePoint.longitude,
-  //     });
-  //   }
-  // }
+  final Set<Polyline> _polylines = <Polyline>{};
+  final Set<Polyline> _routePolylines = <Polyline>{};
 
   @override
   void initState() {
     super.initState();
     _setupMarkersAndPolylines();
   }
-
-  // Future<void> _initializeMarkers() async {
-  //   await processdetail(); // processdetail 함수가 완료될 때까지 기다림
-  //
-  //   _markers.addAll(
-  //     _points.map(
-  //           (e) => Marker(
-  //         markerId: MarkerId(e['name'] as String),
-  //         infoWindow: InfoWindow(title: e['name'] as String),
-  //         position: LatLng(
-  //           e['latitude'] as double,
-  //           e['longitude'] as double,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
 
   Future<void> _setupMarkersAndPolylines() async {
     for (int index = 0; index < detail.length; index++) {
@@ -87,6 +47,8 @@ class _SearchDetailPage extends State<SearchDetailPage>{
       );
       _markers.add(marker);
     }
+    print('$_markers');
+
     _polylines.add(Polyline(
       polylineId: PolylineId('path'),
       points: _points,
@@ -97,24 +59,7 @@ class _SearchDetailPage extends State<SearchDetailPage>{
     setState(() {});
   }
 
-
-  // void _addMarkersOnMap() {
-  //   for (int index = 0; index < detail.length; index++) {
-  //     // UTMK 좌표를 Google 좌표로 변환
-  //     LatLng googlePoint = utmkToGoogle(detail[index].x, detail[index].y);
-  //
-  //     // 새로운 마커 생성
-  //     Marker marker = Marker(
-  //       markerId: MarkerId(index.toString()),
-  //       position: googlePoint,
-  //       icon: BitmapDescriptor.defaultMarker,
-  //       infoWindow: InfoWindow(title: 'Point $index'),
-  //     );
-  //     _markers.add(marker);
-  //   }
-  // }
-
-  final _tuple_utmk_google = ProjectionTuple(
+  final _tupleUtmkGoogle = ProjectionTuple(
     fromProj: Projection.parse( // from 중부원점(GRS80)-falseY:60000 to WGS84
         '+proj=tmerc +lat_0=37.509290 +lon_0=127.062459 +k=1 +x_0=205525.1279 +y_0=445538.6724 +ellps=GRS80 +units=m +no_defs'),
     toProj: Projection.parse('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'),
@@ -122,7 +67,7 @@ class _SearchDetailPage extends State<SearchDetailPage>{
 
   LatLng utmkToGoogle(String x, String y) {
     var utmkPoint = Point(x: double.parse(x), y: double.parse(y));
-    var googlePoint = _tuple_utmk_google.forward(utmkPoint);
+    var googlePoint = _tupleUtmkGoogle.forward(utmkPoint);
 
     return LatLng(googlePoint.y, googlePoint.x);
   }
@@ -140,11 +85,6 @@ class _SearchDetailPage extends State<SearchDetailPage>{
       centerY = double.parse(detail[index].y);
     }
 
-    double center = ((detail.length)/2);
-
-    print('center $center');
-    print('Point $centerX, $centerY');
-
     return utmkToGoogle(centerX.toString(), centerY.toString());
   }
 
@@ -155,7 +95,13 @@ class _SearchDetailPage extends State<SearchDetailPage>{
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('산책로 세부 정보'),
+        centerTitle: true,
+        title: Text(
+          '산책로 세부 정보',
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -170,14 +116,16 @@ class _SearchDetailPage extends State<SearchDetailPage>{
               child: GoogleMap(
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
+                  _setupMarkersAndPolylines();
                 },
                 initialCameraPosition: CameraPosition(
                   target: _calculateCenterPoint(detail),
                   zoom: zoomLevel,
                 ),
                 markers: Set<Marker>.of(_markers),
-                // polylines: _polylines,
+                polylines: _routePolylines.union(_polylines),
               ),
+
             ),
             Row(
               children: [
@@ -194,9 +142,9 @@ class _SearchDetailPage extends State<SearchDetailPage>{
                     child: Text('data'))
               ],
             ),
-            Text("산책시간: " + data["lead_time"].toString() + "분"),
-            Text("산책거리: " + data["distance"].toString() + "km"),
-            Text("난이도: " + data["course_level"].toString()),
+            Text("산책시간: ${data["lead_time"]}분"),
+            Text("산책거리: ${data["distance"]}km"),
+            Text("난이도: ${data["course_level"]}"),
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index){

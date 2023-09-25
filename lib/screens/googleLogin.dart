@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sangoproject/config/palette.dart';
 import 'package:sangoproject/mainPage.dart';
 import 'package:sangoproject/screens/homePage.dart';
 
@@ -10,11 +11,17 @@ class GoogleLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Palette.logoColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('images/logo.png'),
+            Image(
+              image: AssetImage('images/SGlogo.png'),
+              width: MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.2,
+              fit: BoxFit.cover,
+            ),
             ElevatedButton(
               onPressed: () async {
                 final _googleSignIn = GoogleSignIn();

@@ -48,61 +48,88 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('산책하자GO'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => SearchPage()));
-            },
-            icon: Icon(Icons.search),
-          )
-        ],
-      ),
-      body: Container(
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              // 목표
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: Text(
-                  '오늘의 목표',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              TextButton(
-                child: ChartPage(),
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => GoalPage()));
-                },
-              ),
-
-              // 찜목록
-              Padding(
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            '산책가자GO',
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => SearchPage()));
+              },
+              icon: Icon(Icons.search),
+            )
+          ],
+        ),
+        body: Container(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                // 목표
+                Padding(
                   padding: EdgeInsets.all(15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        '찜목록',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => LibraryPage()));
-                          },
-                          icon: Icon(Icons.chevron_right)
-                      )
-                    ],
-                  )
-              ),
-              // Expanded(child: LibraryList(list)),
-            ],
+                  child: Text(
+                    '오늘의 목표',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                TextButton(
+                  child: ChartPage(),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => GoalPage()));
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 버튼 사이의 간격 조절
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: () {
+                        // 첫 번째 버튼을 눌렀을 때 실행할 동작
+                      },
+                      child: Text('목표 수정하기'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // 두 번째 버튼을 눌렀을 때 실행할 동작
+                      },
+                      child: Text('산책 통계'),
+                    ),
+                  ],
+                ),
+                // 찜목록
+                Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          '찜목록',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) => LibraryPage()));
+                            },
+                            icon: Icon(Icons.chevron_right)
+                        )
+                      ],
+                    )
+                ),
+                // Expanded(child: LibraryList(list)),
+              ],
+            ),
           ),
         ),
       ),
