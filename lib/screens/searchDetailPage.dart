@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proj4dart/proj4dart.dart';
 
+import '../config/palette.dart';
+
 class SearchDetailPage extends StatefulWidget{
   dynamic data; // 코스명, 시간, 거리, 난이도
   dynamic detail; // 포인트번호, 포인트명칭, x좌표, y좌표 (courseInfo.dart 참고)
@@ -138,35 +140,80 @@ class _SearchDetailPage extends State<SearchDetailPage>{
                 polylines: _routePolylines.union(_polylines),
               ),
             ),
-            ElevatedButton(
-                onPressed: (){
-                  for (int index = 0; index < detail.length; index++) {
-                    // UTMK 좌표를 Google 좌표로 변환하고 콘솔에 출력
-                    LatLng googlePoint = utmkToGoogle(detail[index].x, detail[index].y);
-                    print('Point $index - Google X: ${googlePoint.latitude.toString()},'
-                        ' Y: ${googlePoint.longitude.toString()}');
-                  }
-                },
-                child: Text('data')),
-            Text(data["course_name"]),
-            Text("산책시간: ${data["lead_time"]}분"),
-            Text("산책거리: ${data["distance"]}km"),
-            Text("난이도: ${data["course_level"]}"),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index){
-                  return Container(
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.swipe_down_alt),
-                        Text(detail[index].cpi_idx.toString() + " " + detail[index].cpi_name),
-                      ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+                        child: Text(
+                          data["course_name"],
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Text("산책시간: ${data["lead_time"]}분"),
+                      Text("산책거리: ${data["distance"]}km"),
+                      Text("난이도: ${data["course_level"]}"),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 24.0),
+                  child: Ink(
+                    decoration: const ShapeDecoration(
+                      color: Palette.logoColor, // 동그라미 배경색
+                      shape: CircleBorder(), // 동그라미 모양
                     ),
-                  );
-                },
-                itemCount: detail.length,
+                    child: InkWell(
+                      onTap: () {}, // 버튼 클릭 시 실행할 함수
+                      customBorder: CircleBorder(), // 클릭 영역을 동그라미로 설정
+                      child: Container(
+                        width: 50, // 버튼의 너비
+                        height: 50, // 버튼의 높이
+                        child: Icon(
+                          Icons.map, // 지도 모양 아이콘
+                          color: Colors.white, // 아이콘 색상
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                child: Scrollbar(
+                  trackVisibility: true,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 4.0),
+                        child: Container(
+                          padding: EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            color: Palette.logoColor.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(10.0), // 둥근 모서리 설정
+                            border: Border.all(width: 1.0, color: Palette.logoColor),
+                          ),// 외곽선 설정
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.swipe_down_alt),
+                              Text(detail[index].cpi_idx.toString() + " " + detail[index].cpi_name),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: detail.length,
+                  ),
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

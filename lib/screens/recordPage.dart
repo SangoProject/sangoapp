@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
+import '../config/palette.dart';
 import '../config/timer.dart';
 import 'components/popDialog.dart';
 
@@ -127,12 +128,10 @@ class _RecordPageState extends State<RecordPage> {
                     ),
                     Align(
                       alignment: Alignment.center,
-                      child: SizedBox(
-                        height: 80,
-                        child: Icon(
-                          Icons.location_on,
-                          color: Colors.red,
-                        ),
+                      child: Icon(
+                        Icons.location_on,
+                        color: Colors.red,
+                        size: 48,
                       ),
                     ),
                   ],
@@ -140,8 +139,12 @@ class _RecordPageState extends State<RecordPage> {
               ),
               Expanded(
                 child: Container(
+                  padding: EdgeInsets.all(24.0),
                   height: MediaQuery.of(context).size.height * 0.2,
-                  color: Colors.white,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40.0), // 둥근 모서리 설정
+                    border: Border.all(width: 1.0, color: Palette.logoColor),
+                  ),
                   child: Column(
                     children: [
                       Padding(
@@ -156,17 +159,17 @@ class _RecordPageState extends State<RecordPage> {
                                 final String formattedTime = TimerUtil.getFormattedTime(seconds);
                                 return Text(
                                   formattedTime,
-                                  style: TextStyle(fontSize: 20),
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 );
                               },
                             ),
                             Text('0.0km',
-                            style: TextStyle(fontSize: 20),),
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                             TextButton(
                               onPressed: () {
                                 getLocation();
                               },
-                              child: Text('현위치'),
+                              child: Text('현위치', style: TextStyle(fontSize: 16),),
                             )
                           ],
                         ),
@@ -215,7 +218,7 @@ class _RecordPageState extends State<RecordPage> {
                                       // startRecording이 true일 때 버튼의 배경색을 옅은 빨강색으로 설정
                                       return Colors.red;
                                     } else {
-                                      return Colors.white; // 그 외에는 흰색으로 설정
+                                      return Palette.logoColor; // 그 외에는 흰색으로 설정
                                     }
                                   }),
                                 ),
