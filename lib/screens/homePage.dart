@@ -90,23 +90,6 @@ class _HomePage extends State<HomePage> {
                         MaterialPageRoute(builder: (context) => GoalPage()));
                   },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 버튼 사이의 간격 조절
-                  children: <Widget>[
-                    ElevatedButton(
-                      onPressed: () {
-                        // 첫 번째 버튼을 눌렀을 때 실행할 동작
-                      },
-                      child: Text('목표 수정하기'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // 두 번째 버튼을 눌렀을 때 실행할 동작
-                      },
-                      child: Text('산책 통계'),
-                    ),
-                  ],
-                ),
                 // 찜목록
                 Padding(
                     padding: EdgeInsets.all(15),

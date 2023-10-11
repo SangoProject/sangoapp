@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sangoproject/config/palette.dart';
 
 import 'components/goalGraph.dart';
@@ -15,6 +16,17 @@ class GoalPage extends StatefulWidget{
   State<StatefulWidget> createState(){
     return _GoalPage();
   }
+}
+
+class LocationService {
+  final Geolocator _geolocator = Geolocator();
+  final LocationSettings _locationSettings = LocationSettings(
+    accuracy: LocationAccuracy.best,
+    distanceFilter: 10,
+  );
+
+  Stream<Position> get locationStream =>
+      Geolocator.getPositionStream();
 }
 
 class _GoalPage extends State<GoalPage>{

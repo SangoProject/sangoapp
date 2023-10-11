@@ -20,10 +20,12 @@ class _RecordPageState extends State<RecordPage> {
   bool startRecording = false; // 기록중인 상태 여부
   final TimerUtil _timerUtil = TimerUtil();
   final StreamController<int> _timerStreamController = StreamController<int>();
+  late Timer _locationUpdateTimer; // 위치 업데이트용 타이머
 
   @override
   void dispose() {
     _timerStreamController.close();
+    _locationUpdateTimer?.cancel(); // 타이머 종료
     super.dispose();
   }
 
@@ -32,6 +34,7 @@ class _RecordPageState extends State<RecordPage> {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+
       print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
 
       setState(() {
@@ -54,6 +57,12 @@ class _RecordPageState extends State<RecordPage> {
   @override
   void initState() {
     super.initState();
+    getLocation();
+
+    // 1초마다 위치 업데이트하는 타이머 시작
+    _locationUpdateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      getLocation();
+    });
   }
 
   final List<Marker> markers = [];
@@ -88,26 +97,45 @@ class _RecordPageState extends State<RecordPage> {
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.7,
-                child: GoogleMap(
-                  onMapCreated: (controller) {
-                    setState(() {
-                      _controller = controller;
-                    });
-                  },
-                  markers: markers.toSet(),
-                  onTap: (cordinate) {
-                    _controller?.animateCamera(CameraUpdate.newLatLng(cordinate));
-                    addMarker(cordinate);
-                  },
-                  initialCameraPosition: _currentPosition != null
-                      ? CameraPosition(
-                    target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-                    zoom: 15.0,
-                  )
-                      : CameraPosition(
-                    target: LatLng(37.541, 126.986),
-                    zoom: 11.0,
-                  ),
+                child: Stack(
+                  children: <Widget>[
+                    GoogleMap(
+                      onMapCreated: (controller) {
+                        setState(() {
+                          _controller = controller;
+                        });
+                      },
+                      markers: markers.toSet(),
+                      onTap: (cordinate) {
+                        _controller?.animateCamera(CameraUpdate.newLatLng(cordinate));
+                        addMarker(cordinate);
+                      },
+                      onCameraMove: (position) {
+                        setState(() {
+                          _currentPosition = position.target as Position?; // 카메라 위치 변경 정보를 저장
+                        });
+                      },
+                      initialCameraPosition: _currentPosition != null
+                          ? CameraPosition(
+                        target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+                        zoom: 15.0,
+                      )
+                          : CameraPosition(
+                        target: LatLng(37.541, 126.986),
+                        zoom: 11.0,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        height: 80,
+                        child: Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Expanded(
