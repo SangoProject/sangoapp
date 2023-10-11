@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class ChartPage extends StatelessWidget {
-  List<double> points = [50, 0, 73, 100, 150, 120, 200, 80];
+  //List<double> points = [50, 0, 73, 100, 150, 120, 200, 80];
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,14 @@ class ChartPage extends StatelessWidget {
 }
 
 class PieChart extends CustomPainter {
-  int percentage = 50;
+  double realDistance = 1.5;
+  double goalDistance = 5.5;
+  double percentage = 0;
   double textScaleFactor = 1.0;
+
+  PieChart(){
+    percentage = realDistance * 100 / goalDistance;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -50,7 +56,7 @@ class PieChart extends CustomPainter {
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
         -pi / 2, arcAngle, false, paint);
 
-    drawText(canvas, size, "$percentage / 100");
+    drawText(canvas, size, "27.5 %");
   }
 
   void drawText(Canvas canvas, Size size, String text) {
