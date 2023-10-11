@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'searchPage.dart';
 import 'goalPage.dart';
 import 'package:sangoproject/screens/components/goalGraph.dart';
+import 'package:sangoproject/screens/components/libraryList.dart';
+import 'package:sangoproject/screens/statistics.dart';
 import 'libraryPage.dart';
-// import 'package:sangoproject/screens/components/libraryList.dart';
-// import 'package:sangoproject/screens/course_data/courseInfo.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,12 +20,21 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   final _authentication = FirebaseAuth.instance; // user 등록
   User? loggedUser; //? is nullable
+  // 유저id 가져와야 됨
+  String uid = 'kim';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCurrentUser();
+    getGoal();
+  }
+
+  void getGoal() async {
+    final _top = await FirebaseDatabase.instance.ref("USERS").child(uid).child("GOAL");
+    final event = await _top.once();
+    final goalData = event.snapshot.value ?? -1;
   }
 
   void getCurrentUser() {
@@ -39,97 +49,61 @@ class _HomePage extends State<HomePage> {
     }
   }
 
-  // //삭제해줘야 됨.
-  // List<CourseInfo> list = [
-  //   CourseInfo(course_name: '생태문화길', area_gu: '관악구', distance: '1.3km', lead_time: '30분', course_level: '1', detail_course: '제2광장 자락길(무장애숲길)입구~도토리 쉼터'),
-  //   CourseInfo(course_name: '한강지천길',area_gu: '종로구', distance: '4km', lead_time: '2시간 30분', course_level: '2', detail_course: '돈의문 터~창의문'),
-  //   CourseInfo(course_name: '생태문화길',area_gu: '중구', distance: '1.8km', lead_time: '1시간', course_level: '1', detail_course: '백범광장~돈의문터 강북삼성병원')
-  // ];
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-            '산책가자GO',
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => SearchPage()));
-              },
-              icon: Icon(Icons.search),
-            )
-          ],
-        ),
-        body: Container(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                // 목표
-                Padding(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('산책하자GO'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => SearchPage()));
+            },
+            icon: Icon(Icons.search),
+          )
+        ],
+      ),
+      body: Container(
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              // 목표
+              GoalPage(),
+              OutlinedButton(
+                child: Text("목표 보기"),
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => Statistics())
+                  );
+                },
+              ),
+              // 찜목록
+              Padding(
                   padding: EdgeInsets.all(15),
-                  child: Text(
-                    '오늘의 목표',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                TextButton(
-                  child: ChartPage(),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => GoalPage()));
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 버튼 사이의 간격 조절
-                  children: <Widget>[
-                    ElevatedButton(
-                      onPressed: () {
-                        // 첫 번째 버튼을 눌렀을 때 실행할 동작
-                      },
-                      child: Text('목표 수정하기'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // 두 번째 버튼을 눌렀을 때 실행할 동작
-                      },
-                      child: Text('산책 통계'),
-                    ),
-                  ],
-                ),
-                // 찜목록
-                Padding(
-                    padding: EdgeInsets.all(15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          '찜목록',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        IconButton(
-                            onPressed: () {
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        '찜목록',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                          onPressed: () async {
+                            final tmp = await FirebaseDatabase.instance.ref('USERS').child(uid).child('LIBRARY');
+                            tmp.onValue.listen((DatabaseEvent event){
+                              List<dynamic> userLibrary =event.snapshot.value as List<dynamic>;
                               Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => LibraryPage()));
-                            },
-                            icon: Icon(Icons.chevron_right)
-                        )
-                      ],
-                    )
-                ),
-                // Expanded(child: LibraryList(list)),
-              ],
-            ),
+                                  MaterialPageRoute(builder: (context) => LibraryPage(userLibrary)));
+                            });
+                          },
+                          icon: Icon(Icons.chevron_right)
+                      )
+                    ],
+                  )
+              ),
+              //Expanded(child: LibraryList(userData as List)),
+            ],
           ),
         ),
       ),
