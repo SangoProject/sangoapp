@@ -55,12 +55,6 @@ class _SearchDetailPage extends State<SearchDetailPage>{
     double centerX = 0.0;
     double centerY = 0.0;
 
-    // 전체 포인트 경로에서 중앙 포인트의 X,Y값
-    // for (int index = 0; index < (detail.length)/2; index++) {
-    //   centerX = double.parse(detail[index].x);
-    //   centerY = double.parse(detail[index].y);
-    // }
-
     // 가장 처음 포인트 X, Y값
     centerX = double.parse(detail[0].x);
     centerY = double.parse(detail[0].y);

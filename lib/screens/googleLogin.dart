@@ -17,7 +17,7 @@ class GoogleLogin extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image(
-              image: AssetImage('images/SGlogo.png'),
+              image: AssetImage('images/logo.png'),
               width: MediaQuery.of(context).size.height * 0.2,
               height: MediaQuery.of(context).size.height * 0.2,
               fit: BoxFit.cover,
