@@ -1,11 +1,8 @@
-import 'package:flutter/material.dart'; //기본 패키지
-import 'package:sangoproject/screens/goalPage.dart';
-import 'package:sangoproject/screens/googleLogin.dart';
-import 'package:sangoproject/screens/loginsignupPage.dart'; // 메인(로그인, 회원가입) 화면 패키지
-import 'mainPage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'dart:async';
+
+import 'package:sangoproject/screens/googleLogin.dart';
+import 'package:sangoproject/mainPage.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,17 +28,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/main',
       routes: {
-        // '/': (context) => LoginSignupScreen(),
         '/' : (context) => GoogleLogin(),
         '/main': (context) => MainPage(),
       },
-
-      ////////////////home: const LoginSignupScreen(),
-
-      // StreamBuilder<User>(
-      //   stream: FirebaseAuth.instance.authStateChanges(),
-      // )
-      // title: '로그인 / 회원가입' 어떻게 넣지
     );
   }
 }

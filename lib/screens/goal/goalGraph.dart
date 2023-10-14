@@ -1,9 +1,10 @@
-//나중에 재사용 가능하도록 위젯으로 만듦. (목표 달성 % (파이 차트))
 import 'package:flutter/material.dart';
 import 'dart:math';
 
 class ChartPage extends StatelessWidget {
-  //List<double> points = [50, 0, 73, 100, 150, 120, 200, 80];
+  var goalDistance;
+  var realDistance;
+  ChartPage(this.goalDistance, this.realDistance);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class ChartPage extends StatelessWidget {
             Container(
               child: CustomPaint(
                 size: Size(150, 150),
-                painter: PieChart(),
+                painter: PieChart(double.parse(goalDistance), double.parse(realDistance)),
               ),
             ),
           ],
@@ -26,13 +27,15 @@ class ChartPage extends StatelessWidget {
 }
 
 class PieChart extends CustomPainter {
-  double realDistance = 1.5;
-  double goalDistance = 5.5;
+  double realDistance;
+  double goalDistance;
   double percentage = 0;
   double textScaleFactor = 1.0;
 
-  PieChart(){
+  PieChart(this.goalDistance, this.realDistance){
     percentage = realDistance * 100 / goalDistance;
+    final tmp = percentage.toStringAsFixed(1);
+    percentage = double.parse(tmp);
   }
 
   @override
@@ -56,7 +59,7 @@ class PieChart extends CustomPainter {
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
         -pi / 2, arcAngle, false, paint);
 
-    drawText(canvas, size, "27.5 %");
+    drawText(canvas, size, "$percentage %");
   }
 
   void drawText(Canvas canvas, Size size, String text) {

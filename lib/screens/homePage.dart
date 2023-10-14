@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'searchPage.dart';
-import 'goalPage.dart';
-import 'package:sangoproject/screens/statistics.dart';
-import 'libraryPage.dart';
-import 'package:firebase_database/firebase_database.dart';
+
+import 'package:sangoproject/screens/search/searchPage.dart';
+import 'package:sangoproject/screens/goal/goal.dart';
+import 'package:sangoproject/screens/libraryPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,21 +17,12 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   final _authentication = FirebaseAuth.instance; // user 등록
   User? loggedUser; //? is nullable
-  // 유저id 가져와야 됨
-  String uid = 'kim';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCurrentUser();
-    getGoal();
-  }
-
-  void getGoal() async {
-    final _top = await FirebaseDatabase.instance.ref("USERS").child(uid).child("GOAL");
-    final event = await _top.once();
-    final goalData = event.snapshot.value ?? -1;
   }
 
   void getCurrentUser() {
@@ -49,35 +39,37 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('산책하자GO'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => SearchPage()));
-            },
-            icon: Icon(Icons.search),
-          )
-        ],
-      ),
-      body: Container(
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              // 목표
-              GoalPage(),
-              OutlinedButton(
-                child: Text("목표 보기"),
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => Statistics())
-                  );
-                },
-              ),
-              // 찜목록
-              Padding(
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            '산책가자GO',
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => SearchPage()));
+              },
+              icon: Icon(Icons.search),
+            )
+          ],
+        ),
+        body: Container(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                // 목표
+                Goal(),
+                // 찜목록
+                Padding(
                   padding: EdgeInsets.all(15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,21 +79,17 @@ class _HomePage extends State<HomePage> {
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       IconButton(
-                          onPressed: () async {
-                            final tmp = await FirebaseDatabase.instance.ref('USERS').child(uid).child('LIBRARY');
-                            tmp.onValue.listen((DatabaseEvent event){
-                              List<dynamic> userLibrary =event.snapshot.value as List<dynamic>;
-                              Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => LibraryPage(userLibrary)));
-                            });
+                          onPressed: () {
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => LibraryPage()));
                           },
                           icon: Icon(Icons.chevron_right)
                       )
                     ],
-                  )
-              ),
-              //Expanded(child: LibraryList(userData as List)),
-            ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

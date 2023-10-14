@@ -1,47 +1,63 @@
 import 'package:flutter/material.dart';
-import 'screens/homePage.dart';
-import 'screens/recordPage.dart';
-import 'screens/calendarPage.dart';
-import 'screens/settingPage.dart';
+
+import 'package:sangoproject/screens/homePage.dart';
+import 'package:sangoproject/screens/recordPage.dart';
+import 'package:sangoproject/screens/calendarPage.dart';
+import 'package:sangoproject/screens/settingPage.dart';
 
 class MainPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState()=> _MainPage();
 }
 
-class _MainPage extends State<MainPage> with SingleTickerProviderStateMixin{
-  TabController? controller;
-
-  @override
-  void initState(){
-    super.initState();
-    controller = TabController(length: 4, vsync: this);
-  }
-
-  @override
-  void dispose(){
-    controller?.dispose();
-    super.dispose();
-  }
+class _MainPage extends State<MainPage> {
+  int current_index = 0;
 
   @override
   Widget build(BuildContext context){
     return Scaffold(
-        body: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[HomePage(), RecordPage(), CalendarPage(), SettingPage()],
-          controller: controller,
-        ),
-        bottomNavigationBar: TabBar(tabs: <Tab>[
-          Tab(icon: Icon(Icons.home),),
-          Tab(icon: Icon(Icons.location_on),),
-          Tab(icon: Icon(Icons.calendar_month),),
-          Tab(icon: Icon(Icons.settings),)
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: current_index,
+        onTap: (index){
+          setState(() {
+            current_index = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.location_on),
+            label: 'record',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'settings',
+          ),
         ],
-          labelColor: Color(0xFFB7B8AD),
-          indicatorColor: Color(0xFFB7B8AD),
-          controller: controller,
-        )
+        selectedItemColor: Color(0xFF436726),
+        unselectedItemColor: Color(0xFFB6C7D1),
+        // item label 보여줄 것인지
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        // fixed : item size 고정, shifting : 선택된 item 확대
+        type: BottomNavigationBarType.fixed,
+      ),
+      body: Center(
+        child: body_item.elementAt(current_index),
+      ),
     );
   }
+  List<Widget> body_item = <Widget>[
+    HomePage(),
+    RecordPage(),
+    CalendarPage(),
+    SettingPage(),
+  ];
 }

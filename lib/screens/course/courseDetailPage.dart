@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proj4dart/proj4dart.dart';
 
-import '../config/palette.dart';
+import '../../config/palette.dart';
 
-class SearchDetailPage extends StatefulWidget{
+class CourseDetailPage extends StatefulWidget{
   dynamic data; // 코스명, 시간, 거리, 난이도
-  dynamic detail; // 포인트번호, 포인트명칭, x좌표, y좌표 (courseInfo.dart 참고)
-  SearchDetailPage(this.data, this.detail);
+  dynamic detail; // 포인트번호, 포인트명칭, x좌표, y좌표 (courseData.dart 참고)
+  CourseDetailPage(this.data, this.detail);
 
   @override
   State<StatefulWidget> createState(){
-    return _SearchDetailPage(data, detail);
+    return _CourseDetailPage(data, detail);
   }
 }
 
-class _SearchDetailPage extends State<SearchDetailPage>{
+class _CourseDetailPage extends State<CourseDetailPage>{
   dynamic data;
   dynamic detail;
-  _SearchDetailPage(this.data, this.detail);
+  _CourseDetailPage(this.data, this.detail);
 
   final Completer<GoogleMapController> _controller = Completer();
   final _markers = <Marker>{};

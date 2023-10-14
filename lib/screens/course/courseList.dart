@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:sangoproject/screens/searchDetailPage.dart';
-import 'package:sangoproject/screens/course_data/courseInfo.dart';
-import 'package:sangoproject/screens/components/libraryButton.dart';
 
-class LibraryList extends StatelessWidget {
+import 'package:sangoproject/screens/course/courseData.dart';
+import 'package:sangoproject/screens/course/courseDetailPage.dart';
+import 'package:sangoproject/screens/course/libraryButton.dart';
+
+class CourseList extends StatelessWidget {
   List<dynamic> data;
-  LibraryList(this.data);
+  CourseList(this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +22,13 @@ class LibraryList extends StatelessWidget {
 
         return TextButton(
             onPressed: () async {
-              final tmp = await FirebaseDatabase.instance.ref('DATA').orderByChild("course_name").equalTo(course_name);
-              tmp.onValue.listen((DatabaseEvent event){
-                Map<dynamic, dynamic> _toMap = event.snapshot.value as Map<dynamic, dynamic>;
-                List<CourseInfo> _data = _toMap.values.map((e) => CourseInfo.fromJson(e)).toList();
-                _data.sort((a, b) => a.cpi_idx.compareTo(b.cpi_idx));
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SearchDetailPage(data[index], _data)));
-              });
+              final realtimeDB = await FirebaseDatabase.instance.ref('DATA').orderByChild("course_name").equalTo(course_name);
+              final event = await realtimeDB.once();
+              final mapData = event.snapshot.value as Map<dynamic, dynamic>;
+              List<CourseData> courseDetail = mapData.values.map((e) => CourseData.fromJson(e)).toList();
+              courseDetail.sort((a, b) => a.cpi_idx.compareTo(b.cpi_idx));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CourseDetailPage(data[index], courseDetail)));
             },
             child: Container(
               width: double.infinity,
@@ -44,7 +44,7 @@ class LibraryList extends StatelessWidget {
                               children: List.generate(course_level!, (index) {
                                 return Icon(
                                   Icons.star,
-                                  color: Colors.amber, // 노란색 별 아이콘
+                                  color: Colors.amber,
                                 );
                               }),
                             ),
@@ -52,7 +52,7 @@ class LibraryList extends StatelessWidget {
                               children: List.generate(course_negative!, (index) {
                                 return Icon(
                                   Icons.star_border,
-                                  color: Colors.amber, // 노란색 별 아이콘
+                                  color: Colors.amber,
                                 );
                               }),
                             ),

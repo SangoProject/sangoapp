@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sangoproject/config/palette.dart';
-
 import 'package:fl_chart/fl_chart.dart';
-import 'package:sangoproject/screens/components/barGraph.dart';
-import 'package:sangoproject/screens/goal_data/barGraph_data.dart';
 
-import 'goal_data/pie_edit.dart';
+import 'package:sangoproject/config/palette.dart';
+import 'package:sangoproject/screens/goal/barGraph.dart';
+import 'package:sangoproject/screens/goal/barGraphData.dart';
 
 
-class Statistics extends StatefulWidget{
+class StatisticsPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState(){
-    return _Statistics();
+    return _StatisticsPage();
   }
 }
 
-class _Statistics extends State<Statistics>{
+class _StatisticsPage extends State<StatisticsPage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(

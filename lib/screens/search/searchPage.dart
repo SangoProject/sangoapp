@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sangoproject/screens/course_data/courseInfo.dart';
-import 'package:sangoproject/screens/searchResultPage.dart';
 import 'package:firebase_database/firebase_database.dart';
+
+import 'package:sangoproject/screens/search/searchResultPage.dart';
 
 class SearchPage extends StatefulWidget{
   @override
@@ -162,95 +162,95 @@ class _SearchPage extends State<SearchPage>{
           ),
 
           SizedBox(height: 18,),
+
+          //검색 버튼
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
                   onPressed: () async {
                     // 데이터 가져오기
-                    final tmp = await FirebaseDatabase.instance.ref('SEARCH').child(dropdownValue);
-                    tmp.onValue.listen((DatabaseEvent event){
-                      List<dynamic> _list = event.snapshot.value as List<dynamic>;
-                      Set<dynamic> _data = _list.toSet();
-                      //산책 시간 필터링
-                      if(_leadTime[0] || _leadTime[1] || _leadTime[2]){
-                        Set<dynamic> _dataLeadTime = {};
-                        for(dynamic i in _list){
-                          if(_leadTime[0]){
-                            if(i["lead_time"] <= 30){
-                              _dataLeadTime.add(i);
-                              continue;
-                            }
-                          }
-                          if(_leadTime[1]){
-                            if(i["lead_time"] > 30 && i["lead_time"] <= 60){
-                              _dataLeadTime.add(i);
-                              continue;
-                            }
-                          }
-                          if(_leadTime[2]){
-                            if(i["lead_time"] > 60){
-                              _dataLeadTime.add(i);
-                              continue;
-                            }
+                    final realtimeDB = await FirebaseDatabase.instance.ref('SEARCH').child(dropdownValue).once();
+                    final List<dynamic> data = realtimeDB.snapshot.value as List<dynamic>;
+                    Set<dynamic> searchData = data.toSet();
+                    //산책 시간 필터링
+                    if(_leadTime[0] || _leadTime[1] || _leadTime[2]){
+                      Set<dynamic> _dataLeadTime = {};
+                      for(dynamic i in data){
+                        if(_leadTime[0]){
+                          if(i["lead_time"] <= 60){
+                            _dataLeadTime.add(i);
+                            continue;
                           }
                         }
-                        _data = _data.intersection(_dataLeadTime);
-                      }
-                      //산책 거리 필터링
-                      if(_distance[0] || _distance[1] || _distance[2]){
-                        Set<dynamic> _dataDistance = {};
-                        for(dynamic i in _list){
-                          if(_distance[0]){
-                            if(i["distance"] <= 1.0){
-                              _dataDistance.add(i);
-                              continue;
-                            }
-                          }
-                          if(_distance[1]){
-                            if(i["distance"] > 1.0 && i["distance"] <= 5.0){
-                              _dataDistance.add(i);
-                              continue;
-                            }
-                          }
-                          if(_distance[2]){
-                            if(i["distance"] > 5.0){
-                              _dataDistance.add(i);
-                              continue;
-                            }
+                        if(_leadTime[1]){
+                          if(i["lead_time"] > 60 && i["lead_time"] <= 120){
+                            _dataLeadTime.add(i);
+                            continue;
                           }
                         }
-                        _data = _data.intersection(_dataDistance);
-                      }
-                      //난이도 필터링
-                      if(_courseLevel[0] || _courseLevel[1] || _courseLevel[2]){
-                        Set<dynamic> _dataLevel = {};
-                        for(dynamic i in _list){
-                          if(_courseLevel[0]){
-                            if(i["course_level"] == 3){
-                              _dataLevel.add(i);
-                              continue;
-                            }
-                          }
-                          if(_courseLevel[1]){
-                            if(i["course_level"] == 2){
-                              _dataLevel.add(i);
-                              continue;
-                            }
-                          }
-                          if(_courseLevel[2]){
-                            if(i["course_level"] == 1){
-                              _dataLevel.add(i);
-                              continue;
-                            }
+                        if(_leadTime[2]){
+                          if(i["lead_time"] > 120){
+                            _dataLeadTime.add(i);
+                            continue;
                           }
                         }
-                        _data = _data.intersection(_dataLevel);
                       }
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => SearchResultPage(dropdownValue, _data.toList()))
-                      );
-                    });
+                      searchData = searchData.intersection(_dataLeadTime);
+                    }
+                    //산책 거리 필터링
+                    if(_distance[0] || _distance[1] || _distance[2]){
+                      Set<dynamic> _dataDistance = {};
+                      for(dynamic i in data){
+                        if(_distance[0]){
+                          if(i["distance"] <= 1.0){
+                            _dataDistance.add(i);
+                            continue;
+                          }
+                        }
+                        if(_distance[1]){
+                          if(i["distance"] > 1.0 && i["distance"] <= 5.0){
+                            _dataDistance.add(i);
+                            continue;
+                          }
+                        }
+                        if(_distance[2]){
+                          if(i["distance"] > 5.0){
+                            _dataDistance.add(i);
+                            continue;
+                          }
+                        }
+                      }
+                      searchData = searchData.intersection(_dataDistance);
+                    }
+                    //난이도 필터링
+                    if(_courseLevel[0] || _courseLevel[1] || _courseLevel[2]){
+                      Set<dynamic> _dataLevel = {};
+                      for(dynamic i in data){
+                        if(_courseLevel[0]){
+                          if(i["course_level"] == 3){
+                            _dataLevel.add(i);
+                            continue;
+                          }
+                        }
+                        if(_courseLevel[1]){
+                          if(i["course_level"] == 2){
+                            _dataLevel.add(i);
+                            continue;
+                          }
+                        }
+                        if(_courseLevel[2]){
+                          if(i["course_level"] == 1){
+                            _dataLevel.add(i);
+                            continue;
+                          }
+                        }
+                      }
+                      searchData = searchData.intersection(_dataLevel);
+                    }
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => SearchResultPage(dropdownValue, searchData.toList()))
+                    );
                   },
                   child: Text('검색하기')
               ),

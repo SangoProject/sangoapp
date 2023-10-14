@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:sangoproject/screens/components/apiButton.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'goalPage.dart';
+import 'goal/goal.dart';
 import '../config/utils.dart';
 
 class Event {
