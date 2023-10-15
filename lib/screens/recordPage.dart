@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:location/location.dart';
 import 'dart:math';
 import '../config/palette.dart';
 import '../config/timer.dart';
@@ -24,6 +23,8 @@ class _RecordPageState extends State<RecordPage> {
   final TimerUtil _timerUtil = TimerUtil();
   final StreamController<int> _timerStreamController = StreamController<int>();
   // late Timer _locationUpdateTimer; // 위치 업데이트용 타이머
+  double distanceInMeters = 0.0; // 순간 이동 거리
+  double distanceTotal = 0.0; // 총 이동 거리
 
   List<LatLng> _polylineCoordinates = [];
   Set<Polyline> _polylines = {};
@@ -45,35 +46,37 @@ class _RecordPageState extends State<RecordPage> {
 
   Future<void> getLocation() async {
     try {
-      Position position = await Geolocator.getCurrentPosition(
+      Position newPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-      // print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
+
+      if (_currentPosition != null) {
+        distanceInMeters = await Geolocator.distanceBetween(
+          _currentPosition!.latitude,
+          _currentPosition!.longitude,
+          newPosition.latitude,
+          newPosition.longitude,
+        );
+        distanceTotal += distanceInMeters; // 총 이동 거리
+        print('Distance: $distanceInMeters meters');
+      }
 
       setState(() {
-        _currentPosition = position;
+        _currentPosition = newPosition;
       });
 
       if (_controller != null) {
         _controller!.animateCamera(
           CameraUpdate.newLatLngZoom(
-            LatLng(position.latitude, position.longitude),
+            LatLng(newPosition.latitude, newPosition.longitude),
             18.0, // 줌 값 변경
           ),
         );
-        double distanceInMeters = await Geolocator.distanceBetween(
-            _currentPosition!.latitude,
-            _currentPosition!.longitude,
-            position.latitude,
-            position.longitude,
-        );
-        // print 성공시 누적값 업데이트하는 내용 추가
-        print('Distance: $distanceInMeters meters');
       }
-      _currentPosition = position;
+
       // Polyline에 현재 위치 추가
-      _polylineCoordinates.add(LatLng(position.latitude, position.longitude));
-      _currentPosition = position;
+      _polylineCoordinates.add(LatLng(newPosition.latitude, newPosition.longitude));
+
       // 위치 변경을 지도에 업데이트
       updateMap();
     } catch (e) {
@@ -86,6 +89,9 @@ class _RecordPageState extends State<RecordPage> {
       _controller!.animateCamera(
         CameraUpdate.newLatLng(
             LatLng(_currentPosition!.latitude, _currentPosition!.longitude)),
+      );
+      _polylineCoordinates.add(
+          LatLng(_currentPosition!.latitude, _currentPosition!.longitude)
       );
       setState(() {
         _polylines.clear();
@@ -197,7 +203,7 @@ class _RecordPageState extends State<RecordPage> {
                           );
                         },
                       ),
-                      Text('0.0km',
+                      Text('${distanceTotal.toStringAsFixed(2)} m',
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                       TextButton(
                         onPressed: () {
@@ -223,14 +229,16 @@ class _RecordPageState extends State<RecordPage> {
                               startRecording = !startRecording;
                               if (startRecording) {
                                 // 위치 가져오고 마커 추가
-                                getLocation().then((position) {
-                                  if (_currentPosition != null) {
-                                    final LatLng currentLatLng =
-                                    LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
-                                    _controller?.animateCamera(CameraUpdate.newLatLng(currentLatLng));
-                                    // _controller?.animateCamera(CameraUpdate.newLatLngZoom(currentLatLng, 15));
-                                    addMarker(currentLatLng);
-                                  }
+                                Timer.periodic(Duration(seconds: 1), (timer) {
+                                  getLocation().then((position) {
+                                    if (_currentPosition != null) {
+                                      final LatLng currentLatLng =
+                                      LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
+                                      _controller?.animateCamera(CameraUpdate.newLatLng(currentLatLng));
+                                      // _controller?.animateCamera(CameraUpdate.newLatLngZoom(currentLatLng, 15));
+                                      addMarker(currentLatLng);
+                                    }
+                                  });
                                 });
                                 _timerUtil.startTimer((seconds) {
                                   // 여기서 타이머 갱신된 값을 처리할 수 있습니다.
