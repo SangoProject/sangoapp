@@ -17,101 +17,132 @@ class RecordPage extends StatefulWidget {
 
 class _RecordPageState extends State<RecordPage> {
   GoogleMapController? _controller;
-  // late LocationData _locationData;
   Position? _currentPosition;
-  bool startRecording = false; // 기록중인 상태 여부
+  bool isRecording = false; // 기록중인 상태 여부
   final TimerUtil _timerUtil = TimerUtil();
   final StreamController<int> _timerStreamController = StreamController<int>();
-  // late Timer _locationUpdateTimer; // 위치 업데이트용 타이머
   double distanceInMeters = 0.0; // 순간 이동 거리
   double distanceTotal = 0.0; // 총 이동 거리
 
-  List<LatLng> _polylineCoordinates = [];
-  Set<Polyline> _polylines = {};
+  final List<LatLng> _polylineCoordinates = [];
+  late Polyline _polyline;
+  final Set<Polyline> _polylines = {};
 
   @override
   void dispose() {
+    if (_locationUpdateTimer != null && _locationUpdateTimer!.isActive) {
+      _locationUpdateTimer?.cancel();
+    }
     _timerStreamController.close();
-    _locationUpdateTimer?.cancel(); // 타이머 종료
     super.dispose();
   }
 
   Timer? _locationUpdateTimer;
 
   void startLocationUpdates() {
-    _locationUpdateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      getLocation();
-    });
+    if (_locationUpdateTimer == null || !_locationUpdateTimer!.isActive) {
+      _locationUpdateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        getLocation();
+      });
+    }
   }
 
-  Future<void> getLocation() async {
+  void stopLocationUpdates() {
+    if (_locationUpdateTimer != null && _locationUpdateTimer!.isActive) {
+      _locationUpdateTimer!.cancel();
+    }
+  }
+
+  // 지도 초기화 or 현위치 버튼 누를시 현재 위치 가져오는 비동기 메서드
+  Future<Position> _getInitialLocation() async {
     try {
-      Position newPosition = await Geolocator.getCurrentPosition(
+      Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+      if (_controller != null) {
+        _controller!.animateCamera(
+          CameraUpdate.newLatLngZoom(
+            LatLng(position.latitude, position.longitude),
+            18.0, // 줌 값 변경
+          ),
+        );
+      }
+      return position;
+    } catch (e) {
+      print('Error: $e');
+      rethrow;
+    }
+  }
 
-      if (_currentPosition != null) {
-        distanceInMeters = await Geolocator.distanceBetween(
+  // 주기적으로 위치 업데이트 가져오는 비동기 메서드
+  Future<void> getLocation() async {
+    if (mounted) {
+      try {
+        Position newPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high,
+        );
+
+        // 이전 위치가 null이면 새 위치를 현재 위치로 설정
+        _currentPosition ??= newPosition;
+
+        // 새 위치와 이전 위치의 거리를 계산
+        double distanceInMeters = Geolocator.distanceBetween(
           _currentPosition!.latitude,
           _currentPosition!.longitude,
           newPosition.latitude,
           newPosition.longitude,
         );
-        distanceTotal += distanceInMeters; // 총 이동 거리
-        print('Distance: $distanceInMeters meters');
+
+        // 위치가 변경된 경우에만 처리
+        if (distanceInMeters > 0.0) {
+          // Polyline에 새 위치 추가
+          _polylineCoordinates.add(LatLng(newPosition.latitude, newPosition.longitude));
+
+          // Polyline 업데이트
+          setState(() {
+            _currentPosition = newPosition;
+          });
+          if (isRecording == true) {
+            distanceTotal += distanceInMeters; // 총 이동 거리
+            print('Distance: $distanceInMeters meters');
+            print('Current Position: ${newPosition.latitude}, ${newPosition.longitude}');
+          }
+        }
+      } catch (e) {
+        print('Error in getLocation: $e');
       }
-
-      setState(() {
-        _currentPosition = newPosition;
-      });
-
-      if (_controller != null) {
-        _controller!.animateCamera(
-          CameraUpdate.newLatLngZoom(
-            LatLng(newPosition.latitude, newPosition.longitude),
-            18.0, // 줌 값 변경
-          ),
-        );
-      }
-
-      // Polyline에 현재 위치 추가
-      _polylineCoordinates.add(LatLng(newPosition.latitude, newPosition.longitude));
-
-      // 위치 변경을 지도에 업데이트
-      updateMap();
-    } catch (e) {
-      print('Error: $e');
     }
   }
 
-  void updateMap() {
+  void updateMap(Position currentPosition) {
+    DateTime now = DateTime.now();
+    String polylineId = 'polyline_${now.year}${now.month}${now.day}_${now.hour}${now.minute}${now.second}';
+
     if (_controller != null) {
       _controller!.animateCamera(
         CameraUpdate.newLatLng(
-            LatLng(_currentPosition!.latitude, _currentPosition!.longitude)),
+            LatLng(currentPosition.latitude, currentPosition.longitude)
+        ),
       );
-      _polylineCoordinates.add(
-          LatLng(_currentPosition!.latitude, _currentPosition!.longitude)
+      _polyline = Polyline(
+        polylineId: PolylineId(polylineId),
+        points: _polylineCoordinates,
+        color: Colors.blue,
+        width: 5,
       );
-      setState(() {
-        _polylines.clear();
-        _polylines.add(Polyline(
-          polylineId: PolylineId('polyline'),
-          points: _polylineCoordinates,
-          color: Colors.blue, // Polyline 색상 설정
-          width: 5, // Polyline 두께 설정
-        ));
-      });
+      _polylines.add(_polyline);
+    } else {
+      _polyline = _polylineCoordinates as Polyline;
     }
   }
 
-  final List<Marker> markers = [];
+  final _markers = <Marker>{};
 
   addMarker(LatLng coordinate) {
     final int id = Random().nextInt(100);
 
     setState(() {
-      markers.add(
+      _markers.add(
         Marker(
           markerId: MarkerId(id.toString()),
           position: coordinate,
@@ -121,13 +152,11 @@ class _RecordPageState extends State<RecordPage> {
     });
   }
 
-
   Stream<int> getTimerStream() {
-    if (startRecording) {
-      _timerStreamController.sink.add(0); // 0으로 초기화
-      return _timerUtil.timerStream; // startRecording이 true일 때 타이머 스트림을 반환
+    if (isRecording) {
+      return _timerUtil.timerStream;
     } else {
-      return Stream<int>.empty(); // startRecording이 false일 때 빈 스트림을 반환
+      return Stream<int>.empty();
     }
   }
 
@@ -135,7 +164,7 @@ class _RecordPageState extends State<RecordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<Position>(
-        future: _getLocation(),
+        future: _getInitialLocation(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _currentPosition = snapshot.data!;
@@ -155,25 +184,24 @@ class _RecordPageState extends State<RecordPage> {
       children: [
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.7,
-          child: Stack(
-            children: <Widget>[
-              GoogleMap(
-                onMapCreated: (controller) {
-                  setState(() {
-                    _controller = controller;
-                  });
-                },
-                onTap: (cordinate) {
-                  _controller?.animateCamera(CameraUpdate.newLatLng(cordinate));
-                 },
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(_currentPosition?.latitude ?? 37.541, _currentPosition?.longitude ?? 126.986),
-                  zoom: 18.0,
-                ),
-                compassEnabled: true,
-                myLocationEnabled: true,
-              ),
-            ],
+          child: GoogleMap(
+            onMapCreated: (controller) {
+              setState(() {
+                _controller = controller;
+              });
+            },
+            onTap: (cordinate) {
+              _controller?.animateCamera(CameraUpdate.newLatLng(cordinate));
+             },
+            initialCameraPosition: CameraPosition(
+              target: LatLng(_currentPosition?.latitude ?? 37.541, _currentPosition?.longitude ?? 126.986),
+              zoom: 18.0,
+              // bearing: _currentPosition!.heading,
+            ),
+            compassEnabled: true,
+            myLocationEnabled: true,
+            markers: _markers,
+            polylines: _polylines,
           ),
         ),
         // Add other widgets here
@@ -203,7 +231,7 @@ class _RecordPageState extends State<RecordPage> {
                           );
                         },
                       ),
-                      Text('${distanceTotal.toStringAsFixed(2)} m',
+                      Text('${(distanceTotal/1000).toStringAsFixed(2)} km', // 미터를 킬로미터로 변환
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                       TextButton(
                         onPressed: () {
@@ -223,28 +251,37 @@ class _RecordPageState extends State<RecordPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              if (!startRecording) {
+                              if (!isRecording) {
                                 _timerUtil.resetTimer(); // 타이머 초기화
+                                _polylineCoordinates.clear(); // polyline 초기화
+                                stopLocationUpdates();
                               }
-                              startRecording = !startRecording;
-                              if (startRecording) {
+                              isRecording = !isRecording;
+                              if (isRecording) {
                                 // 위치 가져오고 마커 추가
                                 Timer.periodic(Duration(seconds: 1), (timer) {
                                   getLocation().then((position) {
-                                    if (_currentPosition != null) {
-                                      final LatLng currentLatLng =
-                                      LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
-                                      _controller?.animateCamera(CameraUpdate.newLatLng(currentLatLng));
-                                      // _controller?.animateCamera(CameraUpdate.newLatLngZoom(currentLatLng, 15));
-                                      addMarker(currentLatLng);
+                                    if (mounted) {
+                                      if (_currentPosition != null && _currentPosition!.latitude != 0 && _currentPosition!.longitude != 0) {
+                                        final LatLng currentLatLng =
+                                        LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
+                                        _controller?.animateCamera(CameraUpdate.newLatLng(currentLatLng));
+                                        updateMap(_currentPosition!);
+                                      }
                                     }
                                   });
                                 });
+                                addMarker(LatLng(_currentPosition!.latitude, _currentPosition!.longitude));
                                 _timerUtil.startTimer((seconds) {
                                   // 여기서 타이머 갱신된 값을 처리할 수 있습니다.
                                   // 예를 들어, 타이머 갱신된 값을 UI에 표시하거나 다른 작업을 수행할 수 있습니다.
                                 });
                               } else {
+                                addMarker(LatLng(_currentPosition!.latitude, _currentPosition!.longitude));
+                                final locationUpdateTimer = _locationUpdateTimer;
+                                if (locationUpdateTimer != null) {
+                                  locationUpdateTimer.cancel(); // 타이머 취소
+                                }
                                 _timerUtil.stopTimer();
                                 showExitConfirmationDialog(context);
                               }
@@ -256,15 +293,15 @@ class _RecordPageState extends State<RecordPage> {
                             ),
                             foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
                             backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                              if (startRecording) {
-                                // startRecording이 true일 때 버튼의 배경색을 옅은 빨강색으로 설정
+                              if (isRecording) {
+                                // isRecording이 true일 때 버튼의 배경색을 옅은 빨강색으로 설정
                                 return Colors.red;
                               } else {
                                 return Palette.logoColor; // 그 외에는 흰색으로 설정
                               }
                             }),
                           ),
-                          child: Text(startRecording ? '산책종료' : '산책시작'),
+                          child: Text(isRecording ? '산책종료' : '산책시작'),
                         ),
                       ),
                     ],
@@ -276,17 +313,5 @@ class _RecordPageState extends State<RecordPage> {
         ),
       ],
     );
-  }
-
-  Future<Position> _getLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      return position;
-    } catch (e) {
-      print('Error: $e');
-      rethrow;
-    }
   }
 }

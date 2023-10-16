@@ -16,10 +16,10 @@ void showExitConfirmationDialog(BuildContext context) {
           ),
           TextButton(
             onPressed: () {
-              // 저장하기 버튼을 눌렀을 때 실행될 로직을 여기에 추가
+              // 취소하기 버튼을 눌렀을 때 실행될 로직을 여기에 추가
               Navigator.of(context).pop(); // 다이얼로그 닫기
             },
-            child: Text("저장하기"),
+            child: Text("취소하기"),
           ),
         ],
       );
