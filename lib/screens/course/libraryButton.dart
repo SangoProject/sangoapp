@@ -11,42 +11,17 @@ class LibraryButton extends StatelessWidget{
   Widget build(BuildContext context){
     return PopupMenuButton(
       onSelected: (String value) async {
-        final top = await getIdx(uid);
+        FirebaseDatabase realtimeDB = FirebaseDatabase.instance;
         if(value == '추가') {
-          FirebaseDatabase _realtime = FirebaseDatabase.instance;
-          _realtime.ref("USERS").child(uid).child("LIBRARY").child(top.toString()).set({
-            "idx": top,
+          realtimeDB.ref("USERS").child(uid).child("LIBRARY").child(course["course_name"]).set({
             "course_level": course["course_level"],
             "course_name": course["course_name"],
             "distance": course["distance"],
             "lead_time": course["lead_time"],
           });
-
-          FirebaseDatabase _updateIdx = FirebaseDatabase.instance;
-          _updateIdx.ref("USERS").child(uid).update({"library_top": top + 1});
         }
         else if(value == '삭제') {
-          int lastIdx = top - 1;
-          if(top > 0){
-            int removeIdx = course["idx"];
-            // top 데이터 가져오기
-            final tmp = await FirebaseDatabase.instance.ref("USERS").child(uid).child("LIBRARY").child(lastIdx.toString());
-            final event = await tmp.once();
-            final topData = await event.snapshot.value;
-            // 데이터 덮어쓰기
-            FirebaseDatabase _updateData = FirebaseDatabase.instance;
-            _updateData.ref("USERS").child(uid).child("LIBRARY").update({"$removeIdx": topData});
-            _updateData.ref("USERS").child(uid).child("LIBRARY").child(removeIdx.toString()).update({"idx": removeIdx});
-            // top 데이터 삭제
-            final rem = await FirebaseDatabase.instance.ref().child("USERS/$uid/LIBRARY/$lastIdx").remove();
-            // top 수정
-            FirebaseDatabase _updateIdx = FirebaseDatabase.instance;
-            _updateIdx.ref("USERS").child(uid).update({"library_top": top - 1});
-
-            // Navigator.pushReplacement(context,
-            //   MaterialPageRoute(builder: (context) => ()),
-            // );
-          }
+          realtimeDB.ref("USERS").child(uid).child("LIBRARY").child(course["course_name"]).remove();
         }
         else{
           print("ERROR");
@@ -62,11 +37,4 @@ class LibraryButton extends StatelessWidget{
       ],
     );
   }
-}
-
-Future<dynamic> getIdx(String uid) async {
-  final _top = await FirebaseDatabase.instance.ref("USERS").child(uid).child("library_top");
-  final event = await _top.once(); // 한 번만 데이터베이스에서 값을 가져옵니다.
-  final top = event.snapshot.value ?? -1; // 값이 없을 경우 -1을 반환합니다.
-  return top;
 }
