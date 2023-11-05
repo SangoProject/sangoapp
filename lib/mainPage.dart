@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sangoproject/screens/homePage.dart';
-import 'package:sangoproject/screens/recordPage.dart';
+import 'package:sangoproject/screens/records/recordPage.dart';
 import 'package:sangoproject/screens/calendarPage.dart';
 import 'package:sangoproject/screens/settingPage.dart';
 

@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sangoproject/screens/records/recordedData.dart';
 import 'dart:math';
-import '../config/palette.dart';
-import '../config/timer.dart';
-import 'components/popDialog.dart';
+import '../../config/palette.dart';
+import '../../config/timer.dart';
+import 'popDialog.dart';
 
 class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _RecordPageState extends State<RecordPage> {
   bool isRecording = false; // 기록중인 상태 여부
   final TimerUtil _timerUtil = TimerUtil();
   final StreamController<int> _timerStreamController = StreamController<int>();
+  String formattedTime = '0:00:00';
   double distanceInMeters = 0.0; // 순간 이동 거리
   double distanceTotal = 0.0; // 총 이동 거리
 
@@ -224,7 +226,7 @@ class _RecordPageState extends State<RecordPage> {
                         stream: getTimerStream(), // 조건에 따라 다른 스트림 반환
                         builder: (context, snapshot) {
                           final int seconds = snapshot.data ?? 0;
-                          final String formattedTime = TimerUtil.getFormattedTime(seconds);
+                          formattedTime = TimerUtil.getFormattedTime(seconds);
                           return Text(
                             formattedTime,
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -283,7 +285,8 @@ class _RecordPageState extends State<RecordPage> {
                                   locationUpdateTimer.cancel(); // 타이머 취소
                                 }
                                 _timerUtil.stopTimer();
-                                showExitConfirmationDialog(context);
+                                showExitConfirmationDialog(context, distanceTotal, formattedTime);
+                                addRecord(distanceTotal, formattedTime);
                               }
                             });
                           },
