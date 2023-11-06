@@ -108,8 +108,10 @@ class Goal extends StatelessWidget{
               ElevatedButton(
                 child: Text('저장'),
                 onPressed: (){
-                  FirebaseDatabase updateData = FirebaseDatabase.instance;
-                  updateData.ref("USERS").child(uid).update({"GOAL": txtGoal.text});
+                  if (txtGoal.text != '') {
+                    FirebaseDatabase updateData = FirebaseDatabase.instance;
+                    updateData.ref("USERS").child(uid).update({"GOAL": txtGoal.text});
+                  }
                   Navigator.pop(context);
                   txtGoal.text = '';
                 },
