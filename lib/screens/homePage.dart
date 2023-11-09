@@ -5,6 +5,8 @@ import 'package:sangoproject/screens/search/searchPage.dart';
 import 'package:sangoproject/screens/goal/goal.dart';
 import 'package:sangoproject/screens/libraryPage.dart';
 
+import 'disaster/disasterBanner.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -66,11 +68,13 @@ class _HomePage extends State<HomePage> {
           child: Center(
             child: Column(
               children: <Widget>[
+                // 재난 공지
+                Disaster(),
                 // 목표
                 Goal(),
                 // 찜목록
                 Padding(
-                  padding: EdgeInsets.all(15),
+                  padding: EdgeInsets.all(20.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

@@ -16,20 +16,23 @@ class Goal extends StatelessWidget{
     return Container(
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                '오늘의 목표',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              IconButton(
-                onPressed: () {
-                  showPieDataDialog(context, uid);
-                },
-                icon: Image.asset('images/pencil.png'),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '오늘의 목표',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  onPressed: () {
+                    showPieDataDialog(context, uid);
+                  },
+                  icon: Image.asset('images/pencil.png'),
+                ),
+              ],
+            ),
           ),
           // 수정 필요, 실제 움직인 거리 가져와야 됨
           StreamBuilder(
