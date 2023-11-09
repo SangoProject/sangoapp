@@ -37,15 +37,23 @@ class _LibraryPage extends State<LibraryPage>{
             );
           }
           else {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                // An Expanded widget must be a descendant of a Row, Column, or Flex,and the path from
-                // the Expanded widget to its enclosing Row, Column, or Flex must contain only
-                // StatelessWidgets or StatefulWidgets (not other kinds of widgets, like RenderObjectWidgets).
-                Expanded(child: CourseList(toList(snapshot.data?.snapshot.value as Map<dynamic, dynamic>, uid))),
-              ],
-            );
+            dynamic libraryData = snapshot.data?.snapshot.value;
+            if (libraryData == null) {
+              return Center(
+                child: Text("저장한 코스가 없습니다."),
+              );
+            }
+            else {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  // An Expanded widget must be a descendant of a Row, Column, or Flex,and the path from
+                  // the Expanded widget to its enclosing Row, Column, or Flex must contain only
+                  // StatelessWidgets or StatefulWidgets (not other kinds of widgets, like RenderObjectWidgets).
+                  Expanded(child: CourseList(toList(libraryData as Map<dynamic, dynamic>, uid))),
+                ],
+              );
+            }
           }
         },
       ),
