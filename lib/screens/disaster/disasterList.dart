@@ -19,10 +19,9 @@ class DisasterListPage extends StatelessWidget {
         ),
         body: Container(
           child: ListView.builder(
-              scrollDirection: Axis.vertical, // 스크롤 방향을 가로로 설정
-              itemCount: 15, // 10개의 아이템을 만듭니다
+              scrollDirection: Axis.vertical,
+              itemCount: 15,
               itemBuilder: (context, index) {
-                // 각 아이템은 정사각형 모양의 컨테이너입니다
                 return Container(
                   width: bannerwidth,
                   height: bannerheight / 8,

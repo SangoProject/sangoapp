@@ -10,7 +10,7 @@ void showExitConfirmationDialog(BuildContext context, double distanceTotal, Stri
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text("이동 거리: ${(distanceTotal / 1000).toStringAsFixed(2)} km"),
-            Text("경과 시간: $formattedTime"),
+            Text("산책 시간: $formattedTime"),
           ],
         ),
         actions: [

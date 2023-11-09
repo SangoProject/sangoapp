@@ -52,6 +52,7 @@ dependencies:
   permission_handler: ^10.4.3
   proj4dart: ^2.1.0
   fluttertoast: ^8.2.2
+  intl: ^0.18.1
 
 
 dev_dependencies:
@@ -108,15 +109,18 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
-#    fonts:
-#      - family: SocialIcons
-#        fonts:
-#          - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
-fonts:
-  - family: Pretendard
-    fonts:
-      - asset: assets/font/Pretendard-Regular.otf
-        weight: 400
-  #
+  #    fonts:
+  #      - family: SocialIcons
+  #        fonts:
+  #          - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/font/Pretendard-Regular.otf
+          weight: 400
+    - family: Inklipquid
+      fonts:
+        - asset: assets/font/THEFACESHOP_INKLIPQUID.otf
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

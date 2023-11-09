@@ -1,10 +1,9 @@
-import 'dart:collection';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
-import 'package:sangoproject/screens/components/apiButton.dart';
+import 'package:sangoproject/screens/calendar/calendarData.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'goal/goal.dart';
-import '../config/utils.dart';
+import '../../config/utils.dart';
 
 class Event {
   final DateTime date;
@@ -26,6 +25,8 @@ class _CalendarPageState extends State<CalendarPage>{
 
   @override
   Widget build(BuildContext context){
+    String formattedDate = DateFormat.MMMMd('en_US').format(_focusedDay);
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -41,6 +42,7 @@ class _CalendarPageState extends State<CalendarPage>{
           ),
         ),
         body: Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TableCalendar(
               firstDay: kFirstDay,
@@ -78,17 +80,19 @@ class _CalendarPageState extends State<CalendarPage>{
               },
               calendarBuilders: CalendarBuilders(
                 dowBuilder: (context, day) {
-                  return Center(child: Text(days[day.weekday],));
+                  return Center(child: Text(days[day.weekday],)
+                  );
                 },
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
-              child: MyButtonWidget(),
-              // Text(
-              //   '기록을 확인할 날짜를 선택해주세요'
-              // ),
-            )
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+              child: Text(
+                '$formattedDate일 산책 기록',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            CalendarData(_focusedDay),
           ],
         ),
       ),
