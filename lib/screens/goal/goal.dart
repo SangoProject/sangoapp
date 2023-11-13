@@ -6,7 +6,7 @@ import 'package:sangoproject/screens/goal/goalGraph.dart';
 import 'package:sangoproject/screens/goal/statisticsPage.dart';
 
 class Goal extends StatelessWidget{
-  final TextEditingController txtGoal = TextEditingController();
+  TextEditingController txtGoal = TextEditingController();
   final String uid = 'kim';
 
   @override
@@ -138,7 +138,7 @@ class Goal extends StatelessWidget{
             content: SingleChildScrollView(
               child: TextField(
                 controller: txtGoal,
-                decoration: InputDecoration(hintText: '값을 입력해주세요(단위: km)'),
+                decoration: InputDecoration(hintText: '값을 입력해주세요(1 ~ 100)'),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.deny(' '),
@@ -162,10 +162,11 @@ class Goal extends StatelessWidget{
               ElevatedButton(
                 child: Text('저장'),
                 onPressed: (){
-                  if (txtGoal.text != '') {
+                  if (txtGoal.text != '' && double.parse(txtGoal.text) >= 1 && double.parse(txtGoal.text) <= 100) {
                     FirebaseDatabase updateData = FirebaseDatabase.instance;
                     updateData.ref("USERS").child(uid).update({"GOAL": txtGoal.text});
                   }
+
                   Navigator.pop(context);
                   txtGoal.text = '';
                 },

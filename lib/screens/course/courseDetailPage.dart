@@ -100,6 +100,8 @@ class _CourseDetailPage extends State<CourseDetailPage>{
   Widget build(BuildContext context) {
     // LatLng? location = LatLng(37.541, 126.986);
     double? zoomLevel = 16;
+    int course_level = data["course_level"];
+    int course_negative = 3 - course_level;
 
     return Scaffold(
       appBar: AppBar(
@@ -146,12 +148,38 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                         padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
                         child: Text(
                           data["course_name"],
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Text("산책시간: ${data["lead_time"]}분"),
-                      Text("산책거리: ${data["distance"]}km"),
-                      Text("난이도: ${data["course_level"]}"),
+                      Text(
+                        "산책시간: ${data["lead_time"]}분", style: TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        "산책거리: ${data["distance"]}km", style: TextStyle(fontSize: 16),
+                      ),
+                      Row(
+                          children: [
+                            Text(
+                              "난이도: ", style: TextStyle(fontSize: 16),
+                            ),
+                            Row(
+                              children: List.generate(course_level, (index) {
+                                return Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                );
+                              }),
+                            ),
+                            Row(
+                              children: List.generate(course_negative, (index) {
+                                return Icon(
+                                  Icons.star_border,
+                                  color: Colors.amber,
+                                );
+                              }),
+                            ),
+                          ]
+                      ),
                     ],
                   ),
                 ),
