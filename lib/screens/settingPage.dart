@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sangoproject/screens/calendar/calendarData.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -34,7 +33,8 @@ class SettingPage extends StatelessWidget {
           child: ListTile(
             title: Text(_data[i],
             style: TextStyle(
-              fontSize: 16
+              fontSize: 16,
+              color: Colors.black,
             ),),
             trailing: Icon(_icon[i]),
           ),
@@ -54,9 +54,11 @@ class SettingPage extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
-            title: Text(_title),
+            title: Text(_title, style: TextStyle(
+              color: Colors.black,
+            ),),
             elevation: 0,
-            backgroundColor: Colors.lime,
+            backgroundColor: Colors.white,
           ),
           body: _settingListView(),
         ),

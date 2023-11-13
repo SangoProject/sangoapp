@@ -11,7 +11,7 @@ class Goal extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    String realDistance = '0';
+    String realDistance = '0.78';
 
     return Container(
       child: Column(
@@ -21,15 +21,23 @@ class Goal extends StatelessWidget{
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox( // 오늘의 목표를 중앙에 띄우기 위한 빈 공간
+                  height: 20,
+                  width: 20,
+                ),
                 Text(
                   '오늘의 목표',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   onPressed: () {
                     showPieDataDialog(context, uid);
                   },
-                  icon: Image.asset('images/pencil.png'),
+                  icon: Image.asset(
+                    'images/pencil.png',
+                    height: 20,
+                    width: 20,
+                  ),
                 ),
               ],
             ),
@@ -66,13 +74,56 @@ class Goal extends StatelessWidget{
               }
             },
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => StatisticsPage()));
-            },
-            child: Text("이번 주 통계 보기"),
-          )
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Stack(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
+                        spreadRadius: 2, // 그림자 확장 범위
+                        blurRadius: 5, // 그림자 흐림 범위
+                        offset: Offset(0, 3), // 그림자 위치 (x, y)
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        '산책 통계',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => StatisticsPage()));
+                          },
+                          icon: Icon(Icons.chevron_right)
+                      )
+                    ],
+                  ),
+                ),
+                Positioned.fill(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => StatisticsPage()),
+                      );
+                    },
+                    splashColor: Colors.grey,
+                    highlightColor: Colors.transparent,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
