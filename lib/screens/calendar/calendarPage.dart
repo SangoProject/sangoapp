@@ -20,12 +20,12 @@ class CalendarPage extends StatefulWidget{
 class _CalendarPageState extends State<CalendarPage>{
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  DateTime _selectedDay = DateTime.now();
   List<String> days = ['_', '월', '화', '수', '목', '금', '토', '일'];
 
   @override
   Widget build(BuildContext context){
-    String formattedDate = DateFormat.MMMMd('en_US').format(_focusedDay);
+    String titleDate = DateFormat("MM월 dd일").format(_selectedDay);
 
     return WillPopScope(
       onWillPop: () async {
@@ -64,6 +64,7 @@ class _CalendarPageState extends State<CalendarPage>{
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
                   });
+                  print('$_selectedDay');
                 }
               },
               onFormatChanged: (format) {
@@ -75,7 +76,6 @@ class _CalendarPageState extends State<CalendarPage>{
                 }
               },
               onPageChanged: (focusedDay) {
-                // No need to call `setState()` here
                 _focusedDay = focusedDay;
               },
               calendarBuilders: CalendarBuilders(
@@ -88,11 +88,11 @@ class _CalendarPageState extends State<CalendarPage>{
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
               child: Text(
-                '$formattedDate일 산책 기록',
+                '$titleDate의 산책 기록',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            CalendarData(_focusedDay),
+            CalendarData(_selectedDay),
           ],
         ),
       ),

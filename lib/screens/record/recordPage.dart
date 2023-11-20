@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sangoproject/screens/records/recordedData.dart';
+import 'package:sangoproject/screens/record/recordedData.dart';
 import 'dart:math';
 import '../../config/palette.dart';
 import '../../config/timer.dart';
@@ -164,19 +164,33 @@ class _RecordPageState extends State<RecordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<Position>(
-        future: _getInitialLocation(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            _currentPosition = snapshot.data!;
-            return buildMap();
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        bool? shouldNavigate = await showExitAlertDialog(context);
+
+        // 사용자가 확인을 누르면 다음 화면으로 이동
+        if (shouldNavigate==true) {
+          Navigator.pop(context); // 현재 화면을 종료
+          return true; // true 반환
+        } else {
+          return false; // false 반환하여 다음 화면으로 이동을 막음
+        }
+
+      },
+      child: Scaffold(
+        body: FutureBuilder<Position>(
+          future: _getInitialLocation(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              _currentPosition = snapshot.data!;
+              return buildMap();
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
     );
   }

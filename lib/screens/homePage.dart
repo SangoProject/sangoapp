@@ -23,7 +23,6 @@ class _HomePage extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUser();
     _requestLocationPermission();
@@ -147,56 +146,56 @@ class _HomePage extends State<HomePage> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Stack(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(15.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
-                              spreadRadius: 2, // 그림자 확장 범위
-                              blurRadius: 5, // 그림자 흐림 범위
-                              offset: Offset(0, 3), // 그림자 위치 (x, y)
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              '산책로 추천',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) => LibraryPage()));
-                                },
-                                icon: Icon(Icons.chevron_right)
-                            )
-                          ],
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => LibraryPage()),
-                            );
-                          },
-                          splashColor: Colors.grey,
-                          highlightColor: Colors.transparent,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(12.0),
+                //   child: Stack(
+                //     children: [
+                //       Container(
+                //         padding: EdgeInsets.all(15.0),
+                //         decoration: BoxDecoration(
+                //           color: Colors.white,
+                //           borderRadius: BorderRadius.circular(8),
+                //           boxShadow: [
+                //             BoxShadow(
+                //               color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
+                //               spreadRadius: 2, // 그림자 확장 범위
+                //               blurRadius: 5, // 그림자 흐림 범위
+                //               offset: Offset(0, 3), // 그림자 위치 (x, y)
+                //             ),
+                //           ],
+                //         ),
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: <Widget>[
+                //             Text(
+                //               '산책로 추천',
+                //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                //             ),
+                //             IconButton(
+                //                 onPressed: () {
+                //                   Navigator.of(context).push(
+                //                       MaterialPageRoute(builder: (context) => LibraryPage()));
+                //                 },
+                //                 icon: Icon(Icons.chevron_right)
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //       Positioned.fill(
+                //         child: InkWell(
+                //           onTap: () {
+                //             Navigator.push(
+                //               context,
+                //               MaterialPageRoute(builder: (context) => LibraryPage()),
+                //             );
+                //           },
+                //           splashColor: Colors.grey,
+                //           highlightColor: Colors.transparent,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),

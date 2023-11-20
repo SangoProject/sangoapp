@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sangoproject/screens/homePage.dart';
-import 'package:sangoproject/screens/records/recordPage.dart';
+import 'package:sangoproject/screens/record/recordPage.dart';
 import 'package:sangoproject/screens/calendar/calendarPage.dart';
 import 'package:sangoproject/screens/settingPage.dart';
 
@@ -23,7 +23,7 @@ class _MainPage extends State<MainPage> {
             current_index = index;
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
