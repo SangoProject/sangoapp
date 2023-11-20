@@ -4,7 +4,7 @@ import 'package:sangoproject/screens/disaster/disasterMsgRepository.dart';
 
 class DisasterListPage extends StatelessWidget {
   DisasterListPage({super.key});
-  DisasterRepository _disasterRepository = DisasterRepository();
+  final DisasterRepository _disasterRepository = DisasterRepository();
 
   Widget _makeMsgOne(DisasterMsg disasterMsg) {
     return Row(
@@ -16,21 +16,21 @@ class DisasterListPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "create_date : " + disasterMsg.create_date.toString(),
+                  "일시 : ${disasterMsg.create_date}",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 Text(
-                  "location_name : " + disasterMsg.location_name.toString(),
+                  "위치 : ${disasterMsg.location_name}",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 Text(
-                  "msg : " + disasterMsg.msg.toString(),
+                  disasterMsg.msg.toString(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 SizedBox(
@@ -46,9 +46,6 @@ class DisasterListPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    final bannerheight = MediaQuery.of(context).size.height;
-    final bannerwidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -65,36 +62,37 @@ class DisasterListPage extends StatelessWidget {
             if (snapshot.hasData == false) {
               return CircularProgressIndicator();
             }
+
+            List<DisasterMsg> filteredMessages = snapshot.data!
+                .where((msg) => !msg.msg!.contains('찾습니다'))
+                .toList();
+
             return Expanded(
-              child: Container(
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: 20,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        //width: bannerwidth,
-                        //height: MediaQuery.of(context).size.height,
-                        margin: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white, // 하얀 배경
-                          borderRadius: BorderRadius.circular(8), // 약간의 BorderRadius
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
-                              spreadRadius: 2, // 그림자 확장 범위
-                              blurRadius: 5, // 그림자 흐림 범위
-                              offset: Offset(0, 3), // 그림자 위치 (x, y)
-                            ),
-                          ],
-                        ),
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: _makeMsgOne(snapshot.data![index]),
-                        ),
-                      );
-                    }
-                ),
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: filteredMessages.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white, // 하얀 배경
+                        borderRadius: BorderRadius.circular(8), // 약간의 BorderRadius
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
+                            spreadRadius: 2, // 그림자 확장 범위
+                            blurRadius: 5, // 그림자 흐림 범위
+                            offset: Offset(0, 3), // 그림자 위치 (x, y)
+                          ),
+                        ],
+                      ),
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: _makeMsgOne(filteredMessages[index]),
+                      ),
+                    );
+                  }
               ),
             );
           },

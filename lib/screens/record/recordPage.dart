@@ -226,7 +226,10 @@ class _RecordPageState extends State<RecordPage> {
             padding: EdgeInsets.all(24.0),
             height: MediaQuery.of(context).size.height * 0.2,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40.0), // 둥근 모서리 설정
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40.0),
+                topRight: Radius.circular(40.0),
+              ),
               border: Border.all(width: 1.0, color: Palette.logoColor),
             ),
             child: Column(
@@ -289,8 +292,6 @@ class _RecordPageState extends State<RecordPage> {
                                 });
                                 addMarker(LatLng(_currentPosition!.latitude, _currentPosition!.longitude));
                                 _timerUtil.startTimer((seconds) {
-                                  // 여기서 타이머 갱신된 값을 처리할 수 있습니다.
-                                  // 예를 들어, 타이머 갱신된 값을 UI에 표시하거나 다른 작업을 수행할 수 있습니다.
                                 });
                               } else {
                                 addMarker(LatLng(_currentPosition!.latitude, _currentPosition!.longitude));
@@ -318,7 +319,14 @@ class _RecordPageState extends State<RecordPage> {
                               }
                             }),
                           ),
-                          child: Text(isRecording ? '산책종료' : '산책시작'),
+                          child: Text(
+                            isRecording ? '산책종료' : '산책시작',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Pretendard',
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ],

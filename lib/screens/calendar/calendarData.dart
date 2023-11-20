@@ -18,7 +18,6 @@ class CalendarData extends StatelessWidget {
           if (!snapshot.hasData) {
             return CircularProgressIndicator();
           }
-
           // Firestore에서 불러온 데이터를 리스트로 변환
           List<DocumentSnapshot> list = snapshot.data!.docs;
 
@@ -81,6 +80,11 @@ class CalendarData extends StatelessWidget {
     String formattedDate = DateFormat("yyyy-MM-dd").format(selectedDate);
 
     // records 컬렉션에서 해당 날짜의 문서 가져오기
-    return _firestore.collection("records").doc(formattedDate).collection("list").snapshots();
+    return _firestore
+        .collection("records")
+        .doc(formattedDate)
+        .collection("list")
+        .orderBy("date")
+        .snapshots();
   }
 }

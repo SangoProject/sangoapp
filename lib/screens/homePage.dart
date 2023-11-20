@@ -93,7 +93,7 @@ class _HomePage extends State<HomePage> {
               children: <Widget>[
                 // 재난 공지
                 Disaster(),
-                // 목표
+                // 목표, 산책통계
                 Goal(),
                 // 찜목록
                 Padding(

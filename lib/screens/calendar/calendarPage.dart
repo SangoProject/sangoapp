@@ -42,7 +42,6 @@ class _CalendarPageState extends State<CalendarPage>{
           ),
         ),
         body: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TableCalendar(
               firstDay: kFirstDay,
@@ -59,7 +58,6 @@ class _CalendarPageState extends State<CalendarPage>{
               },
               onDaySelected: (selectedDay, focusedDay) {
                 if (!isSameDay(_selectedDay, selectedDay)) {
-                  // Call `setState()` when updating the selected day
                   setState(() {
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
