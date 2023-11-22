@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:sangoproject/screens/goal/goalGraph.dart';
 import 'package:sangoproject/screens/goal/statisticsPage.dart';
 
+import '../../config/palette.dart';
+
 class Goal extends StatelessWidget{
   TextEditingController txtGoal = TextEditingController();
   final String uid = 'kim';
@@ -75,29 +77,42 @@ class Goal extends StatelessWidget{
             },
           ),
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
             child: Stack(
               children: [
                 Container(
                   padding: EdgeInsets.all(15.0),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
-                        spreadRadius: 2, // 그림자 확장 범위
-                        blurRadius: 5, // 그림자 흐림 범위
-                        offset: Offset(0, 3), // 그림자 위치 (x, y)
-                      ),
-                    ],
+                    color: Palette.green1,
+                    borderRadius: BorderRadius.circular(12),
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
+                    //     spreadRadius: 2, // 그림자 확장 범위
+                    //     blurRadius: 5, // 그림자 흐림 범위
+                    //     offset: Offset(0, 3), // 그림자 위치 (x, y)
+                    //   ),
+                    // ],
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(
-                        '산책 통계',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          children: const [
+                            Text(
+                              '산책 통계',
+                              style: TextStyle(fontSize: 18, fontFamily: 'Pretendard', fontWeight: FontWeight.bold),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Icon(
+                                Icons.bar_chart,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       IconButton(
                           onPressed: () {

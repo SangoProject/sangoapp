@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../config/palette.dart';
 import 'disasterList.dart';
 
 class Disaster extends StatelessWidget {
@@ -17,16 +18,28 @@ class Disaster extends StatelessWidget {
         );
       },
       child: Container(
+        color: Palette.green3,
         width: bannerwidth,
         height: bannerheight / 16,
         alignment: Alignment.center,
-        color: Colors.grey,
-        child: Text(
-          '- - - > 재난정보를 확인하세요 < - - -',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text(
+                '오늘의 안전정보 알리미',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              Icon(
+                Icons.notification_important_outlined,
+                color: Colors.white,
+              )
+            ],
           ),
         ),
       ),

@@ -52,7 +52,7 @@ class CalendarData extends StatelessWidget {
                 margin: EdgeInsets.fromLTRB(12, 8, 12, 8),
                 decoration: BoxDecoration(
                   gradient: getGradientForWalkTime(walkTime),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),

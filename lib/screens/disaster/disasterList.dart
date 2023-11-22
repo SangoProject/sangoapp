@@ -49,7 +49,7 @@ class DisasterListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '재난 문자 공지',
+          '재난 알림 목록',
           style: TextStyle(
             fontSize: 20,
           ),

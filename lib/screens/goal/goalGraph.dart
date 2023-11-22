@@ -70,7 +70,7 @@ class PieChart extends CustomPainter {
     TextSpan sp = TextSpan(
         style: TextStyle(
             fontSize: fontSize,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'Pretendard',
             color: Colors.black),
         text: text);
     TextPainter tp = TextPainter(text: sp, textDirection: TextDirection.ltr);

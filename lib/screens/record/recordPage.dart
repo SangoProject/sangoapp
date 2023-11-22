@@ -315,15 +315,16 @@ class _RecordPageState extends State<RecordPage> {
                                 // isRecording이 true일 때 버튼의 배경색을 옅은 빨강색으로 설정
                                 return Colors.red;
                               } else {
-                                return Palette.logoColor; // 그 외에는 흰색으로 설정
+                                return Palette.logoColor;
                               }
                             }),
                           ),
                           child: Text(
                             isRecording ? '산책종료' : '산책시작',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                               fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
                           ),
