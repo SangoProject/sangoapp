@@ -9,4 +9,7 @@ class Palette{
   static const Color googleColor = Color(0xFFDE4B39);
   static const Color backgroundColor = Color(0xFFECF3F9);
   static const Color logoColor = Color(0xFF9CCE84);
+  static const Color green1 = Color(0xFFCDE6C1);
+  static const Color green2 = Color(0xFF80A86E);
+  static const Color green3 = Color(0xFF709360);
 }

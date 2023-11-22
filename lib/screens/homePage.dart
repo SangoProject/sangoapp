@@ -63,7 +63,7 @@ class _HomePage extends State<HomePage> {
                 HomePage();
                 },
                 icon: Image.asset(
-                  'images/logo2pin.png',
+                  'images/thin_logo.png',
                   height: 28,
                   width: 28,
                 ),

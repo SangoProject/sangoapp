@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import '../../config/palette.dart';
+
 class ChartPage extends StatelessWidget {
   var goalDistance;
   var realDistance;
@@ -55,7 +57,7 @@ class PieChart extends CustomPainter {
 
     double arcAngle = 2 * pi * (percentage / 100);
 
-    paint..color = Color(0xFF436726);
+    paint.color = Palette.logoColor;
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
         -pi / 2, arcAngle, false, paint);
 
