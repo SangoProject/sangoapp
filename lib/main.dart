@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 
 import 'package:sangoproject/screens/googleLogin.dart';
 import 'package:sangoproject/mainPage.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  // 화면 세로로 고정
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   // flutter 비동기 method 사용위해 초기화 -> flutter에서 firebase 사용을 위해
   await Firebase.initializeApp(); // firebase 이용 초기화 method
   runApp(MyApp());

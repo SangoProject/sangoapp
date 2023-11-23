@@ -55,6 +55,7 @@ class _HomePage extends State<HomePage> {
         return false;
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Row(

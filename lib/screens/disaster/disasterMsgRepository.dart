@@ -6,7 +6,7 @@ class DisasterRepository {
   var apiKey = "5xDdK75doweBoYGR%2F3fMP7mx%2FNsKTlgvp%2FakCm7XgbFIe7kG71H8uq4YJnDY5abp0SoRpc4u%2BF5G8UL6UafQzQ%3D%3D";
 
   Future<List<DisasterMsg>?> loadDisaster() async {
-    String baseUrl = "http://apis.data.go.kr/1741000/DisasterMsg3/getDisasterMsg1List?ServiceKey=$apiKey&type=json&pageNo=1&numOfRows=20";
+    String baseUrl = "http://apis.data.go.kr/1741000/DisasterMsg3/getDisasterMsg1List?ServiceKey=$apiKey&type=json&pageNo=1&numOfRows=30";
     final response = await  http.get(Uri.parse(baseUrl));
 
     if (response.statusCode == 200) {

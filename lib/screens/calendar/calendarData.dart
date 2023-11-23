@@ -13,7 +13,6 @@ class CalendarData extends StatelessWidget {
         .of(context)
         .size
         .width;
-
     return Expanded(
       child: StreamBuilder<QuerySnapshot>(
         stream: fetchRecordData(selectedDate),
@@ -35,13 +34,13 @@ class CalendarData extends StatelessWidget {
 
               // 분류 기준에 따라 산책 시간대를 결정
               String walkTime;
-              if (recordDateTime.hour >= 17 && recordDateTime.hour < 21) {
+              if (recordDateTime.hour >= 2 && recordDateTime.hour < 6) {
                 walkTime = '새벽 산책';
-              } else if (recordDateTime.hour >= 21 && recordDateTime.hour < 24) {
-                walkTime = '아침 산책';
-              } else if (recordDateTime.hour >= 0 && recordDateTime.hour < 6) {
-                walkTime = '낮 산책';
               } else if (recordDateTime.hour >= 6 && recordDateTime.hour < 10) {
+                walkTime = '아침 산책';
+              } else if (recordDateTime.hour >= 10 && recordDateTime.hour < 17) {
+                walkTime = '낮 산책';
+              } else if (recordDateTime.hour >= 17 && recordDateTime.hour < 22) {
                 walkTime = '저녁 산책';
               } else {
                 walkTime = '밤 산책';
