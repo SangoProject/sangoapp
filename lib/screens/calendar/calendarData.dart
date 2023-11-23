@@ -18,7 +18,7 @@ class CalendarData extends StatelessWidget {
         stream: fetchRecordData(selectedDate),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
           // Firestore에서 불러온 데이터를 리스트로 변환
           List<DocumentSnapshot> list = snapshot.data!.docs;

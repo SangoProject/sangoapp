@@ -123,6 +123,9 @@ flutter:
     - family: Inklipquid
       fonts:
         - asset: assets/font/THEFACESHOP_INKLIPQUID.otf
+    - family: Choi
+      fonts:
+        - asset: assets/font/최서영.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

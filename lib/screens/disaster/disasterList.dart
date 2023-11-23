@@ -31,7 +31,8 @@ class DisasterListPage extends StatelessWidget {
                 ),
                 Text(
                   disasterMsg.msg.toString(),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,
+                  fontFamily: 'Choi'),
                 ),
                 SizedBox(
                   height: 10,
@@ -67,33 +68,37 @@ class DisasterListPage extends StatelessWidget {
                 .where((msg) => !msg.msg!.contains('찾습니다'))
                 .toList();
 
-            return Expanded(
-              child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: filteredMessages.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white, // 하얀 배경
-                        borderRadius: BorderRadius.circular(8), // 약간의 BorderRadius
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
-                            spreadRadius: 2, // 그림자 확장 범위
-                            blurRadius: 5, // 그림자 흐림 범위
-                            offset: Offset(0, 3), // 그림자 위치 (x, y)
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: filteredMessages.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white, // 하얀 배경
+                            borderRadius: BorderRadius.circular(8), // 약간의 BorderRadius
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
+                                spreadRadius: 2, // 그림자 확장 범위
+                                blurRadius: 5, // 그림자 흐림 범위
+                                offset: Offset(0, 3), // 그림자 위치 (x, y)
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _makeMsgOne(filteredMessages[index]),
-                      ),
-                    );
-                  }
-              ),
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: _makeMsgOne(filteredMessages[index]),
+                          ),
+                        );
+                      }
+                  ),
+                ),
+              ],
             );
           },
         ),
