@@ -4,16 +4,16 @@ class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
   static const String _title = '설정';
   static const List<String> _data = [
-    '계정',
     '알림',
     '앱 정보',
     '로그아웃',
+    '회원탈퇴'
   ];
   static const List<IconData> _icon = [
-    Icons.account_circle,
     Icons.notifications,
     Icons.info,
     Icons.logout,
+    Icons.no_accounts,
   ];
   static const List<String> _function = [
     '',

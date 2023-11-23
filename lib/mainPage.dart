@@ -16,6 +16,7 @@ class _MainPage extends State<MainPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: current_index,
         onTap: (index){

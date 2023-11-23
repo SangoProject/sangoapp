@@ -50,7 +50,7 @@ class _LibraryPage extends State<LibraryPage>{
                   // An Expanded widget must be a descendant of a Row, Column, or Flex,and the path from
                   // the Expanded widget to its enclosing Row, Column, or Flex must contain only
                   // StatelessWidgets or StatefulWidgets (not other kinds of widgets, like RenderObjectWidgets).
-                  Expanded(child: CourseList(toList(libraryData as Map<dynamic, dynamic>, uid))),
+                  Expanded(child: CourseList(toList(libraryData as Map<dynamic, dynamic>))),
                 ],
               );
             }
@@ -61,7 +61,7 @@ class _LibraryPage extends State<LibraryPage>{
   }
 }
 
-List<dynamic> toList(dynamic map, String uid) {
+List<dynamic> toList(dynamic map) {
   List<dynamic> values = map.values.toList();
   return values;
 }
