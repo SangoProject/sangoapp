@@ -34,7 +34,7 @@ class _StatisticsPage extends State<StatisticsPage>{
             padding: EdgeInsets.all(15),
             child: ChartContainer(
               title: 'Bar Chart',
-              color: Palette.iconColor,
+              color: Colors.white,
               chart: BarChartContent(),
             ),
           ),
@@ -71,7 +71,7 @@ class BarChartContent extends StatelessWidget {
 
 Widget getTitles(double value, TitleMeta meta) {
   const style = TextStyle(
-    color: Colors.white,
+    color: Palette.green3,
     fontWeight: FontWeight.bold,
     fontSize: 12,
   );

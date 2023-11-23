@@ -3,6 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 
 import 'package:sangoproject/screens/search/searchResultPage.dart';
 
+import '../../config/palette.dart';
+
 class SearchPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState(){
@@ -29,7 +31,7 @@ class _SearchPage extends State<SearchPage>{
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          '검색',
+          '산책로 검색',
           style: TextStyle(
             fontSize: 20,
           ),
@@ -39,128 +41,217 @@ class _SearchPage extends State<SearchPage>{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           //위치
-          Padding(
-            padding: const EdgeInsets.only(top: 10, left: 20),
-            child: Text(
-              '위치',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+          Container(
+            margin: EdgeInsets.all(8),
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  child: Text(
+                    '위치',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(width: 15,),
+                    Text('서울특별시', style: TextStyle(fontSize: 15)),
+                    SizedBox(width: 15,),
+                    DropdownButton<String>(
+                      value: dropdownValue,
+                      onChanged: (String? newValue){
+                        setState(() {
+                          dropdownValue = newValue!;
+                        });
+                      },
+                      items: areaGu.map<DropdownMenuItem<String>>((String value){
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          Row(
-            children: <Widget>[
-              SizedBox(width: 15,),
-              Text('서울특별시', style: TextStyle(fontSize: 15)),
-              SizedBox(width: 15,),
-              DropdownButton<String>(
-                value: dropdownValue,
-                onChanged: (String? newValue){
-                  setState(() {
-                    dropdownValue = newValue!;
-                  });
-                },
-                items: areaGu.map<DropdownMenuItem<String>>((String value){
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
-
           //산책시간
-          Padding(
-            padding: const EdgeInsets.only(top: 10, left: 20),
-            child: Text(
-              '산책 시간',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+          Container(
+            margin: EdgeInsets.all(8),
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: Text(
+                    '산책 시간',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ToggleButtons(
+                        onPressed: (int index){
+                          setState(() {
+                            _leadTime[index] = !_leadTime[index];
+                          });
+                        },
+                        isSelected: _leadTime,
+                        children: const <Widget>[
+                          Text("  1시간 이하  "),
+                          Text("  1시간 초과 ~ 2시간 이하  "),
+                          Text("  2시간 초과  "),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ToggleButtons(
-                children: <Widget>[
-                  Text("  1시간 이하  "),
-                  Text("  1시간 초과 2시간 이하  "),
-                  Text("  2시간 초과  "),
-                ],
-                onPressed: (int index){
-                  setState(() {
-                    _leadTime[index] = !_leadTime[index];
-                  });
-                },
-                isSelected: _leadTime,
-              )
-            ],
-          ),
-
           //산책거리
-          Padding(
-            padding: const EdgeInsets.only(top: 10, left: 20),
-            child: Text(
-              '산책 거리',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+          Container(
+            margin: EdgeInsets.all(8),
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: Text(
+                    '산책 거리',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ToggleButtons(
+                        onPressed: (int index){
+                          setState(() {
+                            _distance[index] = !_distance[index];
+                          });
+                        },
+                        isSelected: _distance,
+                        children: const <Widget>[
+                          Text("  1km 이하  "),
+                          Text("  1km 초과 ~ 5km 이하  "),
+                          Text("  5km 초과  "),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ToggleButtons(
-                children: <Widget>[
-                  Text("  1km 이하  "),
-                  Text("  1km 초과  5km 이하  "),
-                  Text("  5km 초과  "),
-                ],
-                onPressed: (int index){
-                  setState(() {
-                    _distance[index] = !_distance[index];
-                  });
-                },
-                isSelected: _distance,
-              )
-            ],
-          ),
-
           //난이도
-          Padding(
-            padding: const EdgeInsets.only(top: 10, left: 20),
-            child: Text(
-              '난이도',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+          Container(
+            margin: EdgeInsets.all(8),
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: Text(
+                    '난이도',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ToggleButtons(
+                        onPressed: (int index){
+                          setState(() {
+                            _courseLevel[index] = !_courseLevel[index];
+                          });
+                        },
+                        isSelected: _courseLevel,
+                        children: const <Widget>[
+                          Text("     상     "),
+                          Text("     중     "),
+                          Text("     하     "),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ToggleButtons(
-                children: <Widget>[
-                  Text("   상   "),
-                  Text("   중   "),
-                  Text("   하   "),
-                ],
-                onPressed: (int index){
-                  setState(() {
-                    _courseLevel[index] = !_courseLevel[index];
-                  });
-                },
-                isSelected: _courseLevel,
-              )
-            ],
-          ),
-
           SizedBox(height: 18,),
 
           //검색 버튼
@@ -252,7 +343,25 @@ class _SearchPage extends State<SearchPage>{
                         MaterialPageRoute(builder: (context) => SearchResultPage(dropdownValue, searchData.toList()))
                     );
                   },
-                  child: Text('검색하기')
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Palette.logoColor, // Text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.search),
+                    SizedBox(width: 8), // Add some spacing between icon and text
+                    Text('검색',
+                      style: TextStyle(
+                          fontSize: 16
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

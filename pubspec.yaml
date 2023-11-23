@@ -86,6 +86,8 @@ flutter:
     - images/logo.png
     - images/logo2.png
     - images/logo2pin.png
+    - images/thin_logo.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

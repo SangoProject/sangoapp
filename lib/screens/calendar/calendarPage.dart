@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sangoproject/screens/calendar/calendarData.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../../config/palette.dart';
 import '../../config/utils.dart';
 
 class Event {
@@ -20,12 +22,12 @@ class CalendarPage extends StatefulWidget{
 class _CalendarPageState extends State<CalendarPage>{
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  DateTime _selectedDay = DateTime.now();
   List<String> days = ['_', '월', '화', '수', '목', '금', '토', '일'];
 
   @override
   Widget build(BuildContext context){
-    String formattedDate = DateFormat.MMMMd('en_US').format(_focusedDay);
+    String titleDate = DateFormat("MM월 dd일").format(_selectedDay);
 
     return WillPopScope(
       onWillPop: () async {
@@ -42,7 +44,6 @@ class _CalendarPageState extends State<CalendarPage>{
           ),
         ),
         body: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TableCalendar(
               firstDay: kFirstDay,
@@ -50,6 +51,16 @@ class _CalendarPageState extends State<CalendarPage>{
               headerStyle: HeaderStyle(
                 formatButtonVisible: false,
                 titleCentered: true,
+              ),
+              calendarStyle: CalendarStyle(
+                todayDecoration : const BoxDecoration(
+                  color: Palette.green1,
+                  shape: BoxShape.circle,
+                ),
+                selectedDecoration : const BoxDecoration(
+                  color: Palette.green2,
+                  shape: BoxShape.circle,
+                ),
               ),
               focusedDay: _focusedDay,
               calendarFormat: _calendarFormat,
@@ -59,11 +70,11 @@ class _CalendarPageState extends State<CalendarPage>{
               },
               onDaySelected: (selectedDay, focusedDay) {
                 if (!isSameDay(_selectedDay, selectedDay)) {
-                  // Call `setState()` when updating the selected day
                   setState(() {
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
                   });
+                  print('$_selectedDay');
                 }
               },
               onFormatChanged: (format) {
@@ -75,7 +86,6 @@ class _CalendarPageState extends State<CalendarPage>{
                 }
               },
               onPageChanged: (focusedDay) {
-                // No need to call `setState()` here
                 _focusedDay = focusedDay;
               },
               calendarBuilders: CalendarBuilders(
@@ -83,19 +93,70 @@ class _CalendarPageState extends State<CalendarPage>{
                   return Center(child: Text(days[day.weekday],)
                   );
                 },
+                markerBuilder: (context, day, events) {
+                  Stream<QuerySnapshot> eventsStream = fetchRecordData(day);
+
+                  return StreamBuilder<QuerySnapshot>(
+                    stream: eventsStream,
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Container();
+                      }
+
+                      // 이벤트 목록을 가져오기
+                      List<DocumentSnapshot> events = snapshot.data!.docs;
+
+                      // 이벤트가 있는 경우 연두색 동그라미 표시
+                      if (events.isNotEmpty) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.lightGreen,
+                            shape: BoxShape.circle,
+                          ),
+                          width: 5,
+                          height: 5,
+                          // child: Center(
+                          //   child: Text(
+                          //     events.length.toString(),
+                          //     style: TextStyle(color: Colors.white),
+                          //   ),
+                          // ),
+                        );
+                      } else {
+                        // 이벤트가 없는 경우 아무것도 표시하지 않습니다.
+                        return Container();
+                      }
+                    },
+                  );
+                },
               ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
               child: Text(
-                '$formattedDate일 산책 기록',
+                '$titleDate의 산책 기록',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            CalendarData(_focusedDay),
+            CalendarData(_selectedDay),
           ],
         ),
       ),
     );
+  }
+
+  Stream<QuerySnapshot<Object?>> fetchRecordData(DateTime day) {
+    FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    // day를 yyyy-MM-dd 형태의 문자열로 변환
+    String formattedDate = DateFormat("yyyy-MM-dd").format(day);
+
+    // records 컬렉션에서 해당 날짜의 문서 가져오기
+    return _firestore
+        .collection("records")
+        .doc(formattedDate)
+        .collection("list")
+        .orderBy("date")
+        .snapshots();
   }
 }

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sangoproject/screens/records/recordedData.dart';
+import 'package:sangoproject/screens/record/recordedData.dart';
 import 'dart:math';
 import '../../config/palette.dart';
 import '../../config/timer.dart';
@@ -164,19 +164,33 @@ class _RecordPageState extends State<RecordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<Position>(
-        future: _getInitialLocation(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            _currentPosition = snapshot.data!;
-            return buildMap();
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        bool? shouldNavigate = await showExitAlertDialog(context);
+
+        // 사용자가 확인을 누르면 다음 화면으로 이동
+        if (shouldNavigate==true) {
+          Navigator.pop(context); // 현재 화면을 종료
+          return true; // true 반환
+        } else {
+          return false; // false 반환하여 다음 화면으로 이동을 막음
+        }
+
+      },
+      child: Scaffold(
+        body: FutureBuilder<Position>(
+          future: _getInitialLocation(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              _currentPosition = snapshot.data!;
+              return buildMap();
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
     );
   }
@@ -212,7 +226,10 @@ class _RecordPageState extends State<RecordPage> {
             padding: EdgeInsets.all(24.0),
             height: MediaQuery.of(context).size.height * 0.2,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40.0), // 둥근 모서리 설정
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40.0),
+                topRight: Radius.circular(40.0),
+              ),
               border: Border.all(width: 1.0, color: Palette.logoColor),
             ),
             child: Column(
@@ -275,8 +292,6 @@ class _RecordPageState extends State<RecordPage> {
                                 });
                                 addMarker(LatLng(_currentPosition!.latitude, _currentPosition!.longitude));
                                 _timerUtil.startTimer((seconds) {
-                                  // 여기서 타이머 갱신된 값을 처리할 수 있습니다.
-                                  // 예를 들어, 타이머 갱신된 값을 UI에 표시하거나 다른 작업을 수행할 수 있습니다.
                                 });
                               } else {
                                 addMarker(LatLng(_currentPosition!.latitude, _currentPosition!.longitude));
@@ -300,11 +315,19 @@ class _RecordPageState extends State<RecordPage> {
                                 // isRecording이 true일 때 버튼의 배경색을 옅은 빨강색으로 설정
                                 return Colors.red;
                               } else {
-                                return Palette.logoColor; // 그 외에는 흰색으로 설정
+                                return Palette.logoColor;
                               }
                             }),
                           ),
-                          child: Text(isRecording ? '산책종료' : '산책시작'),
+                          child: Text(
+                            isRecording ? '산책종료' : '산책시작',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ],
