@@ -61,7 +61,7 @@ class _HomePage extends State<HomePage> {
             children: [
               IconButton(
                 onPressed: () {
-                HomePage();
+                  HomePage();
                 },
                 icon: Image.asset(
                   'images/logo2pin.png',
