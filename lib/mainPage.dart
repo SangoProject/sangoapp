@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sangoproject/screens/homePage.dart';
 import 'package:sangoproject/screens/record/recordPage.dart';
 import 'package:sangoproject/screens/calendar/calendarPage.dart';
-import 'package:sangoproject/screens/settingPage.dart';
+import 'package:sangoproject/screens/setting/settingPage.dart';
 
 class MainPage extends StatefulWidget{
   @override

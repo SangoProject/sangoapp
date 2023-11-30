@@ -55,6 +55,8 @@ class SettingPage extends StatelessWidget {
         home: Scaffold(
           appBar: AppBar(
             title: Text(_title, style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
               color: Colors.black,
             ),),
             elevation: 0,

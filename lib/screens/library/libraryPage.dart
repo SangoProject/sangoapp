@@ -17,7 +17,14 @@ class _LibraryPage extends State<LibraryPage>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('찜목록'),
+        centerTitle: true,
+        title: Text(
+          '찜목록',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: StreamBuilder(
         stream: FirebaseDatabase.instance.ref("USERS").child(uid).child("LIBRARY").onValue,

@@ -3,7 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 import 'package:sangoproject/screens/course/courseData.dart';
 import 'package:sangoproject/screens/course/courseDetailPage.dart';
-import 'package:sangoproject/screens/course/libraryButton.dart';
+import 'package:sangoproject/screens/library/libraryButton.dart';
 
 class CourseList extends StatelessWidget {
   List<dynamic> data;

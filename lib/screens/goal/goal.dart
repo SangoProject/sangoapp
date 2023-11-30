@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import 'package:sangoproject/screens/goal/goalGraph.dart';
 import 'package:sangoproject/screens/goal/realDistanceTotal.dart';
-import 'package:sangoproject/screens/goal/statisticsPage.dart';
+import 'package:sangoproject/screens/statistics/statisticsPage.dart';
 
 import '../../config/palette.dart';
 
@@ -18,134 +18,131 @@ class Goal extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox( // 오늘의 목표를 중앙에 띄우기 위한 빈 공간
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox( // 오늘의 목표를 중앙에 띄우기 위한 빈 공간
+                height: 20,
+                width: 20,
+              ),
+              Text(
+                '오늘의 목표',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                onPressed: () {
+                  showPieDataDialog(context, uid);
+                },
+                icon: Image.asset(
+                  'images/pencil.png',
                   height: 20,
                   width: 20,
                 ),
-                Text(
-                  '오늘의 목표',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  onPressed: () {
-                    showPieDataDialog(context, uid);
-                  },
-                  icon: Image.asset(
-                    'images/pencil.png',
-                    height: 20,
-                    width: 20,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          // 수정 필요, 실제 움직인 거리 가져와야 됨
-          // Goal 클래스 내부의 StreamBuilder 부분
-          StreamBuilder(
-            stream: FirebaseDatabase.instance.ref("USERS").child(uid).child("GOAL").onValue,
-            builder: (context, snapshot) {
-              if (snapshot.hasData == false) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    'Error: ${snapshot.hasError}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                );
-              } else {
-                double goalDistance = double.parse(snapshot.data!.snapshot.value.toString());
-                return FutureBuilder(
-                  future: RealDistanceTotal().fetchAndCalculateTotalDistance(DateTime.now()), // 적절한 날짜를 전달할 수 있도록 수정
-                  builder: (context, distanceSnapshot) {
-                    if (distanceSnapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else {
-                      double realDistance = distanceSnapshot.data ?? 0.0;
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          children: <Widget>[
-                            ChartPage(snapshot.data?.snapshot.value.toString(), realDistance.toString()),
-                            Text(
-                              '${realDistance.toStringAsFixed(2)} / $goalDistance km',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                );
-              }
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-            child: Stack(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    color: Palette.green1,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Row(
-                          children: const [
-                            Text(
-                              '산책 통계',
-                              style: TextStyle(fontSize: 18, fontFamily: 'Pretendard', fontWeight: FontWeight.bold),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Icon(
-                                Icons.bar_chart,
-                              ),
-                            ),
-                          ],
-                        ),
+        ),
+        // Goal 클래스 내부의 StreamBuilder 부분
+        StreamBuilder(
+          stream: FirebaseDatabase.instance.ref("USERS").child(uid).child("GOAL").onValue,
+          builder: (context, snapshot) {
+            if (snapshot.hasData == false) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  'Error: ${snapshot.hasError}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              );
+            } else {
+              double goalDistance = double.parse(snapshot.data!.snapshot.value.toString());
+              return FutureBuilder(
+                future: RealDistanceTotal().fetchAndCalculateTotalDistance(DateTime.now()), // 적절한 날짜를 전달할 수 있도록 수정
+                builder: (context, distanceSnapshot) {
+                  if (distanceSnapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else {
+                    double realDistance = distanceSnapshot.data ?? 0.0;
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: <Widget>[
+                          ChartPage(snapshot.data?.snapshot.value.toString(), realDistance.toString()),
+                          Text(
+                            '${realDistance.toStringAsFixed(2)} / $goalDistance km',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => StatisticsPage()));
-                          },
-                          icon: Icon(Icons.chevron_right)
-                      )
-                    ],
-                  ),
+                    );
+                  }
+                },
+              );
+            }
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+          child: Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                  color: Palette.green1,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                Positioned.fill(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => StatisticsPage()),
-                      );
-                    },
-                    splashColor: Colors.grey,
-                    highlightColor: Colors.transparent,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Row(
+                        children: const [
+                          Text(
+                            '산책 통계',
+                            style: TextStyle(fontSize: 18, fontFamily: 'Pretendard', fontWeight: FontWeight.bold),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: Icon(
+                              Icons.bar_chart,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => StatisticsPage()));
+                        },
+                        icon: Icon(Icons.chevron_right)
+                    )
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Positioned.fill(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StatisticsPage()),
+                    );
+                  },
+                  splashColor: Colors.grey,
+                  highlightColor: Colors.transparent,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

@@ -11,19 +11,12 @@ class DisasterListPage extends StatelessWidget {
       children: [
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: EdgeInsets.all(12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "일시 : ${disasterMsg.create_date}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "위치 : ${disasterMsg.location_name}",
+                  "${disasterMsg.create_date}",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 SizedBox(
@@ -49,10 +42,12 @@ class DisasterListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
-          '재난 알림 목록',
+          '재난 안전 알림 목록',
           style: TextStyle(
             fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -84,7 +79,7 @@ class DisasterListPage extends StatelessWidget {
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
                                 spreadRadius: 2, // 그림자 확장 범위
-                                blurRadius: 5, // 그림자 흐림 범위
+                                blurRadius: 8, // 그림자 흐림 범위
                                 offset: Offset(0, 3), // 그림자 위치 (x, y)
                               ),
                             ],

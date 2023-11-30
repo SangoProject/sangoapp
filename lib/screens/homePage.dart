@@ -4,7 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:sangoproject/screens/search/searchPage.dart';
 import 'package:sangoproject/screens/goal/goal.dart';
-import 'package:sangoproject/screens/libraryPage.dart';
+import 'package:sangoproject/screens/library/libraryPage.dart';
 
 import '../config/palette.dart';
 import 'disaster/disasterBanner.dart';

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sangoproject/screens/calendar/calendarData.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../config/palette.dart';
-import '../../config/utils.dart';
+import 'calendarEvent.dart';
 
 class Event {
   final DateTime date;
@@ -40,6 +40,7 @@ class _CalendarPageState extends State<CalendarPage>{
             '산책 달력',
             style: TextStyle(
               fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -115,12 +116,6 @@ class _CalendarPageState extends State<CalendarPage>{
                           ),
                           width: 5,
                           height: 5,
-                          // child: Center(
-                          //   child: Text(
-                          //     events.length.toString(),
-                          //     style: TextStyle(color: Colors.white),
-                          //   ),
-                          // ),
                         );
                       } else {
                         // 이벤트가 없는 경우 아무것도 표시하지 않습니다.
