@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sangoproject/screens/record/recordedData.dart';
 import 'dart:math';
 import '../../config/palette.dart';
-import '../../config/timer.dart';
+import 'timer.dart';
 import 'popDialog.dart';
 
 class RecordPage extends StatefulWidget {

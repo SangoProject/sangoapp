@@ -11,12 +11,12 @@ class DisasterListPage extends StatelessWidget {
       children: [
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: EdgeInsets.all(12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "일시 : ${disasterMsg.create_date}",
+                  "${disasterMsg.create_date}",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 SizedBox(

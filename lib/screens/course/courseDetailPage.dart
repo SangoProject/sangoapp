@@ -110,6 +110,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
           '산책로 세부 정보',
           style: TextStyle(
             fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

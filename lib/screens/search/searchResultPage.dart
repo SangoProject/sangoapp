@@ -34,6 +34,7 @@ class _SearchResultPage extends State<SearchResultPage>{
           '검색 결과',
           style: TextStyle(
             fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 import 'package:sangoproject/config/palette.dart';
-import 'package:sangoproject/screens/goal/barGraph.dart';
-import 'package:sangoproject/screens/goal/barGraphData.dart';
+import 'package:sangoproject/screens/statistics/barGraph.dart';
+import 'package:sangoproject/screens/statistics/barGraphData.dart';
 
 
 class StatisticsPage extends StatefulWidget{
@@ -19,15 +19,22 @@ class _StatisticsPage extends State<StatisticsPage>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('통계'),
+        centerTitle: true,
+        title: Text(
+          '산책 통계',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.only(top: 20),
             child: Text(
-              '주간 통계',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              '<      11월 5주차      >',
+              style: TextStyle(fontSize: 18),
             ),
           ),
           Padding(
