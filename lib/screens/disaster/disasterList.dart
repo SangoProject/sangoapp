@@ -23,13 +23,6 @@ class DisasterListPage extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "위치 : ${disasterMsg.location_name}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
                   disasterMsg.msg.toString(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,
                   fontFamily: 'Choi'),
