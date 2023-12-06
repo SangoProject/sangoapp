@@ -1,4 +1,4 @@
-// 산책 통계를 나타내는 bar chart 기본 구조
+// 산책 통계를 나타낼 bar chart 기본 구조
 import 'package:flutter/material.dart';
 
 class ChartContainer extends StatelessWidget {

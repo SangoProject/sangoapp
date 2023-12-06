@@ -1,4 +1,4 @@
-// 하루에 실제 산책한 거리에 데한 데이터를 합산하는 함수 및 클래스
+// 하루에 실제 산책한 거리 데이터를 합산하는 파일
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 

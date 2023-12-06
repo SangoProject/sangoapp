@@ -1,23 +1,45 @@
 name: sangoproject
-description: A new Flutter project for graduation project.
+description: A new Flutter project.
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
 environment:
   sdk: '>=2.19.6 <=3.1.5'
 
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
 
   firebase_core: ^2.13.0 # firebase 사용을 위해 pub dev에서 버전 검색하여 추가함
   firebase_auth: ^4.6.1 # firebase auth - 로그인 기능
-  firebase_database: ^10.3.6
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
   cloud_firestore: ^4.7.1
   flutterfire_ui: ^0.4.3+20
   firebase_ui_auth: ^1.3.0
-
   google_maps_flutter: ^2.3.0
   table_calendar: ^3.0.8
   http: ^0.13.6

@@ -7,14 +7,12 @@ import 'package:sangoproject/screens/calendar/calendarPage.dart';
 import 'package:sangoproject/screens/setting/settingPage.dart';
 
 class MainPage extends StatefulWidget{
-  const MainPage({super.key});
-
   @override
   State<StatefulWidget> createState()=> _MainPage();
 }
 
 class _MainPage extends State<MainPage> {
-  int currentIndex = 0; // 네비게이션 바에서 보이는 화면 선택을 위한 변수
+  int current_index = 0; // 네비게이션 바에서 보이는 화면 선택을 위한 변수
 
   @override
   Widget build(BuildContext context){
@@ -23,11 +21,11 @@ class _MainPage extends State<MainPage> {
       resizeToAvoidBottomInset: false,
       // 하단의 네비게이션 바
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        // 네비게이션 바를 선택하면 해당 index로 currentIndex가 바뀜.
+        currentIndex: current_index,
+        // 네비게이션 바를 선택하면 해당 index로 current_index가 바뀜.
         onTap: (index){
           setState(() {
-            currentIndex = index;
+            current_index = index;
           });
         },
         // 네비게이션바 UI
@@ -58,12 +56,12 @@ class _MainPage extends State<MainPage> {
         type: BottomNavigationBarType.fixed,
       ),
       body: Center(
-        // currentIndex에 해당하는 화면을 보여줌.
-        child: bodyItem.elementAt(currentIndex),
+        // current_index에 해당하는 화면을 보여줌.
+        child: body_item.elementAt(current_index),
       ),
     );
   }
-  List<Widget> bodyItem = <Widget>[
+  List<Widget> body_item = <Widget>[
     HomePage(), // 인덱스 0번. 홈화면
     RecordPage(), // 인덱스 1번. 기록 화면
     CalendarPage(), // 인덱스 2번. 캘린더 화면

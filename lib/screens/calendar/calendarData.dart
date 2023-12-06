@@ -1,4 +1,4 @@
-// 산책이 기록된 특정 날짜에 대한 데이터를 담은 위젯
+// 특정 날짜에 대한 데이터를 어떻게 화면에 나타낼지 작성해둔 파일
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -28,7 +28,7 @@ class CalendarData extends StatelessWidget {
             scrollDirection: Axis.vertical,
             itemCount: list.length,
             itemBuilder: (context, index) {
-              // 각각의 산책 기록 records에서 불러온 데이터 가공
+              // 각각의 레코드에서 필요한 데이터 추출
               String distance = list[index]['distance'];
               String time = list[index]['time'];
               DateTime recordDateTime = list[index]['date'].toDate();
@@ -141,7 +141,7 @@ class CalendarData extends StatelessWidget {
     );
   }
 
-  // 산책 목록 UI 디자인 요소
+  // 산책 기록 리스트 시간별 UI
   LinearGradient getGradientForWalkTime(String walkTime) {
     switch (walkTime) {
       case '새벽 산책':

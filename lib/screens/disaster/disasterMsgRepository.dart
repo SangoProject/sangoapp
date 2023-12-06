@@ -30,5 +30,6 @@ class DisasterRepository {
         }
       }
     }
+    return null;
   }
 }

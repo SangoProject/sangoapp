@@ -1,5 +1,6 @@
 // 통계 화면에 대한 구조를 작성해둔 파일
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 import 'package:sangoproject/config/palette.dart';
@@ -8,8 +9,6 @@ import 'package:sangoproject/screens/statistics/barGraphData.dart';
 
 
 class StatisticsPage extends StatefulWidget{
-  const StatisticsPage({super.key});
-
   @override
   State<StatefulWidget> createState(){
     return _StatisticsPage();
@@ -31,7 +30,7 @@ class _StatisticsPage extends State<StatisticsPage>{
         ),
       ),
       body: Column(
-        children: const <Widget>[
+        children: <Widget>[
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: Text(
@@ -49,14 +48,11 @@ class _StatisticsPage extends State<StatisticsPage>{
           ),
         ],
       ),
-      // bottomNavigationBar: TabBar(),
     );
   }
 }
 
 class BarChartContent extends StatelessWidget {
-  const BarChartContent({super.key});
-
   @override
   Widget build(BuildContext context) {
     return BarChart(

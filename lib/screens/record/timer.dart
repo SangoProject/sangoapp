@@ -1,4 +1,5 @@
-// 산책 기록시 하단에 표시되는 산책 시간 측정 타이머
+// 산책 기록시 하단에 표시되는 시간 측정 타이머
+
 import 'dart:async';
 
 class TimerUtil {
@@ -7,6 +8,13 @@ class TimerUtil {
 
   void startTimer(Function(int) updateTimer) {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _seconds++;
+      updateTimer(_seconds);
+    });
+  }
+
+  void pauseTimer(Function(int) updateTimer) {
+    _timer = Timer.periodic(Duration(seconds: 0), (timer) {
       _seconds++;
       updateTimer(_seconds);
     });
