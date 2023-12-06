@@ -1,4 +1,4 @@
-// bar chart 재사용 용도
+// 산책 통계를 나타내는 bar chart 기본 구조
 import 'package:flutter/material.dart';
 
 class ChartContainer extends StatelessWidget {
@@ -34,34 +34,6 @@ class ChartContainer extends StatelessWidget {
                   child: chart,
                 ),
             ),
-            // Expanded(
-            //   child: Container(
-            //     margin: EdgeInsets.all(16.0),
-            //     padding: EdgeInsets.all(16.0),
-            //     decoration: BoxDecoration(
-            //       color: Colors.white,
-            //       borderRadius: BorderRadius.circular(12.0),
-            //       boxShadow: [
-            //         BoxShadow(
-            //           color: Colors.grey.withOpacity(0.3),
-            //           spreadRadius: 2,
-            //           blurRadius: 5,
-            //           offset: Offset(0, 3),
-            //         ),
-            //       ],
-            //     ),
-            //     child: Center(
-            //       child: Text(
-            //         '통계 기능 준비중입니다.',
-            //         style: TextStyle(
-            //           fontSize: 18,
-            //           fontWeight: FontWeight.bold,
-            //           color: Colors.green,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // )
           ],
         ),
       ),

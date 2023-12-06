@@ -1,6 +1,6 @@
+// 산책 통계 데이터를 불러오는 파일
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
 import '../../config/palette.dart';
 
 List<BarChartGroupData> barChartGroupData = [

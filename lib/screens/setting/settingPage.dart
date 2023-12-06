@@ -1,3 +1,4 @@
+// 설정 화면 구조를 나타내는 파일
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatelessWidget {

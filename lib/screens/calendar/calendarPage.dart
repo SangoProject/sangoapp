@@ -1,11 +1,12 @@
+// 산책 달력 화면 구조를 짜둔 페이지
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-
-import 'package:flutter/material.dart';
-import 'package:sangoproject/screens/calendar/calendarData.dart';
 import 'package:table_calendar/table_calendar.dart';
+
 import '../../config/palette.dart';
-import 'calendarEvent.dart';
+import 'package:sangoproject/screens/calendar/calendarData.dart';
+import 'calendarDate.dart';
 
 class Event {
   final DateTime date;
@@ -21,8 +22,8 @@ class CalendarPage extends StatefulWidget{
 
 class _CalendarPageState extends State<CalendarPage>{
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now(); // 오늘 날짜을 포커싱하기 위한 변수
+  DateTime _selectedDay = DateTime.now(); // 오늘 날짜를 디폴트로 선택하기 위한 변수
   List<String> days = ['_', '월', '화', '수', '목', '금', '토', '일'];
 
   @override
@@ -80,7 +81,6 @@ class _CalendarPageState extends State<CalendarPage>{
               },
               onFormatChanged: (format) {
                 if (_calendarFormat != format) {
-                  // Call `setState()` when updating calendar format
                   setState(() {
                     _calendarFormat = format;
                   });
@@ -98,7 +98,7 @@ class _CalendarPageState extends State<CalendarPage>{
                   Stream<QuerySnapshot> eventsStream = fetchRecordData(day);
 
                   return StreamBuilder<QuerySnapshot>(
-                    stream: eventsStream,
+                    stream: eventsStream, // 이벤트(산책기록 데이터)를 위한 스트림
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return Container();
@@ -118,7 +118,7 @@ class _CalendarPageState extends State<CalendarPage>{
                           height: 5,
                         );
                       } else {
-                        // 이벤트가 없는 경우 아무것도 표시하지 않습니다.
+                        // 이벤트가 없는 경우 공란
                         return Container();
                       }
                     },

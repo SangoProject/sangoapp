@@ -1,3 +1,4 @@
+// 산책한 데이터를 firestore DB에 저장하는 파일
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<void> addRecord(double distanceTotal, String formattedTime) async {

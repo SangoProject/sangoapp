@@ -12,9 +12,11 @@ import 'package:sangoproject/screens/statistics/statisticsPage.dart';
 import '../../config/palette.dart';
 
 class Goal extends StatelessWidget{
-  TextEditingController txtGoal = TextEditingController(); // 목표거리를 사용자에게 입력받는 변수
+  final TextEditingController txtGoal = TextEditingController(); // 목표거리를 사용자에게 입력받는 변수
   final String uid = 'kim';
-  String realDistance = ''; // 실제 움직인 거리 변수
+  final String realDistance = '';
+
+  Goal({super.key}); // 실제 움직인 거리 변수
 
   @override
   Widget build(BuildContext context) {
@@ -114,11 +116,11 @@ class Goal extends StatelessWidget{
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+                  children: const <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
+                      padding: EdgeInsets.only(left: 8.0),
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
                             '산책 통계',
                             style: TextStyle(fontSize: 18, fontFamily: 'Pretendard', fontWeight: FontWeight.bold),

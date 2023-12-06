@@ -7,9 +7,9 @@ import 'package:proj4dart/proj4dart.dart';
 import '../../config/palette.dart';
 
 class CourseDetailPage extends StatefulWidget{
-  dynamic data;
-  dynamic detail;
-  CourseDetailPage(this.data, this.detail);
+  final dynamic data;
+  final dynamic detail;
+  CourseDetailPage(this.data, this.detail, {super.key});
 
   @override
   State<StatefulWidget> createState(){
@@ -34,6 +34,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
     _setupMarkersAndPolylines();
   }
 
+  // proj4 라이브러리를 통해 좌표계를 GRS80에서 WGS84로 적절히 변환
   final _tupleUtmkGoogle = ProjectionTuple(
     fromProj: Projection.parse(
       '+proj=tmerc +lat_0=37.509400 +lon_0=127.062559 +k=1 +x_0=205525.1279 +y_0=445538.6724 +ellps=GRS80 +units=m +no_defs',
@@ -48,6 +49,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
     return LatLng(googlePoint.y, googlePoint.x);
   }
 
+  // 세부정보 지도의 중앙 좌표
   LatLng _calculateCenterPoint(List<dynamic> detail) {
     if (detail.isEmpty) {
       return LatLng(37.541, 126.986); // 기본값 설정
@@ -100,8 +102,8 @@ class _CourseDetailPage extends State<CourseDetailPage>{
   @override
   Widget build(BuildContext context) {
     double? zoomLevel = 16;
-    int course_level = data["course_level"]; // 난이도 변수
-    int course_negative = 3 - course_level; // 최대 난이도(3) - 난이도 (난이도 표시를 위한 변수)
+    int courseLevel = data["course_level"]; // 난이도 변수
+    int courseNegative = 3 - courseLevel; // 최대 난이도(3) - 난이도 (난이도 표시를 위한 변수)
 
     return Scaffold(
       appBar: AppBar(
@@ -166,7 +168,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                               "난이도: ", style: TextStyle(fontSize: 16),
                             ),
                             Row(
-                              children: List.generate(course_level, (index) {
+                              children: List.generate(courseLevel, (index) {
                                 return Icon(
                                   Icons.star,
                                   color: Colors.amber,
@@ -174,7 +176,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                               }),
                             ),
                             Row(
-                              children: List.generate(course_negative, (index) {
+                              children: List.generate(courseNegative, (index) {
                                 return Icon(
                                   Icons.star_border,
                                   color: Colors.amber,
@@ -194,11 +196,11 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                       shape: CircleBorder(), // 동그라미 모양
                     ),
                     child: InkWell(
-                      onTap: () {}, // 버튼 클릭 시 실행할 함수
+                      onTap: () {},
                       customBorder: CircleBorder(), // 클릭 영역을 동그라미로 설정
                       child: Container(
-                        width: 50, // 버튼의 너비
-                        height: 50, // 버튼의 높이
+                        width: 50,
+                        height: 50,
                         child: Icon(
                           Icons.map, // 지도 모양 아이콘
                           color: Colors.white, // 아이콘 색상
