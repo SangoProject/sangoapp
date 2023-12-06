@@ -1,3 +1,4 @@
+// 산책코스 세부 정보를 보여주는 페이지
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -6,8 +7,8 @@ import 'package:proj4dart/proj4dart.dart';
 import '../../config/palette.dart';
 
 class CourseDetailPage extends StatefulWidget{
-  dynamic data; // 코스명, 시간, 거리, 난이도
-  dynamic detail; // 포인트번호, 포인트명칭, x좌표, y좌표 (courseData.dart 참고)
+  dynamic data;
+  dynamic detail;
   CourseDetailPage(this.data, this.detail);
 
   @override
@@ -17,8 +18,8 @@ class CourseDetailPage extends StatefulWidget{
 }
 
 class _CourseDetailPage extends State<CourseDetailPage>{
-  dynamic data;
-  dynamic detail;
+  dynamic data; // 코스명, 시간, 거리, 난이도
+  dynamic detail; // 포인트번호, 포인트명칭, x좌표, y좌표 (courseData.dart 참고)
   _CourseDetailPage(this.data, this.detail);
 
   final Completer<GoogleMapController> _controller = Completer();
@@ -98,10 +99,9 @@ class _CourseDetailPage extends State<CourseDetailPage>{
 
   @override
   Widget build(BuildContext context) {
-    // LatLng? location = LatLng(37.541, 126.986);
     double? zoomLevel = 16;
-    int course_level = data["course_level"];
-    int course_negative = 3 - course_level;
+    int course_level = data["course_level"]; // 난이도 변수
+    int course_negative = 3 - course_level; // 최대 난이도(3) - 난이도 (난이도 표시를 위한 변수)
 
     return Scaffold(
       appBar: AppBar(
@@ -145,6 +145,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // 코스명
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
                         child: Text(
@@ -158,6 +159,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                       Text(
                         "산책거리: ${data["distance"]}km", style: TextStyle(fontSize: 16),
                       ),
+                      // 난이도
                       Row(
                           children: [
                             Text(
@@ -207,6 +209,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                 ),
               ],
             ),
+            // 포인트 명칭을 리스트로 나타냄.
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),

@@ -1,3 +1,4 @@
+// 산책코스를 위치, 시간, 거리, 난이도에 따라 필터링 하는 역할
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -13,6 +14,7 @@ class SearchPage extends StatefulWidget{
 }
 
 class _SearchPage extends State<SearchPage>{
+  // 검색 항목 중 위치 정보 리스트
   List<String> areaGu = [
     '강남구', '강동구', '강북구', '강서구', '관악구',
     '광진구', '구로구', '금천구', '노원구', '도봉구',
@@ -20,10 +22,10 @@ class _SearchPage extends State<SearchPage>{
     '성동구', '성북구', '송파구', '양천구', '영등포구',
     '용산구', '은평구', '종로구', '중구', '중랑구'
   ];
-  String dropdownValue = '강남구';
-  List<bool> _leadTime = List.generate(3, (index) => false);
-  List<bool> _distance = List.generate(3, (index) => false);
-  List<bool> _courseLevel = List.generate(3, (index) => false);
+  String dropdownValue = '강남구'; // 초기 위치 값
+  List<bool> _leadTime = List.generate(3, (index) => false); // 소요시간 선택 여부에 따른 bool값
+  List<bool> _distance = List.generate(3, (index) => false); // 산책거리 선택 여부에 따른 bool값
+  List<bool> _courseLevel = List.generate(3, (index) => false); // 난이도 선택 여부에 따른 bool값
 
   @override
   Widget build(BuildContext context){
@@ -43,7 +45,7 @@ class _SearchPage extends State<SearchPage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            //위치
+            // 위치 선택 UI
             Container(
               margin: EdgeInsets.all(8),
               padding: EdgeInsets.all(8),
@@ -79,13 +81,16 @@ class _SearchPage extends State<SearchPage>{
                       SizedBox(width: 15,),
                       DropdownButton<String>(
                         value: dropdownValue,
+                        // 위치 정보 리스트 중 선택한 값으로 변경함.
                         onChanged: (String? newValue){
                           setState(() {
                             dropdownValue = newValue!;
                           });
                         },
+                        // 위치를 dropdownmenu로 보여줌.
                         items: areaGu.map<DropdownMenuItem<String>>((String value){
                           return DropdownMenuItem<String>(
+                            // 선택된 위치 정보로 값이 보여짐.
                             value: value,
                             child: Text(value),
                           );
@@ -96,7 +101,7 @@ class _SearchPage extends State<SearchPage>{
                 ],
               ),
             ),
-            //산책시간
+            // 산책시간 UI
             Container(
               margin: EdgeInsets.all(8),
               padding: EdgeInsets.all(8),
@@ -131,12 +136,14 @@ class _SearchPage extends State<SearchPage>{
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         ToggleButtons(
+                          // 버튼을 누르면 산책시간 선택 여부를 토글해 줌.
                           onPressed: (int index){
                             setState(() {
                               _leadTime[index] = !_leadTime[index];
                             });
                           },
                           isSelected: _leadTime,
+                          // 산책시간 선택지
                           children: const <Widget>[
                             Text("  1시간 이하  "),
                             Text("  1시간 초과 ~ 2시간 이하  "),
@@ -149,7 +156,7 @@ class _SearchPage extends State<SearchPage>{
                 ],
               ),
             ),
-            //산책거리
+            // 산책거리 UI
             Container(
               margin: EdgeInsets.all(8),
               padding: EdgeInsets.all(8),
@@ -184,12 +191,14 @@ class _SearchPage extends State<SearchPage>{
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         ToggleButtons(
+                          // 버튼을 누르면 산책거리 선택 여부를 토글해 줌.
                           onPressed: (int index){
                             setState(() {
                               _distance[index] = !_distance[index];
                             });
                           },
                           isSelected: _distance,
+                          // 산책 거리 선택지
                           children: const <Widget>[
                             Text("  1km 이하  "),
                             Text("  1km 초과 ~ 5km 이하  "),
@@ -202,7 +211,7 @@ class _SearchPage extends State<SearchPage>{
                 ],
               ),
             ),
-            //난이도
+            // 난이도 UI
             Container(
               margin: EdgeInsets.all(8),
               padding: EdgeInsets.all(8),
@@ -237,12 +246,14 @@ class _SearchPage extends State<SearchPage>{
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         ToggleButtons(
+                          // 버튼을 누르면 난이도 선택 여부를 토글해 줌.
                           onPressed: (int index){
                             setState(() {
                               _courseLevel[index] = !_courseLevel[index];
                             });
                           },
                           isSelected: _courseLevel,
+                          // 난이도 선택지
                           children: const <Widget>[
                             Text("     상     "),
                             Text("     중     "),
@@ -257,17 +268,20 @@ class _SearchPage extends State<SearchPage>{
             ),
             SizedBox(height: 18,),
 
-            //검색 버튼
+            // 검색 버튼
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 ElevatedButton(
                     onPressed: () async {
-                      // 데이터 가져오기
+                      // 집합 형식으로 필터링해줌.
+                      // 산책코스 데이터 전체를 불러옴.
                       final realtimeDB = await FirebaseDatabase.instance.ref('SEARCH').child(dropdownValue).once();
                       final List<dynamic> data = realtimeDB.snapshot.value as List<dynamic>;
+                      // 가져온 데이터를 집합형식으로 바꾸어 줌.
                       Set<dynamic> searchData = data.toSet();
-                      //산책 시간 필터링
+
+                      //산책시간 필터링
                       if(_leadTime[0] || _leadTime[1] || _leadTime[2]){
                         Set<dynamic> _dataLeadTime = {};
                         for(dynamic i in data){
@@ -290,8 +304,10 @@ class _SearchPage extends State<SearchPage>{
                             }
                           }
                         }
+                        // 필터링된 산책시간과 전체 데이터의 교집합을 저장함.
                         searchData = searchData.intersection(_dataLeadTime);
                       }
+
                       //산책 거리 필터링
                       if(_distance[0] || _distance[1] || _distance[2]){
                         Set<dynamic> _dataDistance = {};
@@ -315,8 +331,10 @@ class _SearchPage extends State<SearchPage>{
                             }
                           }
                         }
+                        // 필터링된 산책거리와 남은 데이터의 교집합을 저장함.
                         searchData = searchData.intersection(_dataDistance);
                       }
+
                       //난이도 필터링
                       if(_courseLevel[0] || _courseLevel[1] || _courseLevel[2]){
                         Set<dynamic> _dataLevel = {};
@@ -340,8 +358,11 @@ class _SearchPage extends State<SearchPage>{
                             }
                           }
                         }
+                        // 필터링된 난이도와 남은 데이터의 교집합을 저장함.
                         searchData = searchData.intersection(_dataLevel);
                       }
+
+                      // 검색 결과 페이지로 넘어감.
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => SearchResultPage(dropdownValue, searchData.toList()))
                       );

@@ -1,3 +1,4 @@
+// 앱의 기본적인 화면 구조를 작성해둔 파일
 import 'package:flutter/material.dart';
 
 import 'package:sangoproject/screens/homePage.dart';
@@ -11,19 +12,23 @@ class MainPage extends StatefulWidget{
 }
 
 class _MainPage extends State<MainPage> {
-  int current_index = 0;
+  int current_index = 0; // 네비게이션 바에서 보이는 화면 선택을 위한 변수
 
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      // 키보드 오버플로우를 해결을 위해
       resizeToAvoidBottomInset: false,
+      // 하단의 네비게이션 바
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: current_index,
+        // 네비게이션 바를 선택하면 해당 index로 current_index가 바뀜.
         onTap: (index){
           setState(() {
             current_index = index;
           });
         },
+        // 네비게이션바 UI
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -51,14 +56,15 @@ class _MainPage extends State<MainPage> {
         type: BottomNavigationBarType.fixed,
       ),
       body: Center(
+        // current_index에 해당하는 화면을 보여줌.
         child: body_item.elementAt(current_index),
       ),
     );
   }
   List<Widget> body_item = <Widget>[
-    HomePage(),
-    RecordPage(),
-    CalendarPage(),
-    SettingPage(),
+    HomePage(), // 인덱스 0번. 홈화면
+    RecordPage(), // 인덱스 1번. 기록 화면
+    CalendarPage(), // 인덱스 2번. 캘린더 화면
+    SettingPage(), // 인덱스 3번. 설정 화면
   ];
 }

@@ -1,3 +1,4 @@
+// 필터링된 검색 결과를 보여주는 페이지
 import 'package:flutter/material.dart';
 
 import 'package:sangoproject/screens/course/courseList.dart';
@@ -14,8 +15,8 @@ class SearchResultPage extends StatefulWidget{
 }
 
 class _SearchResultPage extends State<SearchResultPage>{
-  String areaGu = '';
-  List<dynamic> data;
+  String areaGu = ''; // 선택된 위치 정보 변수
+  List<dynamic> data; // 검색된 산책코스가 들어가 있는 변수
   _SearchResultPage(this.areaGu, this.data);
 
   @override
@@ -24,6 +25,7 @@ class _SearchResultPage extends State<SearchResultPage>{
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
+        // 버튼을 누르면 main으로 이동.
         leading: IconButton(
           onPressed: () {
             Navigator.popUntil(context, ModalRoute.withName("/main"));
@@ -47,8 +49,9 @@ class _SearchResultPage extends State<SearchResultPage>{
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: Text("${data.length}건"),
+            child: Text("${data.length}건"), // 검색 결과 개수
           ),
+          // 검색 결과에 대한 courseList 띄우기
           Expanded(child: CourseList(data)),
         ],
       ),

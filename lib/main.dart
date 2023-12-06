@@ -1,3 +1,4 @@
+// 앱의 기본적인 정보를 세팅해둔 파일
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // 상단에 debug가 뜨지 않도록 함.
       debugShowCheckedModeBanner: false,
       title: 'SanGo app', // 산책하자고로 이름을 바꿈
       theme: ThemeData(
@@ -33,6 +35,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
+      // 루트 설정 정보
       initialRoute: '/main',
       routes: {
         '/' : (context) => GoogleLogin(),

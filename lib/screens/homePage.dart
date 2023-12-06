@@ -1,3 +1,4 @@
+// 홈 화면 구조를 작성해둔 파일
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -50,27 +51,20 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // 뒤로가기 버튼을 눌러도 뒤로 가지지 않음.
     return WillPopScope(
       onWillPop: () async {
         return false;
       },
       child: Scaffold(
+        // 키보드 오버플로우를 해결을 위해
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          // 상단에 나타나는 뒤로가기 버튼 제거.
           automaticallyImplyLeading: false,
           title: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
-              // IconButton(
-              //   onPressed: () {
-              //   HomePage();
-              //   },
-              //   icon: Image.asset(
-              //     'images/thin_logo.png',
-              //     height: 28,
-              //     width: 28,
-              //   ),
-              // ),
               Padding(
                 padding: EdgeInsets.only(left: 8.0),
                 child: Text(
@@ -83,6 +77,7 @@ class _HomePage extends State<HomePage> {
               ),
             ],
           ),
+          // 검색 버튼 (아이콘 버튼). 누르면 검색 페이지(SearchPage)로 넘어감.
           actions: [
             IconButton(
               onPressed: () {
@@ -97,28 +92,23 @@ class _HomePage extends State<HomePage> {
           child: Center(
             child: Column(
               children: <Widget>[
-                // 재난 공지
+                // 재난 공지 배너
                 Disaster(),
+
                 // 목표, 산책통계
                 Goal(),
-                // 찜목록
+
+                // 찜목록 버튼. 버튼을 누르면 찜목록을 볼 수 있는 페이지로 넘어감.
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                   child: Stack(
                     children: [
                       Container(
+                        height: 80,
                         padding: EdgeInsets.all(15.0),
                         decoration: BoxDecoration(
                           color: Palette.green1,
                           borderRadius: BorderRadius.circular(12),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
-                          //     spreadRadius: 2, // 그림자 확장 범위
-                          //     blurRadius: 5, // 그림자 흐림 범위
-                          //     offset: Offset(0, 3), // 그림자 위치 (x, y)
-                          //   ),
-                          // ],
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,13 +130,7 @@ class _HomePage extends State<HomePage> {
                                 ],
                               ),
                             ),
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) => LibraryPage()));
-                                },
-                                icon: Icon(Icons.chevron_right)
-                            )
+                            Icon(Icons.chevron_right),
                           ],
                         ),
                       ),

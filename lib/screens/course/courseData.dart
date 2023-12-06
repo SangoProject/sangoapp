@@ -1,3 +1,4 @@
+// 산책코스 세부 정보 데이터 골격. 필요한 데이터만 가져옴
 class CourseData{
   final cpi_idx;
   final cpi_name;
@@ -18,14 +19,5 @@ class CourseData{
       x: json["x"],
       y: json["y"],
     );
-  }
-
-  Map<dynamic, dynamic> toJson(){
-    return{
-      "cpi_idx": cpi_idx,
-      "cpi_name": cpi_name,
-      "x": x,
-      "y": y,
-    };
   }
 }

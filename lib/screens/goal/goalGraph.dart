@@ -1,11 +1,12 @@
+// 목표 달성 차트의 기본 구조에 대한 파일
 import 'package:flutter/material.dart';
 import 'dart:math';
 
 import '../../config/palette.dart';
 
 class ChartPage extends StatelessWidget {
-  var goalDistance;
-  var realDistance;
+  var goalDistance; // 목표한 산책 거리
+  var realDistance; // 실제로 산책한 거리
   ChartPage(this.goalDistance, this.realDistance);
 
   @override
@@ -18,6 +19,7 @@ class ChartPage extends StatelessWidget {
             Container(
               child: CustomPaint(
                 size: Size(150, 150),
+                // PieChart를 그려줌. (산책한 거리와 목표한 거리에 대한 그래프)
                 painter: PieChart(double.parse(goalDistance), double.parse(realDistance)),
               ),
             ),
@@ -29,17 +31,19 @@ class ChartPage extends StatelessWidget {
 }
 
 class PieChart extends CustomPainter {
-  double realDistance;
-  double goalDistance;
-  double percentage = 0;
+  double realDistance; // 실제로 움직인 거리
+  double goalDistance; // 목표한 거리
+  double percentage = 0; // 실제로 움직인 거리와 목표한 거리에 대한 비율
   double textScaleFactor = 1.0;
 
+  // 목표와 실제거리의 비율을 계산해서 percentage에 저장함
   PieChart(this.goalDistance, this.realDistance){
     percentage = realDistance * 100 / goalDistance;
     final tmp = percentage.toStringAsFixed(1);
     percentage = double.parse(tmp);
   }
 
+  // 목표 그래프 UI를 그려줌
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()

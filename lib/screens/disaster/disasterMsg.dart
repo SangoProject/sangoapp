@@ -1,3 +1,4 @@
+// 재난 정보 문자 데이터 골격. 필요한 데이터만 가져옴.
 class DisasterMsg {
   String? create_date;
   String? msg;
