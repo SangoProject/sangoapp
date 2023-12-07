@@ -73,8 +73,10 @@ class Goal extends StatelessWidget{
             else {
               // String 타입을 double 타입으로 바꾸어 줌.
               double goalDistance = double.parse(snapshot.data!.snapshot.value.toString());
+
+              // 오늘 산책한 거리 합을 반환하여 차트에 적용하는 빌더
               return FutureBuilder(
-                future: RealDistanceTotal().fetchAndCalculateTotalDistance(DateTime.now()), // 적절한 날짜를 전달할 수 있도록 수정
+                future: RealDistanceTotal().fetchAndCalculateTotalDistance(DateTime.now()),
                 builder: (context, distanceSnapshot) {
                   if (distanceSnapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
@@ -114,11 +116,11 @@ class Goal extends StatelessWidget{
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+                  children: const <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
+                      padding: EdgeInsets.only(left: 8.0),
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
                             '산책 통계',
                             style: TextStyle(fontSize: 18, fontFamily: 'Pretendard', fontWeight: FontWeight.bold),
@@ -208,6 +210,8 @@ class Goal extends StatelessWidget{
         }
     );
   }
+
+  // firestore에 저장된 오늘 날짜 산책기록 데이터를 가져오기
   Stream<QuerySnapshot> fetchRecordData(DateTime today) {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
 

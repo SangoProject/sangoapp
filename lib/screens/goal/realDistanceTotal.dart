@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 class RealDistanceTotal {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // DB에 저장되어 있는 총 산책 거리의 fetch
   Future<double> fetchAndCalculateTotalDistance(DateTime today) async {
     try {
       List<DocumentSnapshot> list = await fetchRecordData(today);
@@ -16,6 +17,7 @@ class RealDistanceTotal {
     }
   }
 
+  // DB에서 산책 데이터 불러옴
   Future<List<DocumentSnapshot>> fetchRecordData(DateTime today) async {
     String formattedDate = DateFormat("yyyy-MM-dd").format(today);
 
@@ -34,6 +36,7 @@ class RealDistanceTotal {
     }
   }
 
+  // 산책거리 총 합 계산
   double calculateTotalDistance(List<DocumentSnapshot> list) {
     double totalDistance = 0.0;
 
@@ -46,6 +49,7 @@ class RealDistanceTotal {
     return totalDistance;
   }
 
+  // 산책 거리 타입변환 (String->double)
   double extractNumberFromDistanceString(String distanceString) {
     RegExp regex = RegExp(r'(\d+(\.\d+)?)');
     Match? match = regex.firstMatch(distanceString);

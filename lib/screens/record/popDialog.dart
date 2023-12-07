@@ -33,6 +33,7 @@ void showExitConfirmationDialog(BuildContext context, double distanceTotal, Stri
   );
 }
 
+// 다른 화면으로 전환 제한
 Future<bool?> showExitAlertDialog(BuildContext context) async {
   return await showDialog<bool>(
     context: context,

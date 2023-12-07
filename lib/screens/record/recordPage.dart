@@ -43,6 +43,7 @@ class _RecordPageState extends State<RecordPage> {
 
   Timer? _locationUpdateTimer;
 
+  // 위치 업데이트 시작
   void startLocationUpdates() {
     if (_locationUpdateTimer == null || !_locationUpdateTimer!.isActive) {
       _locationUpdateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -118,6 +119,7 @@ class _RecordPageState extends State<RecordPage> {
     }
   }
 
+  // 실시간 산책 경로 그리기
   void updateMap(Position currentPosition) {
     DateTime now = DateTime.now();
     String polylineId = 'polyline_${now.year}${now.month}${now.day}_${now.hour}${now.minute}${now.second}';

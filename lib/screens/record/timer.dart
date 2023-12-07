@@ -33,6 +33,7 @@ class TimerUtil {
         (x) => x,
   );
 
+  // 00:00:00 형식으로 시간 변환
   static String getFormattedTime(int seconds) {
     int hours = seconds ~/ 3600;
     int minutes = (seconds % 3600) ~/ 60;

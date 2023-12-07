@@ -21,16 +21,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> {
   final _authentication = FirebaseAuth.instance; // user 등록
-  User? loggedUser; //? is nullable
+  User? loggedUser; // 로그인 여부 판단
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUser();
     _requestLocationPermission();
   }
 
+  // 위치 권한 허용 여부 확인
   Future<void> _requestLocationPermission() async {
     if (await Permission.location.isDenied) {
       await Permission.location.request();
@@ -42,7 +42,7 @@ class _HomePage extends State<HomePage> {
       final user = _authentication.currentUser;
       if (user != null) {
         loggedUser = user;
-        print(loggedUser!.email); // ! is not null
+        print(loggedUser!.email);
       }
     } catch (e) {
       print(e);
@@ -51,7 +51,7 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // 뒤로가기 버튼을 눌러도 뒤로 가지지 않음.
+    // 뒤로가기 버튼을 눌러도 뒤로 가지지 않도록 설정
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -88,69 +88,67 @@ class _HomePage extends State<HomePage> {
             )
           ],
         ),
-        body: Container(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                // 재난 공지 배너
-                Disaster(),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              // 재난 공지 배너
+              Disaster(),
 
-                // 목표, 산책통계
-                Goal(),
+              // 목표, 산책통계
+              Goal(),
 
-                // 찜목록 버튼. 버튼을 누르면 찜목록을 볼 수 있는 페이지로 넘어감.
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 80,
-                        padding: EdgeInsets.all(15.0),
-                        decoration: BoxDecoration(
-                          color: Palette.green1,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '찜목록',
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              // 찜목록 버튼. 버튼을 누르면 찜목록을 볼 수 있는 페이지로 넘어감.
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 80,
+                      padding: EdgeInsets.all(15.0),
+                      decoration: BoxDecoration(
+                        color: Palette.green1,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  '찜목록',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 8.0),
+                                  child: Icon(
+                                    Icons.view_list_rounded,
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Icon(
-                                      Icons.view_list_rounded,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            Icon(Icons.chevron_right),
-                          ],
-                        ),
+                          ),
+                          Icon(Icons.chevron_right),
+                        ],
                       ),
-                      Positioned.fill(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => LibraryPage()),
-                            );
-                          },
-                          splashColor: Colors.grey,
-                          highlightColor: Colors.transparent,
-                        ),
+                    ),
+                    Positioned.fill(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LibraryPage()),
+                          );
+                        },
+                        splashColor: Colors.grey,
+                        highlightColor: Colors.transparent,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

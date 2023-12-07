@@ -11,6 +11,7 @@ class Disaster extends StatelessWidget {
     final bannerheight = MediaQuery.of(context).size.height;
     final bannerwidth = MediaQuery.of(context).size.width;
 
+    // 배너 탭시 재난정보 페이지로 전환
     return GestureDetector(
       onTap: () {
         Navigator.push(
