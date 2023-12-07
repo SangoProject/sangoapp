@@ -8,7 +8,7 @@ Future<void> addRecord(double distanceTotal, String formattedTime) async {
   DateTime now = DateTime.now();
 
   // 날짜를 Document ID로 사용하기 위한 포매팅
-  String documentId = "${now.year}-${now.month}-${now.day}";
+  String documentId = "${now.year}-${now.month}-${now.day < 10 ? '0${now.day}' : now.day}";
 
   // records 컬렉션에 해당 날짜의 문서가 있는지 확인
   DocumentSnapshot<Map<String, dynamic>> document = await _firestore
