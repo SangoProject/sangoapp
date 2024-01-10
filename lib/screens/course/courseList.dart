@@ -8,7 +8,7 @@ import 'package:sangoproject/screens/library/libraryButton.dart';
 
 class CourseList extends StatelessWidget {
   final List<dynamic> data; // 코스명, 시간, 거리, 난이도
-  CourseList(this.data);
+  CourseList(this.data, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +16,16 @@ class CourseList extends StatelessWidget {
     // 구분선이 있는 리스트를 반환
     return ListView.separated(
       itemBuilder: (context, index){
-        String course_name = data[index]["course_name"]; // 코스명
+        String courseName = data[index]["course_name"]; // 코스명
         final distance = data[index]["distance"]; // 산책거리
-        final lead_time = data[index]["lead_time"]; // 산책시간
-        int course_level = data[index]["course_level"]; // 난이도
-        int course_negative = 3 - course_level; // 최대난이도(3) - 난이도 (난이도 표시를 위한 변수)
+        final leadTime = data[index]["lead_time"]; // 산책시간
+        int courseLevel = data[index]["course_level"]; // 난이도
+        int courseNegative = 3 - courseLevel; // 최대난이도(3) - 난이도 (난이도 표시를 위한 변수)
 
         return TextButton(
           // 버튼을 누르면 파이어베이스에서 해당하는 산책코스의 세부 정보를 가져온 뒤 산책코스 세부 정보를 보여주는 페이지로 넘어감
             onPressed: () async {
-              final realtimeDB = await FirebaseDatabase.instance.ref('DATA').orderByChild("course_name").equalTo(course_name);
+              final realtimeDB = await FirebaseDatabase.instance.ref('DATA').orderByChild("course_name").equalTo(courseName);
               final event = await realtimeDB.once();
               final mapData = event.snapshot.value as Map<dynamic, dynamic>;
               List<CourseData> courseDetail = mapData.values.map((e) => CourseData.fromJson(e)).toList();
@@ -46,7 +46,7 @@ class CourseList extends StatelessWidget {
                       Row(
                           children: [
                             Row(
-                              children: List.generate(course_level, (index) {
+                              children: List.generate(courseLevel, (index) {
                                 return Icon(
                                   Icons.star,
                                   color: Colors.amber,
@@ -54,7 +54,7 @@ class CourseList extends StatelessWidget {
                               }),
                             ),
                             Row(
-                              children: List.generate(course_negative, (index) {
+                              children: List.generate(courseNegative, (index) {
                                 return Icon(
                                   Icons.star_border,
                                   color: Colors.amber,
@@ -70,10 +70,10 @@ class CourseList extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Text(course_name),
+                      Text(courseName),
                     ],
                   ),
-                  Text("거리 : " + distance.toString() + "km, 산책시간 : " + lead_time.toString() + "분"),
+                  Text("거리 : ${distance}km, 산책시간 : $leadTime분"),
                 ],
               ),
             )

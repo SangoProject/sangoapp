@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 
 import 'package:sangoproject/screens/googleLogin.dart';
-import 'package:sangoproject/mainPage.dart';
+import 'package:sangoproject/main_page.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

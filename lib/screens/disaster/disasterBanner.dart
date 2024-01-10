@@ -1,4 +1,4 @@
-// 홈 화면에서 재난 정보에 접근하기 위한 배너 위젯
+// 홈화면에서 재난정보를 확인하기 위해 접근하는 배너 위젯
 import 'package:flutter/material.dart';
 import '../../config/palette.dart';
 import 'disasterList.dart';
@@ -11,7 +11,7 @@ class Disaster extends StatelessWidget {
     final bannerheight = MediaQuery.of(context).size.height;
     final bannerwidth = MediaQuery.of(context).size.width;
 
-    // 배너 탭시 재난정보 페이지로 전환
+    // 탭시 재난정보 리스트 페이지로 전환(DisasterListPage.dart)
     return GestureDetector(
       onTap: () {
         Navigator.push(

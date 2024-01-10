@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sangoproject/config/palette.dart';
-import 'package:sangoproject/mainPage.dart';
+import 'package:sangoproject/main_page.dart';
 import 'package:sangoproject/screens/homePage.dart';
 
 class GoogleLogin extends StatelessWidget {
@@ -25,8 +25,8 @@ class GoogleLogin extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                final _googleSignIn = GoogleSignIn();
-                final googleAccount = await _googleSignIn.signIn();
+                final googleSignIn = GoogleSignIn();
+                final googleAccount = await googleSignIn.signIn();
 
                 if (googleAccount != null) {
                   final googleAuth = await googleAccount.authentication;
