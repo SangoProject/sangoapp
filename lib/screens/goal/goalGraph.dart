@@ -1,13 +1,12 @@
 // 목표 달성 차트의 기본 구조에 대한 파일
 import 'package:flutter/material.dart';
 import 'dart:math';
-
 import '../../config/palette.dart';
 
 class ChartPage extends StatelessWidget {
-  var goalDistance; // 목표한 산책 거리
-  var realDistance; // 실제로 산책한 거리
-  ChartPage(this.goalDistance, this.realDistance);
+  final goalDistance; // 목표한 산책 거리
+  final realDistance; // 실제로 산책한 거리
+  ChartPage(this.goalDistance, this.realDistance, {super.key});
 
   @override
   Widget build(BuildContext context) {

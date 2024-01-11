@@ -9,7 +9,7 @@ import '../../config/palette.dart';
 class CourseDetailPage extends StatefulWidget{
   final dynamic data;
   final dynamic detail;
-  CourseDetailPage(this.data, this.detail);
+  CourseDetailPage(this.data, this.detail, {super.key});
 
   @override
   State<StatefulWidget> createState(){
@@ -34,7 +34,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
     _setupMarkersAndPolylines();
   }
 
-  // proj4 라이브러리를 이용하여 좌표계 변경(GRS80 -> WGS84)
+  // proj4 라이브러리를 통해 좌표계를 GRS80에서 WGS84로 적절히 변환
   final _tupleUtmkGoogle = ProjectionTuple(
     fromProj: Projection.parse(
       '+proj=tmerc +lat_0=37.509400 +lon_0=127.062559 +k=1 +x_0=205525.1279 +y_0=445538.6724 +ellps=GRS80 +units=m +no_defs',
@@ -49,7 +49,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
     return LatLng(googlePoint.y, googlePoint.x);
   }
 
-  // 지도 중앙 좌표값
+  // 세부정보 지도의 중앙 좌표
   LatLng _calculateCenterPoint(List<dynamic> detail) {
     if (detail.isEmpty) {
       return LatLng(37.541, 126.986); // 기본값 설정
@@ -102,8 +102,8 @@ class _CourseDetailPage extends State<CourseDetailPage>{
   @override
   Widget build(BuildContext context) {
     double? zoomLevel = 16;
-    int course_level = data["course_level"]; // 난이도 변수
-    int course_negative = 3 - course_level; // 최대 난이도(3) - 난이도 (난이도 표시를 위한 변수)
+    int courseLevel = data["course_level"]; // 난이도 변수
+    int courseNegative = 3 - courseLevel; // 최대 난이도(3) - 난이도 (난이도 표시를 위한 변수)
 
     return Scaffold(
       appBar: AppBar(
@@ -168,7 +168,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                               "난이도: ", style: TextStyle(fontSize: 16),
                             ),
                             Row(
-                              children: List.generate(course_level, (index) {
+                              children: List.generate(courseLevel, (index) {
                                 return Icon(
                                   Icons.star,
                                   color: Colors.amber,
@@ -176,7 +176,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                               }),
                             ),
                             Row(
-                              children: List.generate(course_negative, (index) {
+                              children: List.generate(courseNegative, (index) {
                                 return Icon(
                                   Icons.star_border,
                                   color: Colors.amber,
@@ -192,18 +192,18 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                   padding: const EdgeInsets.only(right: 24.0),
                   child: Ink(
                     decoration: const ShapeDecoration(
-                      color: Palette.logoColor,
-                      shape: CircleBorder(),
+                      color: Palette.logoColor, // 동그라미 배경색
+                      shape: CircleBorder(), // 동그라미 모양
                     ),
                     child: InkWell(
                       onTap: () {},
                       customBorder: CircleBorder(), // 클릭 영역을 동그라미로 설정
-                      child: SizedBox(
+                      child: Container(
                         width: 50,
                         height: 50,
                         child: Icon(
-                          Icons.map,
-                          color: Colors.white,
+                          Icons.map, // 지도 모양 아이콘
+                          color: Colors.white, // 아이콘 색상
                         ),
                       ),
                     ),
@@ -225,9 +225,9 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                           padding: EdgeInsets.all(4.0),
                           decoration: BoxDecoration(
                             color: Palette.logoColor.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(10.0),
+                            borderRadius: BorderRadius.circular(10.0), // 둥근 모서리 설정
                             border: Border.all(width: 1.0, color: Palette.logoColor),
-                          ),
+                          ),// 외곽선 설정
                           child: Row(
                             children: <Widget>[
                               Icon(Icons.swipe_down_alt),

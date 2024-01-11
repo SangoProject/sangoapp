@@ -14,7 +14,9 @@ import '../../config/palette.dart';
 class Goal extends StatelessWidget{
   final TextEditingController txtGoal = TextEditingController(); // 목표거리를 사용자에게 입력받는 변수
   final String uid = 'kim';
-  final String realDistance = ''; // 실제 움직인 거리 변수
+  final String realDistance = '';
+
+  Goal({super.key}); // 실제 움직인 거리 변수
 
   @override
   Widget build(BuildContext context) {

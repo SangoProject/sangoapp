@@ -1,12 +1,12 @@
 // 산책코스를 위치, 시간, 거리, 난이도에 따라 필터링 하는 역할
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-
 import 'package:sangoproject/screens/search/searchResultPage.dart';
-
 import '../../config/palette.dart';
 
 class SearchPage extends StatefulWidget{
+  const SearchPage({super.key});
+
   @override
   State<StatefulWidget> createState(){
     return _SearchPage();
@@ -23,9 +23,9 @@ class _SearchPage extends State<SearchPage>{
     '용산구', '은평구', '종로구', '중구', '중랑구'
   ];
   String dropdownValue = '강남구'; // 초기 위치 값
-  List<bool> _leadTime = List.generate(3, (index) => false); // 소요시간 선택 여부에 따른 bool값
-  List<bool> _distance = List.generate(3, (index) => false); // 산책거리 선택 여부에 따른 bool값
-  List<bool> _courseLevel = List.generate(3, (index) => false); // 난이도 선택 여부에 따른 bool값
+  final List<bool> _leadTime = List.generate(3, (index) => false); // 소요시간 선택 여부에 따른 bool값
+  final List<bool> _distance = List.generate(3, (index) => false); // 산책거리 선택 여부에 따른 bool값
+  final List<bool> _courseLevel = List.generate(3, (index) => false); // 난이도 선택 여부에 따른 bool값
 
   @override
   Widget build(BuildContext context){

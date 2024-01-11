@@ -6,7 +6,7 @@ import 'package:sangoproject/screens/course/courseList.dart';
 class SearchResultPage extends StatefulWidget{
   String areaGu = '';
   List<dynamic> data;
-  SearchResultPage(this.areaGu, this.data);
+  SearchResultPage(this.areaGu, this.data, {super.key});
 
   @override
   State<StatefulWidget> createState(){

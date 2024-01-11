@@ -1,6 +1,5 @@
-// 산책 기록 화면 구조에 대한 파일
+// 산책기록 화면 구조에 대한 파일
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -14,10 +13,10 @@ class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);
 
   @override
-  _RecordPageState createState() => _RecordPageState();
+  RecordPageState createState() => RecordPageState();
 }
 
-class _RecordPageState extends State<RecordPage> {
+class RecordPageState extends State<RecordPage> {
   GoogleMapController? _controller;
   Position? _currentPosition;
   bool isRecording = false; // 기록중인 상태 여부
@@ -32,7 +31,6 @@ class _RecordPageState extends State<RecordPage> {
   final Set<Polyline> _polylines = {};
 
   @override
-  // 타이머 초기화
   void dispose() {
     if (_locationUpdateTimer != null && _locationUpdateTimer!.isActive) {
       _locationUpdateTimer?.cancel();
@@ -144,7 +142,6 @@ class _RecordPageState extends State<RecordPage> {
 
   final _markers = <Marker>{};
 
-  // 현위치 마커 추가
   addMarker(LatLng coordinate) {
     final int id = Random().nextInt(100);
 
@@ -217,6 +214,7 @@ class _RecordPageState extends State<RecordPage> {
             initialCameraPosition: CameraPosition(
               target: LatLng(_currentPosition?.latitude ?? 37.541, _currentPosition?.longitude ?? 126.986),
               zoom: 18.0,
+              // bearing: _currentPosition!.heading,
             ),
             compassEnabled: true,
             myLocationEnabled: true,
