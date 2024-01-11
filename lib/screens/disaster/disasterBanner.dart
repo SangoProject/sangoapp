@@ -1,7 +1,7 @@
 // 홈 화면에서 재난 정보에 접근하기 위한 배너 위젯
 import 'package:flutter/material.dart';
-import '../../config/palette.dart';
-import 'disasterList.dart';
+import 'package:sangoproject/config/palette.dart';
+import 'package:sangoproject/screens/disaster/disasterList.dart';
 
 class Disaster extends StatelessWidget {
   const Disaster({super.key});
