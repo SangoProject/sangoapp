@@ -139,7 +139,7 @@ class _BarChart extends StatelessWidget {
           int rodIndex,
           ) {
         return BarTooltipItem(
-          rod.toY.round().toString(),
+          rod.toY.toStringAsFixed(1).toString(),
           const TextStyle(
             color: Palette.green1,
             fontWeight: FontWeight.bold,

@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // 루트 설정 정보
-      initialRoute: '/main',
+      initialRoute: '/',
       routes: {
         '/' : (context) => GoogleLogin(),
         '/main': (context) => MainPage(),

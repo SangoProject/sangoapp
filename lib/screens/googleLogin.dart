@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sangoproject/config/palette.dart';
 import 'package:sangoproject/main_page.dart';
-import 'package:sangoproject/screens/homePage.dart';
 
 class GoogleLogin extends StatelessWidget {
   const GoogleLogin({Key? key}) : super(key: key);
