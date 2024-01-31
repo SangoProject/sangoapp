@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:sangoproject/screens/googleLogin.dart';
 import 'package:sangoproject/main_page.dart';
@@ -25,6 +26,11 @@ class MyApp extends StatelessWidget {
   // main 화면의 로그인 기능
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    // 사용자 로그인 상태에 따라 라우트 설정
+    String initialRoute = user != null ? '/main' : '/';
+
     return MaterialApp(
       // 상단에 debug가 뜨지 않도록 함.
       debugShowCheckedModeBanner: false,
@@ -36,7 +42,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // 루트 설정 정보
-      initialRoute: '/',
+      initialRoute: initialRoute,
       routes: {
         '/' : (context) => GoogleLogin(),
         '/main': (context) => MainPage(),

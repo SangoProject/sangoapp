@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sangoproject/screens/googleLogin.dart';
+import 'popDialog.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -19,46 +17,6 @@ class SettingPage extends StatelessWidget {
     Icons.no_accounts,
   ];
 
-  // 함수 리스트에서 직접 호출할 함수들 정의
-  static void _logout(BuildContext context) async {
-    final googleSignIn = GoogleSignIn();
-    await FirebaseAuth.instance.signOut();
-    await googleSignIn.signOut();
-    // GoogleLogin 페이지로 이동
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => GoogleLogin()),
-    );
-  }
-
-  // 로그아웃 팝업 띄우기
-  Future<void> _showLogoutDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('로그아웃'),
-          content: Text('로그아웃 하시겠습니까?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // 닫기
-              },
-              child: Text('아니오'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // 닫기
-                _logout(context); // 로그아웃 수행
-              },
-              child: Text('예'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Widget _settingListView(BuildContext context) {
     return ListView.builder(
       itemCount: _data.length,
@@ -67,9 +25,11 @@ class SettingPage extends StatelessWidget {
           onTap: () {
             // 각 항목에 따라 함수 호출
             if (_data[i] == '로그아웃') {
-              _showLogoutDialog(context); // 로그아웃 팝업 띄우기
-            } else {
-              // 다른 항목에 따른 동작 추가
+              showLogoutDialog(context, i); // 로그아웃 팝업 띄우기
+            } else if(_data[i] == '회원탈퇴') {
+              showUserDeleteDialog(context, i); // 회원탈퇴 팝업 띄우기
+            } else{
+              // 알림, 앱정보 추가 구현 필요
             }
           },
           child: ListTile(
