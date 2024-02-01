@@ -5,23 +5,24 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proj4dart/proj4dart.dart';
 
 import '../../config/palette.dart';
+import 'package:sangoproject/screens/course/courseData.dart';
+import 'package:sangoproject/screens/course/courseRepository.dart';
 
 class CourseDetailPage extends StatefulWidget{
   final dynamic data;
-  final dynamic detail;
-  CourseDetailPage(this.data, this.detail, {super.key});
+  CourseDetailPage(this.data, {super.key});
 
   @override
   State<StatefulWidget> createState(){
-    return _CourseDetailPage(data, detail);
+    return _CourseDetailPage(data);
   }
 }
 
 class _CourseDetailPage extends State<CourseDetailPage>{
   dynamic data; // 코스명, 시간, 거리, 난이도
-  dynamic detail; // 포인트번호, 포인트명칭, x좌표, y좌표 (courseData.dart 참고)
-  _CourseDetailPage(this.data, this.detail);
+  _CourseDetailPage(this.data);
 
+  final CourseRepository _courseRepository = CourseRepository();
   final Completer<GoogleMapController> _controller = Completer();
   final _markers = <Marker>{};
   final List<LatLng> _points = [];
@@ -31,7 +32,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
   @override
   void initState() {
     super.initState();
-    _setupMarkersAndPolylines();
+    // _setupMarkersAndPolylines();
   }
 
   // proj4 라이브러리를 통해 좌표계를 GRS80에서 WGS84로 적절히 변환
@@ -65,7 +66,7 @@ class _CourseDetailPage extends State<CourseDetailPage>{
     return utmkToGoogle(centerX.toString(), centerY.toString());
   }
 
-  Future<void> _setupMarkersAndPolylines() async {
+  Future<void> _setupMarkersAndPolylines(List<CourseData> detail) async {
     LatLng? prevPoint; // 이전 포인트를 저장하기 위한 변수
     for (int index = 0; index < detail.length; index++) {
       final LatLng point = utmkToGoogle(detail[index].x, detail[index].y);
@@ -116,135 +117,149 @@ class _CourseDetailPage extends State<CourseDetailPage>{
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height * 0.4,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: GoogleMap(
-                onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                  _setupMarkersAndPolylines();
-                },
-                initialCameraPosition: CameraPosition(
-                  target: _calculateCenterPoint(detail),
-                  zoom: zoomLevel,
-                ),
-                markers: Set<Marker>.of(_markers),
-                polylines: _routePolylines.union(_polylines),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // 코스명
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
-                        child: Text(
-                          data["course_name"],
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Text(
-                        "산책시간: ${data["lead_time"]}분", style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        "산책거리: ${data["distance"]}km", style: TextStyle(fontSize: 16),
-                      ),
-                      // 난이도
-                      Row(
-                          children: [
-                            Text(
-                              "난이도: ", style: TextStyle(fontSize: 16),
-                            ),
-                            Row(
-                              children: List.generate(courseLevel, (index) {
-                                return Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                );
-                              }),
-                            ),
-                            Row(
-                              children: List.generate(courseNegative, (index) {
-                                return Icon(
-                                  Icons.star_border,
-                                  color: Colors.amber,
-                                );
-                              }),
-                            ),
-                          ]
-                      ),
-                    ],
+      body: FutureBuilder(
+        future: _courseRepository.loadCourse(data["course_name"]),
+        builder: (context, AsyncSnapshot<List<CourseData>?> snapshot) {
+          if (snapshot.hasData == false) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          List<CourseData> detail = snapshot.data!; //포인트번호, 포인트명칭, x좌표, y좌표 (courseData.dart 참고)
+          detail.sort((a, b) => a.cpi_idx.compareTo(b.cpi_idx));
+
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: GoogleMap(
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                      _setupMarkersAndPolylines(detail);
+                    },
+                    initialCameraPosition: CameraPosition(
+                      target: _calculateCenterPoint(detail),
+                      zoom: zoomLevel,
+                    ),
+                    markers: Set<Marker>.of(_markers),
+                    polylines: _routePolylines.union(_polylines),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 24.0),
-                  child: Ink(
-                    decoration: const ShapeDecoration(
-                      color: Palette.logoColor, // 동그라미 배경색
-                      shape: CircleBorder(), // 동그라미 모양
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 코스명
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+                            child: Text(
+                              data["course_name"],
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Text(
+                            "산책시간: ${data["lead_time"]}분", style: TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            "산책거리: ${data["distance"]}km", style: TextStyle(fontSize: 16),
+                          ),
+                          // 난이도
+                          Row(
+                              children: [
+                                Text(
+                                  "난이도: ", style: TextStyle(fontSize: 16),
+                                ),
+                                Row(
+                                  children: List.generate(courseLevel, (index) {
+                                    return Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    );
+                                  }),
+                                ),
+                                Row(
+                                  children: List.generate(courseNegative, (index) {
+                                    return Icon(
+                                      Icons.star_border,
+                                      color: Colors.amber,
+                                    );
+                                  }),
+                                ),
+                              ]
+                          ),
+                        ],
+                      ),
                     ),
-                    child: InkWell(
-                      onTap: () {},
-                      customBorder: CircleBorder(), // 클릭 영역을 동그라미로 설정
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        child: Icon(
-                          Icons.map, // 지도 모양 아이콘
-                          color: Colors.white, // 아이콘 색상
+                    Padding(
+                      padding: const EdgeInsets.only(right: 24.0),
+                      child: Ink(
+                        decoration: const ShapeDecoration(
+                          color: Palette.logoColor, // 동그라미 배경색
+                          shape: CircleBorder(), // 동그라미 모양
                         ),
+                        child: InkWell(
+                          onTap: () {},
+                          customBorder: CircleBorder(), // 클릭 영역을 동그라미로 설정
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            child: Icon(
+                              Icons.map, // 지도 모양 아이콘
+                              color: Colors.white, // 아이콘 색상
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // 포인트 명칭을 리스트로 나타냄.
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: Scrollbar(
+                      trackVisibility: true,
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: Container(
+                              padding: EdgeInsets.all(4.0),
+                              decoration: BoxDecoration(
+                                color: Palette.logoColor.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(10.0), // 둥근 모서리 설정
+                                border: Border.all(width: 1.0, color: Palette.logoColor),
+                              ),// 외곽선 설정
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.swipe_down_alt),
+                                  Text(detail[index].cpi_idx.toString() + " " + detail[index].cpi_name),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: detail.length,
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-            // 포인트 명칭을 리스트로 나타냄.
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                child: Scrollbar(
-                  trackVisibility: true,
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 4.0),
-                        child: Container(
-                          padding: EdgeInsets.all(4.0),
-                          decoration: BoxDecoration(
-                            color: Palette.logoColor.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(10.0), // 둥근 모서리 설정
-                            border: Border.all(width: 1.0, color: Palette.logoColor),
-                          ),// 외곽선 설정
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.swipe_down_alt),
-                              Text(detail[index].cpi_idx.toString() + " " + detail[index].cpi_name),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: detail.length,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+          );
+        },
+      )
     );
   }
 }

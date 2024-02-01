@@ -6,18 +6,18 @@ class CourseData{
   final y;
 
   CourseData({
-    required this.cpi_idx,
-    required this.cpi_name,
-    required this.x,
-    required this.y,
+    this.cpi_idx,
+    this.cpi_name,
+    this.x,
+    this.y,
   });
 
   factory CourseData.fromJson(Map<dynamic, dynamic> json){
     return CourseData(
-      cpi_idx: json["cpi_idx"],
-      cpi_name: json["cpi_name"],
-      x: json["x"],
-      y: json["y"],
+      cpi_idx: json["CPI_IDX"],
+      cpi_name: json["CPI_NAME"],
+      x: json["X"],
+      y: json["Y"],
     );
   }
 }

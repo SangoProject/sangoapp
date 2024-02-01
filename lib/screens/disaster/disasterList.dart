@@ -38,14 +38,6 @@ class _DisasterListPage extends State<DisasterListPage>{
                   height: 10,
                 ),
 
-                Text(
-                  "${disasterMsg.location_name}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-
                 // 메시지 내용을 보여줌.
                 Text(
                   disasterMsg.msg.toString(),
