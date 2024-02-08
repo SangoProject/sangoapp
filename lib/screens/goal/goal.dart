@@ -1,18 +1,15 @@
 // 목표한 거리에 대한 실제 산책 거리를 나타내는 차트와 산책 목표 거리를 수정하는 파일
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import 'package:sangoproject/screens/goal/goalGraph.dart';
 import 'package:sangoproject/screens/goal/realDistanceTotal.dart';
-import 'package:sangoproject/screens/statistics/statisticsPage.dart';
-
-import '../../config/palette.dart';
 
 class Goal extends StatelessWidget{
   final TextEditingController txtGoal = TextEditingController(); // 목표거리를 사용자에게 입력받는 변수
+  // 수정필요
   final String uid = 'kim';
   final String realDistance = '';
 
@@ -53,13 +50,12 @@ class Goal extends StatelessWidget{
         // Goal 클래스 내부의 StreamBuilder 부분
         StreamBuilder(
           // 목표값이 수정되었다면 수정된 값을 불러와서 UI를 수정해줌.
-          stream: FirebaseDatabase.instance.ref("USERS").child(uid).child("GOAL").onValue,
+          stream: FirebaseFirestore.instance.collection("user").doc(uid).snapshots(),
           builder: (context, snapshot) {
             // 값을 불러오지 못 한다면 CircularProgressIndicator를 띄움.
-            if (snapshot.hasData == false) {
+            if (!snapshot.hasData) {
               return CircularProgressIndicator();
             }
-
             // 에러가 났다면 에러 메시지를 띄움.
             else if (snapshot.hasError) {
               return Padding(
@@ -70,11 +66,9 @@ class Goal extends StatelessWidget{
                 ),
               );
             }
-
             // 데이터를 정상적으로 불러왔을 경우
             else {
-              // String 타입을 double 타입으로 바꾸어 줌.
-              double goalDistance = double.parse(snapshot.data!.snapshot.value.toString());
+              final goalDistance = snapshot.data!['goal'];
 
               // 오늘 산책한 거리 합을 반환하여 차트에 적용하는 빌더
               return FutureBuilder(
@@ -89,7 +83,7 @@ class Goal extends StatelessWidget{
                       child: Column(
                         children: <Widget>[
                           // ChartPage를 띄움. (목표한 거리와 실제 움직인 거리의 비율 그래프)
-                          ChartPage(snapshot.data?.snapshot.value.toString(), realDistance.toString()),
+                          ChartPage(goalDistance.toString(), realDistance.toString()),
                           Text(
                             '${realDistance.toStringAsFixed(2)} / $goalDistance km',
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -102,58 +96,6 @@ class Goal extends StatelessWidget{
               );
             }
           },
-        ),
-
-        // 주간 산책 통계 버튼. 누르면 주간 산책 통계를 볼 수 있음.
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-          child: Stack(
-            children: [
-              Container(
-                height: 80,
-                padding: EdgeInsets.all(15.0),
-                decoration: BoxDecoration(
-                  color: Palette.green1,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            '산책 통계',
-                            style: TextStyle(fontSize: 18, fontFamily: 'Pretendard', fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: Icon(
-                              Icons.bar_chart,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Icon(Icons.chevron_right),
-                  ],
-                ),
-              ),
-              Positioned.fill(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => StatisticsPage()),
-                    );
-                  },
-                  splashColor: Colors.grey,
-                  highlightColor: Colors.transparent,
-                ),
-              ),
-            ],
-          ),
         ),
       ],
     );
@@ -199,8 +141,13 @@ class Goal extends StatelessWidget{
                 child: Text('저장'),
                 onPressed: (){
                   if (txtGoal.text != '' && double.parse(txtGoal.text) >= 1 && double.parse(txtGoal.text) <= 100) {
-                    FirebaseDatabase updateData = FirebaseDatabase.instance;
-                    updateData.ref("USERS").child(uid).update({"GOAL": txtGoal.text});
+                    FirebaseFirestore update = FirebaseFirestore.instance;
+                    update.collection('user').doc(uid).update({
+                      'goal' : double.parse(double.parse(txtGoal.text).toStringAsFixed(2))
+                    }).then(
+                        (value) => print("DocumentSnapshot successfully updated!"),
+                      onError: (e) => print("Error updating document $e")
+                    );
                   }
 
                   Navigator.pop(context);

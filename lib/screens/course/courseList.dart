@@ -1,8 +1,6 @@
 // 산책 코스에 대한 간략한 정보를 리스트로 보여주는 위젯 (검색 결과와 찜목록에서 보이는 리스트)
 import 'package:flutter/material.dart';
-/*import 'package:firebase_database/firebase_database.dart';
 
-import 'package:sangoproject/screens/course/courseData.dart';*/
 import 'package:sangoproject/screens/course/courseDetailPage.dart';
 import 'package:sangoproject/screens/library/libraryButton.dart';
 

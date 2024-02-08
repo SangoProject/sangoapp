@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sangoproject/screens/search/searchPage.dart';
 import 'package:sangoproject/screens/goal/goal.dart';
 import 'package:sangoproject/screens/library/libraryPage.dart';
+import 'package:sangoproject/screens/statistics/statisticsButton.dart';
 
 import '../config/palette.dart';
 import 'disaster/disasterBanner.dart';
@@ -94,8 +95,11 @@ class _HomePage extends State<HomePage> {
               // 재난 공지 배너
               Disaster(),
 
-              // 목표, 산책통계
+              // 목표
               Goal(),
+
+              // 산책 통계
+              StatisticsButton(),
 
               // 찜목록 버튼. 버튼을 누르면 찜목록을 볼 수 있는 페이지로 넘어감.
               Padding(
