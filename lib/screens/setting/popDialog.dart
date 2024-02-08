@@ -1,4 +1,5 @@
 // settingPage의 로그아웃, 회원탈퇴 함수 및 Dialog
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -18,20 +19,31 @@ void _logout(BuildContext context) async {
 }
 
 // 회원탈퇴 함수
-void deleteCurrentUser(BuildContext context) async {
+Future<void> deleteCurrentUser(BuildContext context) async {
   final googleSignIn = GoogleSignIn();
   try {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      // 사용자 삭제
+      // Firestore에서 사용자 문서 삭제
+      await FirebaseFirestore.instance.collection('users').doc(user.email).delete();
+
+      // Firebase Authentication에서 사용자 삭제
+      await user.delete();
+
+      // Google 로그아웃
+      await googleSignIn.signOut();
+
+      // Firebase 로그아웃
+      await FirebaseAuth.instance.signOut();
+
+      print('User account deleted.');
+
+      // 현재 페이지를 팝하여 제거한 후에 GoogleLogin 페이지로 이동
+      Navigator.pop(context); // 현재 페이지를 팝하여 제거
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => GoogleLogin()),
       );
-      await user.delete();
-      await FirebaseAuth.instance.signOut();
-      await googleSignIn.signOut();
-      print('User account deleted.');
     } else {
       print('No user signed in.');
     }
@@ -39,6 +51,8 @@ void deleteCurrentUser(BuildContext context) async {
     print('Error deleting user: $e');
   }
 }
+
+
 
 // 로그아웃 팝업 띄우기
 Future<void> showLogoutDialog(BuildContext context, int i) async {

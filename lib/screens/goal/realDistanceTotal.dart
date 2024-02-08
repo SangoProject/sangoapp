@@ -1,5 +1,6 @@
 // 하루에 실제 산책한 거리에 데한 데이터를 합산하는 함수 및 클래스
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class RealDistanceTotal {
@@ -19,10 +20,14 @@ class RealDistanceTotal {
 
   // DB에서 산책 데이터 불러옴
   Future<List<DocumentSnapshot>> fetchRecordData(DateTime today) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    String? userId = user?.email;
     String formattedDate = DateFormat("yyyy-MM-dd").format(today);
 
     try {
       QuerySnapshot querySnapshot = await _firestore
+          .collection("users")
+          .doc(userId)
           .collection("records")
           .doc(formattedDate)
           .collection("list")

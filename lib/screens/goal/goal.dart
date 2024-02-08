@@ -1,5 +1,6 @@
 // 목표한 거리에 대한 실제 산책 거리를 나타내는 차트와 산책 목표 거리를 수정하는 파일
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -9,8 +10,7 @@ import 'package:sangoproject/screens/goal/realDistanceTotal.dart';
 
 class Goal extends StatelessWidget{
   final TextEditingController txtGoal = TextEditingController(); // 목표거리를 사용자에게 입력받는 변수
-  // 수정필요
-  final String uid = 'kim';
+  final String userId = FirebaseAuth.instance.currentUser?.email ?? '';
   final String realDistance = '';
 
   Goal({super.key}); // 실제 움직인 거리 변수
@@ -36,7 +36,7 @@ class Goal extends StatelessWidget{
               // 연필 아이콘 버튼. 누르면 산책목표를 수정하기 위한 팝업을 보여줌.
               IconButton(
                 onPressed: () {
-                  showPieDataDialog(context, uid);
+                  showPieDataDialog(context, userId);
                 },
                 icon: Image.asset(
                   'images/pencil.png',
@@ -50,7 +50,7 @@ class Goal extends StatelessWidget{
         // Goal 클래스 내부의 StreamBuilder 부분
         StreamBuilder(
           // 목표값이 수정되었다면 수정된 값을 불러와서 UI를 수정해줌.
-          stream: FirebaseFirestore.instance.collection("user").doc(uid).snapshots(),
+          stream: FirebaseFirestore.instance.collection('users').doc(userId).snapshots(),
           builder: (context, snapshot) {
             // 값을 불러오지 못 한다면 CircularProgressIndicator를 띄움.
             if (!snapshot.hasData) {
@@ -142,7 +142,7 @@ class Goal extends StatelessWidget{
                 onPressed: (){
                   if (txtGoal.text != '' && double.parse(txtGoal.text) >= 1 && double.parse(txtGoal.text) <= 100) {
                     FirebaseFirestore update = FirebaseFirestore.instance;
-                    update.collection('user').doc(uid).update({
+                    update.collection('users').doc(userId).update({
                       'goal' : double.parse(double.parse(txtGoal.text).toStringAsFixed(2))
                     }).then(
                         (value) => print("DocumentSnapshot successfully updated!"),
@@ -163,14 +163,16 @@ class Goal extends StatelessWidget{
   // firestore에 저장된 오늘 날짜 산책기록 데이터를 가져오기
   Stream<QuerySnapshot> fetchRecordData(DateTime today) {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    User? user = FirebaseAuth.instance.currentUser;
+    String? userId = user?.email;
 
     // today를 yyyy-MM-dd 형태의 문자열로 변환
     String formattedDate = DateFormat("yyyy-MM-dd").format(today);
 
     // records 컬렉션에서 해당 날짜의 문서 가져오기
     return _firestore
-        .collection("records")
-        .doc(formattedDate)
+        .collection("users").doc(userId)
+        .collection("records").doc(formattedDate)
         .collection("list")
         .orderBy("date")
         .snapshots();
