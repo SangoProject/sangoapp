@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CalendarData extends StatelessWidget {
   final DateTime selectedDate;
@@ -183,14 +184,16 @@ class CalendarData extends StatelessWidget {
 
     Stream<QuerySnapshot> fetchRecordData(DateTime selectedDate) {
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
+      User? user = FirebaseAuth.instance.currentUser;
+      String? userID = user?.email;
 
       // selectedDate를 yyyy-MM-dd 형태의 문자열로 변환
       String formattedDate = DateFormat("yyyy-MM-dd").format(selectedDate);
 
       // records 컬렉션에서 해당 날짜의 문서 가져오기
       return _firestore
-          .collection("records")
-          .doc(formattedDate)
+          .collection("users").doc(userID)
+          .collection("records").doc(formattedDate)
           .collection("list")
           .orderBy("date")
           .snapshots();

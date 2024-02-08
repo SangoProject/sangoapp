@@ -6,7 +6,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../config/palette.dart';
 import 'package:sangoproject/screens/calendar/calendarData.dart';
-import 'calendarDate.dart';
+import 'calendarSet.dart';
 
 class Event {
   final DateTime date;
