@@ -52,10 +52,12 @@ class GoogleLogin extends StatelessWidget {
                     } catch (e) {
                       print('an error occured $e');
                     }
-                  } else
+                  } else {
                     print('an error occured');
-                } else
+                  }
+                } else {
                   print('an error occured');
+                }
               }, child: Text('+ Google'),
             )
           ],
@@ -73,13 +75,17 @@ Future<void> setTermsAndGoal() async {
   DocumentSnapshot<Map<String, dynamic>> userDocument =
   await firestore.collection('users').doc(userId).get();
 
-  // 사용자 문서가 존재하지 않거나 termsOfServiceAgreement 필드가 없는 경우
-  if (!userDocument.exists || userDocument.data() == null || !userDocument.data()!.containsKey('termsOfServiceAgreement')) {
-    await firestore.collection('users').doc(userId).update({'terms' : false});
-  }
-
-  // 사용자 문서가 존재하지 않거나 goal 필드가 없는 경우
-  if (!userDocument.exists || userDocument.data() == null || !userDocument.data()!.containsKey('goal')) {
-    await firestore.collection('users').doc(userId).update({'goal' : 5});
+  if (!userDocument.exists || userDocument.data() == null) {
+    // 사용자 문서가 없거나 데이터가 null인 경우
+    await firestore.collection('users').doc(userId).set({
+      'terms': false,
+      'goal': 5,
+    });
+  } else if (!userDocument.data()!.containsKey('terms') || !userDocument.data()!.containsKey('goal')) {
+    // terms 또는 goal 필드가 없는 경우
+    await firestore.collection('users').doc(userId).update({
+      'terms': false,
+      'goal': 5,
+    });
   }
 }

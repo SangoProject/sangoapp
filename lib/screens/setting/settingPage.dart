@@ -1,49 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../config/palette.dart';
 import 'popDialog.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
   static const String _title = '설정';
   static const List<String> _data = [
-    '알림',
-    '앱 정보',
+    '문의하기',
+    // '앱 정보',
     '로그아웃',
-    '회원탈퇴'
+    // '회원탈퇴'
   ];
   static const List<IconData> _icon = [
-    Icons.notifications,
-    Icons.info,
+    Icons.email,
+    // Icons.info,
     Icons.logout,
-    Icons.no_accounts,
+    // Icons.no_accounts,
   ];
 
   Widget _settingListView(BuildContext context) {
-    return ListView.builder(
-      itemCount: _data.length,
-      itemBuilder: (BuildContext context, int i) {
-        return InkWell(
-          onTap: () {
-            // 각 항목에 따라 함수 호출
-            if (_data[i] == '로그아웃') {
-              showLogoutDialog(context, i); // 로그아웃 팝업 띄우기
-            } else if(_data[i] == '회원탈퇴') {
-              showUserDeleteDialog(context, i); // 회원탈퇴 팝업 띄우기
-            } else{
-              // 알림, 앱정보 추가 구현 필요
-            }
-          },
-          child: ListTile(
-            title: Text(
-              _data[i],
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
+    return Expanded(
+      child: ListView.builder(
+        itemCount: _data.length,
+        itemBuilder: (BuildContext context, int i) {
+          return InkWell(
+            onTap: () {
+              // 각 항목에 따라 함수 호출
+              if (_data[i] == '문의하기') {
+                showEmailDialog(context, i); // 문의하기 팝업 띄우기
+              } else if (_data[i] == '로그아웃') {
+                showLogoutDialog(context, i); // 로그아웃 팝업 띄우기
+              } else if(_data[i] == '회원탈퇴') {
+                showUserDeleteDialog(context, i); // 회원탈퇴 팝업 띄우기
+              } else{
+                // 알림, 앱정보 추가 구현 필요
+              }
+            },
+            child: ListTile(
+              title: Text(
+                _data[i],
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
               ),
+              trailing: Icon(_icon[i]),
             ),
-            trailing: Icon(_icon[i]),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -69,7 +75,51 @@ class SettingPage extends StatelessWidget {
             elevation: 0,
             backgroundColor: Colors.white,
           ),
-          body: _settingListView(context),
+          body: Column(children: <Widget>[
+            _settingListView(context),
+            Center(
+              child: Text('v 1.0.0',
+                style: TextStyle(
+                    color: Palette.logoColor,
+                    fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    onPressed: (){
+                      launchUrl(Uri.parse('https://akaseoyoung.notion.site/13cf9e28310c4f4f9f36a8e57b830286?pvs=4'));
+                    },
+                    child: Text('이용약관',
+                    style: TextStyle(
+                      color: Palette.green2,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Text('|',
+                  style: TextStyle(
+                    color: Palette.green2,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextButton(
+                  onPressed: (){
+                    launchUrl(Uri.parse('https://akaseoyoung.notion.site/19ec0893e246478582c30d31260f49cf?pvs=4'));
+                  },
+                  child: Text('개인정보처리방침',
+                    style: TextStyle(
+                      color: Palette.green2,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ]
+          ),
         ),
       ),
     );

@@ -96,13 +96,13 @@ class _Terms extends State<Terms> {
   List<Widget> renderCheckList() {
     List<String> labels = [
       '모두 동의',
-      '개인정보처리방침(필수) >',
-      '서비스 이용 약관(필수) >',
+      '이용 약관(필수) >',
+      '개인정보수집이용동의(필수) >',
     ];
 
     List<String> uris = [
-      'https://www.google.com',
-      'https://www.naver.com',
+      'https://akaseoyoung.notion.site/13cf9e28310c4f4f9f36a8e57b830286?pvs=4',
+      'https://akaseoyoung.notion.site/19ec0893e246478582c30d31260f49cf?pvs=4',
     ];
 
     List<Widget> list = [
@@ -153,5 +153,7 @@ void updateTerms() async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String userId = FirebaseAuth.instance.currentUser!.email!;
 
-  await firestore.collection('users').doc(userId).update({'terms' : true});
+  await firestore.collection('users')
+      .doc(userId)
+      .update({'terms' : true});
 }

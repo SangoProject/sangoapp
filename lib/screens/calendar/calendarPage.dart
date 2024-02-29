@@ -1,4 +1,5 @@
 // 산책 달력 화면 구조를 짜둔 페이지
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -22,7 +23,7 @@ class CalendarPage extends StatefulWidget{
 
 class _CalendarPageState extends State<CalendarPage>{
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime _focusedDay = DateTime.now(); // 오늘 날짜을 포커싱하기 위한 변수
+  DateTime _focusedDay = DateTime.now(); // 오늘 날짜를 포커싱하기 위한 변수
   DateTime _selectedDay = DateTime.now(); // 오늘 날짜를 디폴트로 선택하기 위한 변수
   List<String> days = ['_', '월', '화', '수', '목', '금', '토', '일'];
 
@@ -141,13 +142,17 @@ class _CalendarPageState extends State<CalendarPage>{
   }
 
   Stream<QuerySnapshot<Object?>> fetchRecordData(DateTime day) {
-    FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    User? user = FirebaseAuth.instance.currentUser;
+    String? userId = user?.email;
 
     // day를 yyyy-MM-dd 형태의 문자열로 변환
     String formattedDate = DateFormat("yyyy-MM-dd").format(day);
 
-    // records 컬렉션에서 해당 날짜의 문서 가져오기
-    return _firestore
+    // 사용자의 기록을 가져오기
+    return firestore
+        .collection("users")
+        .doc(userId)
         .collection("records")
         .doc(formattedDate)
         .collection("list")
