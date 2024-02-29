@@ -2,8 +2,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:sangoproject/config/palette.dart';
-import 'package:sangoproject/main_page.dart';
+import 'package:sangoproject/mainPage.dart';
 
 class GoogleLogin extends StatelessWidget {
   const GoogleLogin({Key? key}) : super(key: key);
@@ -39,6 +41,9 @@ class GoogleLogin extends StatelessWidget {
                         accessToken: googleAuth.accessToken,
                       ));
                       print('success registered');
+
+                      await setTermsAndGoal();
+
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) => MainPage()),
                       );
@@ -57,5 +62,24 @@ class GoogleLogin extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> setTermsAndGoal() async {
+  // Firestore 인스턴스 생성
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String userId = FirebaseAuth.instance.currentUser!.email!;
+
+  DocumentSnapshot<Map<String, dynamic>> userDocument =
+  await firestore.collection('users').doc(userId).get();
+
+  // 사용자 문서가 존재하지 않거나 termsOfServiceAgreement 필드가 없는 경우
+  if (!userDocument.exists || userDocument.data() == null || !userDocument.data()!.containsKey('termsOfServiceAgreement')) {
+    await firestore.collection('users').doc(userId).update({'terms' : false});
+  }
+
+  // 사용자 문서가 존재하지 않거나 goal 필드가 없는 경우
+  if (!userDocument.exists || userDocument.data() == null || !userDocument.data()!.containsKey('goal')) {
+    await firestore.collection('users').doc(userId).update({'goal' : 5});
   }
 }

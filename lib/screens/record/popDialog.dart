@@ -1,6 +1,6 @@
 // 산책 종료 확인 팝업 위젯
 import 'package:flutter/material.dart';
-import '../../main_page.dart';
+import '../../mainPage.dart';
 
 void showExitConfirmationDialog(BuildContext context, double distanceTotal, String formattedTime) {
   showDialog(

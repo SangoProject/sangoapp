@@ -1,5 +1,4 @@
 // 홈 화면 구조를 작성해둔 파일
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -30,7 +29,6 @@ class _HomePage extends State<HomePage> {
     super.initState();
     _requestLocationPermission();
     getCurrentUser();
-    checkAndSetGoal();
   }
 
   // 위치 권한 허용 여부 확인
@@ -49,22 +47,6 @@ class _HomePage extends State<HomePage> {
       }
     } catch (e) {
       print(e);
-    }
-  }
-
-  // 사용자 문서 확인 및 goal 필드 초기화
-  void checkAndSetGoal() async {
-    // Firestore 인스턴스 생성
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    String userId = FirebaseAuth.instance.currentUser!.email!;
-
-    DocumentSnapshot<Map<String, dynamic>> userDocument =
-    await firestore.collection('users').doc(userId).get();
-
-    // 사용자 문서가 존재하지 않거나 goal 필드가 없는 경우
-    if (!userDocument.exists || userDocument.data() == null || !userDocument.data()!.containsKey('goal')) {
-      await firestore.collection('users').doc(userId).set({'goal': 5.0});
-      print('User goal set to 5.0');
     }
   }
 
