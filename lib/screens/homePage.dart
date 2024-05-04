@@ -7,7 +7,6 @@ import 'package:sangoproject/screens/search/searchPage.dart';
 import 'package:sangoproject/screens/goal/goal.dart';
 import 'package:sangoproject/screens/library/libraryPage.dart';
 import 'package:sangoproject/screens/statistics/statisticsButton.dart';
-
 import '../config/palette.dart';
 import 'disaster/disasterBanner.dart';
 
@@ -21,7 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  final _authentication = FirebaseAuth.instance; // user 등록
+  /*final _authentication = FirebaseAuth.instance; // user 등록
   User? loggedUser; // 로그인 여부 판단
 
   @override
@@ -48,7 +47,7 @@ class _HomePage extends State<HomePage> {
     } catch (e) {
       print(e);
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -159,3 +158,118 @@ class _HomePage extends State<HomePage> {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+// 버튼으로 데이터 확인
+/*
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import 'package:sangoproject/screens/search/searchPage.dart';
+import 'package:sangoproject/screens/goal/goal.dart';
+import 'package:sangoproject/screens/library/libraryPage.dart';
+import 'package:sangoproject/screens/statistics/statisticsButton.dart';
+import 'package:sangoproject/settingSP.dart';
+
+import '../config/palette.dart';
+import 'disaster/disasterBanner.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _HomePage();
+  }
+}
+
+class _HomePage extends State<HomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 뒤로가기 버튼을 눌러도 뒤로 가지지 않도록 설정
+    return Scaffold(
+      // 키보드 오버플로우를 해결을 위해
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        // 상단에 나타나는 뒤로가기 버튼 제거
+        automaticallyImplyLeading: false,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: Text(
+                '산책가자GO',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontFamily: 'Inklipquid',
+                ),
+              ),
+            ),
+          ],
+        ),
+        // 검색 버튼 (아이콘 버튼). 누르면 검색 페이지(SearchPage)로 넘어감.
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => SearchPage()));
+            },
+            icon: Icon(Icons.search),
+          )
+        ],
+      ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            ElevatedButton(
+                onPressed: () async {
+                  final data = await loadGoal();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('goal : $data')), // 저장 완료 메시지 출력
+                  );
+                },
+                child: Text('저장된 goal 값 보기')
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  final data = await loadTerms();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('terms : $data')), // 저장 완료 메시지 출력
+                  );
+                },
+                child: Text('저장된 terms 값 보기')
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  final data = await saveTerms(false);
+                },
+                child: Text('false로 저장')
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  final data = await saveTerms(true);
+                },
+                child: Text('true로 저장')
+            ),
+          ]
+        ),
+      ),
+    );
+  }
+}*/

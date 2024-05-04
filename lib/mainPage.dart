@@ -18,11 +18,55 @@ class MainPage extends StatefulWidget{
 
 class _MainPage extends State<MainPage> {
   int currentIndex = 0; // 네비게이션 바에서 보이는 화면 선택을 위한 변수
-  String userId = FirebaseAuth.instance.currentUser!.email!;
+  //String userId = FirebaseAuth.instance.currentUser!.email!;
 
   @override
   Widget build(BuildContext context){
-    return StreamBuilder(
+    return Scaffold(
+      // 키보드 오버플로우를 해결을 위해
+      resizeToAvoidBottomInset: false,
+      // 하단의 네비게이션 바
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        // 네비게이션 바를 선택하면 해당 index로 currentIndex가 바뀜.
+        onTap: (index){
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        // 네비게이션바 UI
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.location_on),
+            label: 'record',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'settings',
+          ),
+        ],
+        selectedItemColor: Color(0xFF436726),
+        unselectedItemColor: Color(0xFFB6C7D1),
+        // item label 보여줄 것인지
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        // fixed : item size 고정, shifting : 선택된 item 확대
+        type: BottomNavigationBarType.fixed,
+      ),
+      body: Center(
+        // currentIndex에 해당하는 화면을 보여줌.
+        child: bodyItem.elementAt(currentIndex),
+      ),
+    );
+    /*StreamBuilder(
       stream: FirebaseFirestore.instance.collection('users').doc(userId).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -81,7 +125,7 @@ class _MainPage extends State<MainPage> {
           }
         }
       },
-    );
+    );*/
   }
   List<Widget> bodyItem = <Widget>[
     HomePage(), // 인덱스 0번. 홈화면

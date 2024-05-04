@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:sangoproject/config/palette.dart';
 import 'package:sangoproject/mainPage.dart';
+import 'package:sangoproject/screens/settingSP.dart';
 
 class Terms extends StatefulWidget {
   const Terms({super.key});
@@ -58,9 +59,11 @@ class _Terms extends State<Terms> {
                   children: <Widget>[
                     Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_buttonActive) {
-                              updateTerms();
+                              //updateTerms();
+                              saveTerms(true);
+                              await loadGoal();
 
                               Navigator.pushReplacement(context,
                                 MaterialPageRoute(builder: (context) => MainPage()),
@@ -149,6 +152,7 @@ class _Terms extends State<Terms> {
   }
 }
 
+/*
 void updateTerms() async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String userId = FirebaseAuth.instance.currentUser!.email!;
@@ -156,4 +160,4 @@ void updateTerms() async {
   await firestore.collection('users')
       .doc(userId)
       .update({'terms' : true});
-}
+}*/

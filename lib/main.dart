@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sangoproject/screens/googleLogin.dart';
 import 'package:sangoproject/mainPage.dart';
+import 'package:sangoproject/screens/settingSP.dart';
+import 'package:sangoproject/screens/terms.dart';
 
-void main() async{
+Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // 화면 세로로 고정
   await SystemChrome.setPreferredOrientations([
@@ -17,19 +20,22 @@ void main() async{
 
   // flutter 비동기 method 사용위해 초기화 -> flutter에서 firebase 사용을 위해
   await Firebase.initializeApp(); // firebase 이용 초기화 method
-  runApp(MyApp());
+  final termsBool = await loadTerms();
+  runApp(MyApp(termsBool: termsBool));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool? termsBool;
+  const MyApp({Key? key, this.termsBool}) : super(key: key);
 
   // main 화면의 로그인 기능
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
+    //User? user = FirebaseAuth.instance.currentUser;
 
     // 사용자 로그인 상태에 따라 라우트 설정
-    String initialRoute = user != null ? '/main' : '/';
+    //String initialRoute = user != null ? '/main' : '/';
+    String initialRoute = termsBool == true ? '/main' : '/terms';
 
     return MaterialApp(
       // 상단에 debug가 뜨지 않도록 함.
@@ -44,8 +50,9 @@ class MyApp extends StatelessWidget {
       // 루트 설정 정보
       initialRoute: initialRoute,
       routes: {
-        '/' : (context) => GoogleLogin(),
+        //'/' : (context) => GoogleLogin(),
         '/main': (context) => MainPage(),
+        '/terms': (context) => Terms(),
       },
     );
   }

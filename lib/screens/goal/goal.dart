@@ -6,14 +6,33 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import 'package:sangoproject/screens/goal/goalGraph.dart';
+import 'package:sangoproject/screens/settingSP.dart';
 import 'package:sangoproject/screens/goal/realDistanceTotal.dart';
 
-class Goal extends StatelessWidget{
-  final TextEditingController txtGoal = TextEditingController(); // 목표거리를 사용자에게 입력받는 변수
-  final String userId = FirebaseAuth.instance.currentUser?.email ?? '';
-  final String realDistance = '';
+class Goal extends StatefulWidget {
+  const Goal({Key? key}) : super(key: key);
 
-  Goal({super.key}); // 실제 움직인 거리 변수
+  @override
+  State<StatefulWidget> createState() {
+    return _Goal();
+  }
+}
+
+class _Goal extends State<Goal> {
+  final TextEditingController txtGoal = TextEditingController(); // 목표거리를 사용자에게 입력받는 변수
+  //final String userId = FirebaseAuth.instance.currentUser?.email ?? '';
+  double goalDistance = 1.0;
+  double realDistance = 3.6;
+
+  @override
+  void initState() {
+    super.initState();
+    loadGoal().then((data) {
+      setState(() {
+        goalDistance = data;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +55,7 @@ class Goal extends StatelessWidget{
               // 연필 아이콘 버튼. 누르면 산책목표를 수정하기 위한 팝업을 보여줌.
               IconButton(
                 onPressed: () {
-                  showPieDataDialog(context, userId);
+                  showPieDataDialog(context/*, userId*/);
                 },
                 icon: Image.asset(
                   'images/pencil.png',
@@ -47,7 +66,12 @@ class Goal extends StatelessWidget{
             ],
           ),
         ),
-        // Goal 클래스 내부의 StreamBuilder 부분
+        ChartPage(goalDistance, realDistance),
+        Text(
+          '${realDistance.toStringAsFixed(1)} / ${goalDistance.toStringAsFixed(1)} km',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        /*// Goal 클래스 내부의 StreamBuilder 부분
         StreamBuilder(
           // 목표값이 수정되었다면 수정된 값을 불러와서 UI를 수정해줌.
           stream: FirebaseFirestore.instance.collection('users').doc(userId).snapshots(),
@@ -96,13 +120,13 @@ class Goal extends StatelessWidget{
               );
             }
           },
-        ),
+        ),*/
       ],
     );
   }
 
   // 연필 아이콘을 누르면 뜨는 팝업창
-  Future<dynamic> showPieDataDialog(BuildContext context, String uid) async {
+  Future<dynamic> showPieDataDialog(BuildContext context/*, String uid*/) async {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -139,15 +163,19 @@ class Goal extends StatelessWidget{
               // 저장을 누르면 입력된 값이 1~100 사이인지 확인하고 맞으면 파이어베이스에 저장하고 아니면 저장하지 않고 팝업창 닫고 입력받은 값 초기화
               ElevatedButton(
                 child: Text('저장'),
-                onPressed: (){
+                onPressed: () async {
                   if (txtGoal.text != '' && double.parse(txtGoal.text) >= 1 && double.parse(txtGoal.text) <= 100) {
-                    FirebaseFirestore update = FirebaseFirestore.instance;
+                    await saveGoal(double.parse(double.parse(txtGoal.text).toStringAsFixed(2)));
+                    setState(() {
+                      goalDistance = double.parse(double.parse(txtGoal.text).toStringAsFixed(2));
+                    });
+                    /*FirebaseFirestore update = FirebaseFirestore.instance;
                     update.collection('users').doc(userId).update({
                       'goal' : double.parse(double.parse(txtGoal.text).toStringAsFixed(2))
                     }).then(
-                        (value) => print("DocumentSnapshot successfully updated!"),
-                      onError: (e) => print("Error updating document $e")
-                    );
+                            (value) => print("DocumentSnapshot successfully updated!"),
+                        onError: (e) => print("Error updating document $e")
+                    );*/
                   }
 
                   Navigator.pop(context);
@@ -160,7 +188,7 @@ class Goal extends StatelessWidget{
     );
   }
 
-  // firestore에 저장된 오늘 날짜 산책기록 데이터를 가져오기
+  /*// firestore에 저장된 오늘 날짜 산책기록 데이터를 가져오기
   Stream<QuerySnapshot> fetchRecordData(DateTime today) {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
     User? user = FirebaseAuth.instance.currentUser;
@@ -176,5 +204,5 @@ class Goal extends StatelessWidget{
         .collection("list")
         .orderBy("date")
         .snapshots();
-  }
+  }*/
 }
