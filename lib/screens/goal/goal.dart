@@ -7,7 +7,8 @@ import 'package:intl/intl.dart';
 
 import 'package:sangoproject/screens/goal/goalGraph.dart';
 import 'package:sangoproject/screens/settingSP.dart';
-import 'package:sangoproject/screens/goal/realDistanceTotal.dart';
+
+import '../../config/database.dart';
 
 class Goal extends StatefulWidget {
   const Goal({Key? key}) : super(key: key);
@@ -20,9 +21,8 @@ class Goal extends StatefulWidget {
 
 class _Goal extends State<Goal> {
   final TextEditingController txtGoal = TextEditingController(); // 목표거리를 사용자에게 입력받는 변수
-  //final String userId = FirebaseAuth.instance.currentUser?.email ?? '';
   double goalDistance = 1.0;
-  double realDistance = 3.6;
+  double realDistance = 0.0;
 
   @override
   void initState() {
@@ -30,6 +30,13 @@ class _Goal extends State<Goal> {
     loadGoal().then((data) {
       setState(() {
         goalDistance = data;
+      });
+    });
+    openRecordDatabase('recorded_data.db').then((db) {
+      todayRecordSum(db).then((sum) {
+        setState(() {
+          realDistance = sum;
+        });
       });
     });
   }
@@ -71,62 +78,12 @@ class _Goal extends State<Goal> {
           '${realDistance.toStringAsFixed(1)} / ${goalDistance.toStringAsFixed(1)} km',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        /*// Goal 클래스 내부의 StreamBuilder 부분
-        StreamBuilder(
-          // 목표값이 수정되었다면 수정된 값을 불러와서 UI를 수정해줌.
-          stream: FirebaseFirestore.instance.collection('users').doc(userId).snapshots(),
-          builder: (context, snapshot) {
-            // 값을 불러오지 못 한다면 CircularProgressIndicator를 띄움.
-            if (!snapshot.hasData) {
-              return CircularProgressIndicator();
-            }
-            // 에러가 났다면 에러 메시지를 띄움.
-            else if (snapshot.hasError) {
-              return Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  'Error: ${snapshot.hasError}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              );
-            }
-            // 데이터를 정상적으로 불러왔을 경우
-            else {
-              final goalDistance = snapshot.data!['goal'];
-
-              // 오늘 산책한 거리 합을 반환하여 차트에 적용하는 빌더
-              return FutureBuilder(
-                future: RealDistanceTotal().fetchAndCalculateTotalDistance(DateTime.now()),
-                builder: (context, distanceSnapshot) {
-                  if (distanceSnapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else {
-                    double realDistance = distanceSnapshot.data ?? 0.0;
-                    return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: <Widget>[
-                          // ChartPage를 띄움. (목표한 거리와 실제 움직인 거리의 비율 그래프)
-                          ChartPage(goalDistance.toString(), realDistance.toString()),
-                          Text(
-                            '${realDistance.toStringAsFixed(2)} / $goalDistance km',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                },
-              );
-            }
-          },
-        ),*/
       ],
     );
   }
 
   // 연필 아이콘을 누르면 뜨는 팝업창
-  Future<dynamic> showPieDataDialog(BuildContext context/*, String uid*/) async {
+  Future<dynamic> showPieDataDialog(BuildContext context) async {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -169,13 +126,6 @@ class _Goal extends State<Goal> {
                     setState(() {
                       goalDistance = double.parse(double.parse(txtGoal.text).toStringAsFixed(2));
                     });
-                    /*FirebaseFirestore update = FirebaseFirestore.instance;
-                    update.collection('users').doc(userId).update({
-                      'goal' : double.parse(double.parse(txtGoal.text).toStringAsFixed(2))
-                    }).then(
-                            (value) => print("DocumentSnapshot successfully updated!"),
-                        onError: (e) => print("Error updating document $e")
-                    );*/
                   }
 
                   Navigator.pop(context);
@@ -187,22 +137,4 @@ class _Goal extends State<Goal> {
         }
     );
   }
-
-  /*// firestore에 저장된 오늘 날짜 산책기록 데이터를 가져오기
-  Stream<QuerySnapshot> fetchRecordData(DateTime today) {
-    FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    User? user = FirebaseAuth.instance.currentUser;
-    String? userId = user?.email;
-
-    // today를 yyyy-MM-dd 형태의 문자열로 변환
-    String formattedDate = DateFormat("yyyy-MM-dd").format(today);
-
-    // records 컬렉션에서 해당 날짜의 문서 가져오기
-    return _firestore
-        .collection("users").doc(userId)
-        .collection("records").doc(formattedDate)
-        .collection("list")
-        .orderBy("date")
-        .snapshots();
-  }*/
 }

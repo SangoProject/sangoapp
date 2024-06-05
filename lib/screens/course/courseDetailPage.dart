@@ -209,7 +209,9 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                           shape: CircleBorder(), // 동그라미 모양
                         ),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            // 첫번째 포인트 매개변수 넘겨주기
+                          },
                           customBorder: CircleBorder(), // 클릭 영역을 동그라미로 설정
                           child: Container(
                             width: 50,

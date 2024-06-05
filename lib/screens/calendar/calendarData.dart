@@ -1,8 +1,8 @@
 // 산책이 기록된 특정 날짜에 대한 데이터를 담은 위젯
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import '../../config/database.dart';
 
 class CalendarData extends StatelessWidget {
   final DateTime selectedDate;
@@ -11,28 +11,27 @@ class CalendarData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bannerwidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final bannerwidth = MediaQuery.of(context).size.width;
+
     return Expanded(
-      child: StreamBuilder<QuerySnapshot>(
-        stream: fetchRecordData(selectedDate),
+      child: FutureBuilder<List<Record>>(
+        future: fetchRecordData(selectedDate),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
-          // Firestore에서 불러온 데이터를 리스트로 변환
-          List<DocumentSnapshot> list = snapshot.data!.docs;
+
+          // sqflite에서 불러온 데이터를 리스트로 변환
+          List<Record> list = snapshot.data!;
 
           return ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: list.length,
             itemBuilder: (context, index) {
               // 각각의 산책 기록 records에서 불러온 데이터 가공
-              String distance = list[index]['distance'];
-              String time = list[index]['time'];
-              DateTime recordDateTime = list[index]['date'].toDate();
+              String distance = "${list[index].distance.toStringAsFixed(2)} km";
+              String time = list[index].time;
+              DateTime recordDateTime = list[index].date;
 
               // 분류 기준에 따라 산책 시간대를 결정
               String walkTime;
@@ -142,6 +141,13 @@ class CalendarData extends StatelessWidget {
     );
   }
 
+  Future<List<Record>> fetchRecordData(DateTime selectedDate) async {
+    String databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, 'records.db');
+    Database db = await openRecordDatabase(path);
+    return await getRecords(db, selectedDate);
+  }
+
   // 산책 목록 UI 디자인 요소
   LinearGradient getGradientForWalkTime(String walkTime) {
     switch (walkTime) {
@@ -181,21 +187,4 @@ class CalendarData extends StatelessWidget {
         );
     }
   }
-
-    Stream<QuerySnapshot> fetchRecordData(DateTime selectedDate) {
-      FirebaseFirestore _firestore = FirebaseFirestore.instance;
-      User? user = FirebaseAuth.instance.currentUser;
-      String? userId = user?.email;
-
-      // selectedDate를 yyyy-MM-dd 형태의 문자열로 변환
-      String formattedDate = DateFormat("yyyy-MM-dd").format(selectedDate);
-
-      // records 컬렉션에서 해당 날짜의 문서 가져오기
-      return _firestore
-          .collection("users").doc(userId)
-          .collection("records").doc(formattedDate)
-          .collection("list")
-          .orderBy("date")
-          .snapshots();
-    }
-  }
+}

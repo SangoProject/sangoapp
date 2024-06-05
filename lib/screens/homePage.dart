@@ -20,34 +20,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  /*final _authentication = FirebaseAuth.instance; // user 등록
-  User? loggedUser; // 로그인 여부 판단
-
   @override
   void initState() {
     super.initState();
     _requestLocationPermission();
-    getCurrentUser();
   }
 
-  // 위치 권한 허용 여부 확인
   Future<void> _requestLocationPermission() async {
     if (await Permission.location.isDenied) {
       await Permission.location.request();
     }
   }
-
-  void getCurrentUser() {
-    try {
-      final user = _authentication.currentUser;
-      if (user != null) {
-        loggedUser = user;
-        print(loggedUser!.email);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }*/
 
   @override
   Widget build(BuildContext context) {
