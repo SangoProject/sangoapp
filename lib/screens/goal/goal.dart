@@ -1,14 +1,11 @@
 // 목표한 거리에 대한 실제 산책 거리를 나타내는 차트와 산책 목표 거리를 수정하는 파일
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
 import 'package:sangoproject/screens/goal/goalGraph.dart';
-import 'package:sangoproject/screens/settingSP.dart';
-
+// import 'package:sangoproject/screens/settingSP.dart';
 import '../../config/database.dart';
+import 'package:sangoproject/crud/crudSP.dart';
 
 class Goal extends StatefulWidget {
   const Goal({Key? key}) : super(key: key);
@@ -21,7 +18,7 @@ class Goal extends StatefulWidget {
 
 class _Goal extends State<Goal> {
   final TextEditingController txtGoal = TextEditingController(); // 목표거리를 사용자에게 입력받는 변수
-  double goalDistance = 1.0;
+  late double goalDistance = 1.0;
   double realDistance = 0.0;
 
   @override
@@ -62,7 +59,7 @@ class _Goal extends State<Goal> {
               // 연필 아이콘 버튼. 누르면 산책목표를 수정하기 위한 팝업을 보여줌.
               IconButton(
                 onPressed: () {
-                  showPieDataDialog(context/*, userId*/);
+                  showPieDataDialog(context);
                 },
                 icon: Image.asset(
                   'images/pencil.png',
@@ -92,7 +89,7 @@ class _Goal extends State<Goal> {
             content: SingleChildScrollView(
               child: TextField(
                 controller: txtGoal,
-                decoration: InputDecoration(hintText: '값을 입력해주세요(1 ~ 100)'),
+                decoration: InputDecoration(hintText: '목표를 입력해 주세요(1 ~ 100)'),
                 // 숫자 키보드
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 // 띄어쓰기를 하지 못하도록 제한
@@ -101,9 +98,11 @@ class _Goal extends State<Goal> {
                 ],
                 onChanged: (value){
                   // 입력받은 값이 소수가 아니라면 입력되지 않음
-                  if(double.tryParse(value) == null){
-                    txtGoal.text = value.substring(0, value.length - 1);
-                    txtGoal.selection = TextSelection.fromPosition(TextPosition(offset: txtGoal.text.length));
+                  if(value.isNotEmpty) {
+                    if(double.tryParse(value) == null){
+                      txtGoal.text = value.substring(0, value.length - 1);
+                      txtGoal.selection = TextSelection.fromPosition(TextPosition(offset: txtGoal.text.length));
+                    }
                   }
                 },
               ),
@@ -117,17 +116,39 @@ class _Goal extends State<Goal> {
                   txtGoal.text = '';
                 },
               ),
-              // 저장을 누르면 입력된 값이 1~100 사이인지 확인하고 맞으면 파이어베이스에 저장하고 아니면 저장하지 않고 팝업창 닫고 입력받은 값 초기화
+              // 저장을 누르면 입력된 값이 1~100 사이인지 확인하고 맞으면 저장하고 아니면 저장하지 않은 뒤 팝업창 닫고 입력받은 값 초기화
               ElevatedButton(
                 child: Text('저장'),
                 onPressed: () async {
-                  if (txtGoal.text != '' && double.parse(txtGoal.text) >= 1 && double.parse(txtGoal.text) <= 100) {
-                    await saveGoal(double.parse(double.parse(txtGoal.text).toStringAsFixed(2)));
-                    setState(() {
-                      goalDistance = double.parse(double.parse(txtGoal.text).toStringAsFixed(2));
-                    });
+// <<<<<<< HEAD
+//                   if (txtGoal.text != '' && double.parse(txtGoal.text) >= 1 && double.parse(txtGoal.text) <= 100) {
+//                     await saveGoal(double.parse(double.parse(txtGoal.text).toStringAsFixed(2)));
+//                     setState(() {
+//                       goalDistance = double.parse(double.parse(txtGoal.text).toStringAsFixed(2));
+//                     });
+// =======
+                  if (txtGoal.text.isNotEmpty) {
+                    double goal = double.parse(double.parse(txtGoal.text).toStringAsFixed(5));
+                    if (goal >= 1 && goal <= 100) {
+                      await updateGoal(goal);
+                      setState(() {
+                        goalDistance = goal;
+                      });
+                    }
+                    else {
+                      final snackBar = SnackBar(
+                        content: Text("1 ~ 100 사이의 값으로 입력해주세요."),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
                   }
-
+                  else {
+                    final snackBar = SnackBar(
+                      content: Text("값이 입력되지 않았습니다."),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+// >>>>>>> 86ef01b0d10812350c033f696c8f82844a49ad26
+                  }
                   Navigator.pop(context);
                   txtGoal.text = '';
                 },

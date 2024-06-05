@@ -2,8 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+
 import 'package:sangoproject/mainPage.dart';
-import 'package:sangoproject/screens/settingSP.dart';
+import 'package:sangoproject/crud/crudSP.dart';
 import 'package:sangoproject/screens/terms.dart';
 import 'config/database.dart';
 
@@ -28,10 +29,8 @@ class MyApp extends StatelessWidget {
   // main 화면의 로그인 기능
   @override
   Widget build(BuildContext context) {
-    //User? user = FirebaseAuth.instance.currentUser;
 
-    // 사용자 로그인 상태에 따라 라우트 설정
-    //String initialRoute = user != null ? '/main' : '/';
+    // term == true인 경우 mainPage, term == false인 경우 termPage
     String initialRoute = termsBool == true ? '/main' : '/terms';
 
     return MaterialApp(
@@ -47,7 +46,6 @@ class MyApp extends StatelessWidget {
       // 루트 설정 정보
       initialRoute: initialRoute,
       routes: {
-        //'/' : (context) => GoogleLogin(),
         '/main': (context) => MainPage(),
         '/terms': (context) => Terms(),
       },
