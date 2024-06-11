@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:sangoproject/screens/goal/goalGraph.dart';
-// import 'package:sangoproject/screens/settingSP.dart';
 import '../../config/database.dart';
 import 'package:sangoproject/crud/crudSP.dart';
 
@@ -89,7 +88,7 @@ class _Goal extends State<Goal> {
             content: SingleChildScrollView(
               child: TextField(
                 controller: txtGoal,
-                decoration: InputDecoration(hintText: '목표를 입력해 주세요(1 ~ 100)'),
+                decoration: InputDecoration(hintText: '목표를 입력해 주세요(1 ~ 50km)'),
                 // 숫자 키보드
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 // 띄어쓰기를 하지 못하도록 제한
@@ -120,16 +119,9 @@ class _Goal extends State<Goal> {
               ElevatedButton(
                 child: Text('저장'),
                 onPressed: () async {
-// <<<<<<< HEAD
-//                   if (txtGoal.text != '' && double.parse(txtGoal.text) >= 1 && double.parse(txtGoal.text) <= 100) {
-//                     await saveGoal(double.parse(double.parse(txtGoal.text).toStringAsFixed(2)));
-//                     setState(() {
-//                       goalDistance = double.parse(double.parse(txtGoal.text).toStringAsFixed(2));
-//                     });
-// =======
                   if (txtGoal.text.isNotEmpty) {
                     double goal = double.parse(double.parse(txtGoal.text).toStringAsFixed(5));
-                    if (goal >= 1 && goal <= 100) {
+                    if (goal >= 1 && goal <= 50) {
                       await updateGoal(goal);
                       setState(() {
                         goalDistance = goal;
@@ -137,7 +129,7 @@ class _Goal extends State<Goal> {
                     }
                     else {
                       final snackBar = SnackBar(
-                        content: Text("1 ~ 100 사이의 값으로 입력해주세요."),
+                        content: Text("1 ~ 50 사이의 값으로 입력해주세요."),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
@@ -147,7 +139,6 @@ class _Goal extends State<Goal> {
                       content: Text("값이 입력되지 않았습니다."),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-// >>>>>>> 86ef01b0d10812350c033f696c8f82844a49ad26
                   }
                   Navigator.pop(context);
                   txtGoal.text = '';

@@ -6,7 +6,7 @@ import '../config/palette.dart';
 import 'package:sangoproject/screens/search/searchPage.dart';
 import 'package:sangoproject/screens/goal/goal.dart';
 import 'package:sangoproject/screens/library/libraryPage.dart';
-import 'package:sangoproject/screens/statistics/statisticsButton.dart';
+import 'package:sangoproject/screens/chart/recordChart.dart';
 import 'package:sangoproject/screens/disaster/disasterBanner.dart';
 
 class HomePage extends StatefulWidget {
@@ -80,7 +80,7 @@ class _HomePage extends State<HomePage> {
               Goal(),
 
               // 산책 통계
-              StatisticsButton(),
+              RecordChart(),
 
               // 찜목록 버튼. 버튼을 누르면 찜목록을 볼 수 있는 페이지로 넘어감.
               Padding(

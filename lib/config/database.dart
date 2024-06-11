@@ -43,7 +43,18 @@ Future<void> addRecord(Database db, DateTime date, double distance, String time)
 }
 
 Future<List<Record>> getRecords(Database db, DateTime selectedDate) async {
-  var records = await db.query('records', orderBy: 'date DESC');
+  // 선택된 날짜의 시작 시간과 종료 시간 계산
+  DateTime startOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 0, 0, 0);
+  DateTime endOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 23, 59, 59);
+
+  // 해당 날짜의 기록만 가져오는 쿼리 실행
+  var records = await db.query(
+    'records',
+    where: 'date BETWEEN ? AND ?',
+    whereArgs: [startOfDay.toIso8601String(), endOfDay.toIso8601String()],
+    orderBy: 'date DESC',
+  );
+
   return records.map((map) => Record.fromMap(map)).toList();
 }
 

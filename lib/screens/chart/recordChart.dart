@@ -1,10 +1,9 @@
 // 주간 산책 통계 버튼. 누르면 주간 산책 통계를 볼 수 있음.
 import 'package:flutter/material.dart';
-
-import 'package:sangoproject/screens/statistics/statisticsPage.dart';
+import 'package:sangoproject/screens/chart/recordChartPage.dart';
 import 'package:sangoproject/config/palette.dart';
 
-class StatisticsButton extends StatelessWidget {
+class RecordChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -47,7 +46,7 @@ class StatisticsButton extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => StatisticsPage()),
+                  MaterialPageRoute(builder: (context) => RecordChartPage()),
                 );
               },
               splashColor: Colors.grey,
