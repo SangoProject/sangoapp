@@ -16,9 +16,15 @@ class _RecordLineChartState extends State<RecordLineChart> {
     Palette.green1,
     Palette.green3,
   ];
-  bool showAvg = false;
+  bool showWeeklyRecord = true;
   double weeklyAverage = 0.0; // 추가: 주간 평균 데이터를 저장할 변수
-  bool fiveOrFifty = true;
+  bool selectedValue = true; // true: 5km 기준, false: 50km 기준
+
+  void toggleButton(){
+    setState(() {
+      showWeeklyRecord = !showWeeklyRecord;
+    });
+  }
 
   @override
   void initState() {
@@ -40,7 +46,7 @@ class _RecordLineChartState extends State<RecordLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    List<bool> isSelected = [true, false];
+    // List<bool> isSelected = [true, false];
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -50,70 +56,92 @@ class _RecordLineChartState extends State<RecordLineChart> {
             child: SizedBox()
         ),
         Expanded(
-          flex: 1,
-          child: Stack(
+          flex: 2,
+          child: Column(
             children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    fiveOrFifty = !fiveOrFifty;
-                  });
-                },
-                child: Text(fiveOrFifty ? '5km 기준' : '50km 기준',
-                style: TextStyle(
-                    color: Palette.logoColor),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ToggleButtons(
-                    isSelected: isSelected,
-                    onPressed: (int index) {
-                      setState(() {
-                        for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
-                          isSelected[buttonIndex] = buttonIndex == index; // 선택된 버튼 활성화
-                        }
-                        showAvg = isSelected[1]; // showAvg 상태 업데이트
-                      });
-                    },
-                    selectedColor: Colors.white, // 선택된 텍스트 색상
-                    fillColor: Palette.green2, // 선택된 배경 색상
-                    borderColor: Palette.green3,
-                    selectedBorderColor: Palette.green3,
-                    borderRadius: BorderRadius.circular(4.0),
+              GestureDetector(
+                onTap: toggleButton,
+                child: Container(
+                  width: 200,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25.0),
+                    border: Border.all(
+                      color: Palette.green2,
+                      width: 2.0,
+                    ),
+                    color: showWeeklyRecord ? Palette.green2 : Colors.white,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text(
-                          '차트보기',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: isSelected[0] ? Colors.white : Palette.green2,
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: showWeeklyRecord ? Palette.green2 : Colors.white,
+                            borderRadius: BorderRadius.horizontal(
+                              left: Radius.circular(25.0),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '주간기록',
+                            style: TextStyle(
+                              color: showWeeklyRecord? Colors.white : Palette.green2,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text(
-                          '평균보기',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: isSelected[1] ? Colors.white : Palette.green2,
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: showWeeklyRecord ? Colors.white : Palette.green2,
+                            borderRadius: BorderRadius.horizontal(
+                              right: Radius.circular(25.0),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '평균기록',
+                            style: TextStyle(
+                              color: showWeeklyRecord? Palette.green2 : Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                ],
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: DropdownButton<bool>(
+                    value: selectedValue,
+                    onChanged: (bool? newValue) {
+                      setState(() {
+                        selectedValue = newValue!;
+                      });
+                    },
+                    items: const <DropdownMenuItem<bool>>[
+                      DropdownMenuItem<bool>(
+                        value: true,
+                        child: Text('5km 기준'),
+                      ),
+                      DropdownMenuItem<bool>(
+                        value: false,
+                        child: Text('50km 기준'),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
         ),
         Expanded(
-          flex: 5,
+          flex: 6,
           child: AspectRatio(
             aspectRatio: 1.00,
             child: Padding(
@@ -124,7 +152,7 @@ class _RecordLineChartState extends State<RecordLineChart> {
                 bottom: 12,
               ),
               child: LineChart(
-                showAvg ? avgData() : mainData(),
+                showWeeklyRecord ? mainData() : avgData(),
               ),
             ),
           ),
@@ -183,8 +211,8 @@ class _RecordLineChartState extends State<RecordLineChart> {
     );
     String text;
 
-    // fiveOrFifty 값에 따라 분기 처리
-    if (fiveOrFifty) {
+    // selectedValue 값에 따라 분기 처리
+    if (selectedValue) {
       switch (value.toInt()) {
         case 0:
           text = '(km)';
@@ -220,8 +248,8 @@ class _RecordLineChartState extends State<RecordLineChart> {
   }
 
   LineChartData mainData() {
-    double horizontalInterval = fiveOrFifty ? 1 : 10;
-    double maxY = fiveOrFifty ? 5 : 50;
+    double horizontalInterval = selectedValue ? 1 : 10;
+    double maxY = selectedValue ? 5 : 50;
 
     return LineChartData(
       gridData: FlGridData(
@@ -309,8 +337,8 @@ class _RecordLineChartState extends State<RecordLineChart> {
   }
 
   LineChartData avgData() {
-    double horizontalInterval = fiveOrFifty ? 1 : 10;
-    double maxY = fiveOrFifty ? 5 : 50;
+    double horizontalInterval = selectedValue ? 1 : 10;
+    double maxY = selectedValue ? 5 : 50;
 
     return LineChartData(
       lineTouchData: LineTouchData(enabled: false),
@@ -424,11 +452,11 @@ class _RecordLineChartState extends State<RecordLineChart> {
     } else {
       double maxValue = 5;
 
-      if (fiveOrFifty) {
-        // fiveOrFifty가 true일 때 최대값을 5로 제한
+      if (selectedValue) {
+        // selectedValue가 true일 때 최대값을 5로 제한
         return maxValue > 5 ? 5 : maxValue;
       } else {
-        // fiveOrFifty가 false일 때 최대값을 50으로 제한
+        // selectedValue가 false일 때 최대값을 50으로 제한
         return maxValue > 50 ? 50 : maxValue;
       }
     }

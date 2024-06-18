@@ -201,29 +201,29 @@ class _CourseDetailPage extends State<CourseDetailPage>{
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 24.0),
-                      child: Ink(
-                        decoration: const ShapeDecoration(
-                          color: Palette.logoColor, // 동그라미 배경색
-                          shape: CircleBorder(), // 동그라미 모양
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            // 첫번째 포인트 매개변수 넘겨주기
-                          },
-                          customBorder: CircleBorder(), // 클릭 영역을 동그라미로 설정
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            child: Icon(
-                              Icons.map, // 지도 모양 아이콘
-                              color: Colors.white, // 아이콘 색상
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(right: 24.0),
+                    //   child: Ink(
+                    //     decoration: const ShapeDecoration(
+                    //       color: Palette.logoColor, // 동그라미 배경색
+                    //       shape: CircleBorder(), // 동그라미 모양
+                    //     ),
+                    //     child: InkWell(
+                    //       onTap: () {
+                    //         // 첫번째 포인트 매개변수 넘겨주기
+                    //       },
+                    //       customBorder: CircleBorder(), // 클릭 영역을 동그라미로 설정
+                    //       child: Container(
+                    //         width: 50,
+                    //         height: 50,
+                    //         child: Icon(
+                    //           Icons.map, // 지도 모양 아이콘
+                    //           color: Colors.white, // 아이콘 색상
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 // 포인트 명칭을 리스트로 나타냄.

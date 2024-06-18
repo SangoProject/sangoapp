@@ -38,7 +38,7 @@ class _InitGoal extends State<InitGoal> {
             TextField(
               controller: _controller,
               textAlign: TextAlign.center,
-              decoration: InputDecoration(labelText: '  목표를 입력해 주세요.(1 ~ 100, 단위: km)'),
+              decoration: InputDecoration(labelText: '  목표를 입력해 주세요.(1 ~ 50, 단위: km)'),
               // 숫자 키보드
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               //textInputAction: TextInputAction.done,
@@ -64,7 +64,7 @@ class _InitGoal extends State<InitGoal> {
                   if (_controller.text.isNotEmpty) {
                     double goal = double.parse(double.parse(_controller.text).toStringAsFixed(5));
                     // 1 ~ 100 사이의 값이면 저장
-                    if (goal >= 1 && goal <= 100) {
+                    if (goal >= 1 && goal <= 50) {
                       // 목표 저장 후 mainPage로 이동
                       await updateGoal(goal);
 

@@ -42,7 +42,7 @@ class AppInfoPage extends StatelessWidget {
                 ),
               ),
             ),
-            Text('v 1.0.6')
+            Text('v 1.0.8')
           ],
         ),
       ),

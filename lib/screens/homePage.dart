@@ -9,6 +9,8 @@ import 'package:sangoproject/screens/library/libraryPage.dart';
 import 'package:sangoproject/screens/chart/recordChart.dart';
 import 'package:sangoproject/screens/disaster/disasterBanner.dart';
 
+import 'backPopDialog.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -28,6 +30,7 @@ class _HomePage extends State<HomePage> {
   Future<void> _requestLocationPermission() async {
     if (await Permission.location.isDenied) {
       await Permission.location.request();
+      showBackgroundPermissionDialog(context);
     }
   }
 
