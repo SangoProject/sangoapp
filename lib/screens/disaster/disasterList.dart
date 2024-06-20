@@ -42,7 +42,7 @@ class _DisasterListPage extends State<DisasterListPage>{
                 Text(
                   disasterMsg.msg.toString(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,
-                      fontFamily: 'Choi'),
+                      fontFamily: 'Pretendard'),
                 ),
                 SizedBox(
                   height: 10,

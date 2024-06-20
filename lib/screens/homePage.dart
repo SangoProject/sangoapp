@@ -1,15 +1,15 @@
 // 홈 화면 구조를 작성해둔 파일
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../config/palette.dart';
 import 'package:sangoproject/screens/search/searchPage.dart';
 import 'package:sangoproject/screens/goal/goal.dart';
 import 'package:sangoproject/screens/library/libraryPage.dart';
-import 'package:sangoproject/screens/statistics/statisticsButton.dart';
+import 'package:sangoproject/screens/chart/recordChart.dart';
+import 'package:sangoproject/screens/disaster/disasterBanner.dart';
 
-import '../config/palette.dart';
-import 'disaster/disasterBanner.dart';
+import 'backPopDialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -21,32 +21,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  final _authentication = FirebaseAuth.instance; // user 등록
-  User? loggedUser; // 로그인 여부 판단
-
   @override
   void initState() {
     super.initState();
     _requestLocationPermission();
-    getCurrentUser();
   }
 
-  // 위치 권한 허용 여부 확인
   Future<void> _requestLocationPermission() async {
     if (await Permission.location.isDenied) {
       await Permission.location.request();
-    }
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = _authentication.currentUser;
-      if (user != null) {
-        loggedUser = user;
-        print(loggedUser!.email);
-      }
-    } catch (e) {
-      print(e);
+      showBackgroundPermissionDialog(context);
     }
   }
 
@@ -99,7 +83,7 @@ class _HomePage extends State<HomePage> {
               Goal(),
 
               // 산책 통계
-              StatisticsButton(),
+              RecordChart(),
 
               // 찜목록 버튼. 버튼을 누르면 찜목록을 볼 수 있는 페이지로 넘어감.
               Padding(

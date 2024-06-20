@@ -32,6 +32,8 @@ dependencies:
   fluttertoast: ^8.2.2
   intl: ^0.18.1
   url_launcher: ^6.2.4
+  sqflite: ^2.3.2
+  path: ^1.8.3
 
 
 dev_dependencies:

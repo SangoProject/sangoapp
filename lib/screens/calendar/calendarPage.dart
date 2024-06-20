@@ -1,10 +1,11 @@
 // 산책 달력 화면 구조를 짜둔 페이지
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../config/database.dart';
 import '../../config/palette.dart';
 import 'package:sangoproject/screens/calendar/calendarData.dart';
 import 'calendarSet.dart';
@@ -33,6 +34,7 @@ class _CalendarPageState extends State<CalendarPage>{
 
     return WillPopScope(
       onWillPop: () async {
+
         return false;
       },
       child: Scaffold(
@@ -96,32 +98,26 @@ class _CalendarPageState extends State<CalendarPage>{
                   );
                 },
                 markerBuilder: (context, day, events) {
-                  Stream<QuerySnapshot> eventsStream = fetchRecordData(day);
-
-                  return StreamBuilder<QuerySnapshot>(
-                    stream: eventsStream, // 이벤트(산책기록 데이터)를 위한 스트림
+                  return FutureBuilder<List<Record>>(
+                    future: fetchRecordData(day),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return Container();
                       }
-
-                      // 이벤트 목록을 가져오기
-                      List<DocumentSnapshot> events = snapshot.data!.docs;
-
-                      // 이벤트가 있는 경우 연두색 동그라미 표시
-                      if (events.isNotEmpty) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: Colors.lightGreen,
-                            shape: BoxShape.circle,
+                      if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                        return Positioned(
+                          bottom: -2,
+                          child: Container(
+                            width: 7,
+                            height: 7,
+                            decoration: BoxDecoration(
+                              color: Palette.logoColor, // 마커 색상
+                              shape: BoxShape.circle,
+                            ),
                           ),
-                          width: 5,
-                          height: 5,
                         );
-                      } else {
-                        // 이벤트가 없는 경우 공란
-                        return Container();
                       }
+                      return Container();
                     },
                   );
                 },
@@ -141,22 +137,23 @@ class _CalendarPageState extends State<CalendarPage>{
     );
   }
 
-  Stream<QuerySnapshot<Object?>> fetchRecordData(DateTime day) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    User? user = FirebaseAuth.instance.currentUser;
-    String? userId = user?.email;
+  Future<List<Record>> fetchRecordData(DateTime selectedDate) async {
+    String databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, 'records.db');
+    Database db = await openRecordDatabase(path);
 
-    // day를 yyyy-MM-dd 형태의 문자열로 변환
-    String formattedDate = DateFormat("yyyy-MM-dd").format(day);
+    // 선택된 날짜의 시작과 끝 시간 계산
+    DateTime startOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 0, 0, 0);
+    DateTime endOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 23, 59, 59);
 
-    // 사용자의 기록을 가져오기
-    return firestore
-        .collection("users")
-        .doc(userId)
-        .collection("records")
-        .doc(formattedDate)
-        .collection("list")
-        .orderBy("date")
-        .snapshots();
+    // 선택된 날짜의 데이터 가져오기
+    var result = await db.query(
+      'records',
+      where: 'date BETWEEN ? AND ?',
+      whereArgs: [startOfDay.toIso8601String(), endOfDay.toIso8601String()],
+      orderBy: 'date DESC',
+    );
+
+    return result.map((map) => Record.fromMap(map)).toList();
   }
 }

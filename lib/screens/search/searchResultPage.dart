@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sangoproject/screens/course/courseList.dart';
+import 'package:sangoproject/mainPage.dart';
 
 class SearchResultPage extends StatefulWidget{
   String areaGu = '';
@@ -28,7 +29,9 @@ class _SearchResultPage extends State<SearchResultPage>{
         // 버튼을 누르면 main으로 이동.
         leading: IconButton(
           onPressed: () {
-            Navigator.popUntil(context, ModalRoute.withName("/main"));
+            Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => MainPage()),
+            );
           },
           icon: Icon(Icons.close),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../config/palette.dart';
+import 'appInfo.dart';
 import 'popDialog.dart';
 
 class SettingPage extends StatelessWidget {
@@ -8,14 +9,14 @@ class SettingPage extends StatelessWidget {
   static const String _title = '설정';
   static const List<String> _data = [
     '문의하기',
-    // '앱 정보',
-    '로그아웃',
+    '앱 정보',
+    // '로그아웃',
     // '회원탈퇴'
   ];
   static const List<IconData> _icon = [
     Icons.email,
-    // Icons.info,
-    Icons.logout,
+    Icons.info,
+    // Icons.logout,
     // Icons.no_accounts,
   ];
 
@@ -29,10 +30,11 @@ class SettingPage extends StatelessWidget {
               // 각 항목에 따라 함수 호출
               if (_data[i] == '문의하기') {
                 showEmailDialog(context, i); // 문의하기 팝업 띄우기
-              } else if (_data[i] == '로그아웃') {
-                showLogoutDialog(context, i); // 로그아웃 팝업 띄우기
-              } else if(_data[i] == '회원탈퇴') {
-                showUserDeleteDialog(context, i); // 회원탈퇴 팝업 띄우기
+              } else if (_data[i] == '앱 정보') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AppInfoPage())
+                );
               } else{
                 // 알림, 앱정보 추가 구현 필요
               }
@@ -77,14 +79,6 @@ class SettingPage extends StatelessWidget {
           ),
           body: Column(children: <Widget>[
             _settingListView(context),
-            Center(
-              child: Text('v 1.0.0',
-                style: TextStyle(
-                    color: Palette.logoColor,
-                    fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

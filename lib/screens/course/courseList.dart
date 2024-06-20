@@ -12,7 +12,7 @@ class CourseList extends StatelessWidget {
   Widget build(BuildContext context) {
     if(data.length == 0) {
       return Center(
-        child: Text("검색 결과가 없습니다."),
+        child: Text("데이터가 없습니다."),
       );
     }
     else{

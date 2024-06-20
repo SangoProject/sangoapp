@@ -19,7 +19,7 @@ class ChartPage extends StatelessWidget {
               child: CustomPaint(
                 size: Size(150, 150),
                 // PieChart를 그려줌. (산책한 거리와 목표한 거리에 대한 그래프)
-                painter: PieChart(double.parse(goalDistance), double.parse(realDistance)),
+                painter: PieChart(goalDistance, realDistance),
               ),
             ),
           ],
@@ -38,8 +38,10 @@ class PieChart extends CustomPainter {
   // 목표와 실제거리의 비율을 계산해서 percentage에 저장함
   PieChart(this.goalDistance, this.realDistance){
     percentage = realDistance * 100 / goalDistance;
-    final tmp = percentage.toStringAsFixed(1);
-    percentage = double.parse(tmp);
+    if (percentage > 100) {
+      percentage = 100;
+    }
+    percentage = double.parse(percentage.toStringAsFixed(1));
   }
 
   // 목표 그래프 UI를 그려줌
